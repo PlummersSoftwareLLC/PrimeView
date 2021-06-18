@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Frontend.csproj", "{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataInterface", "DataInterface\DataInterface.csproj", "{CD9396AD-CD56-4EEA-A29A-5110AC706C63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{EE9F9309-F849-4592-A0D0-10A6D97B7B88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD9396AD-CD56-4EEA-A29A-5110AC706C63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD9396AD-CD56-4EEA-A29A-5110AC706C63}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD9396AD-CD56-4EEA-A29A-5110AC706C63}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD9396AD-CD56-4EEA-A29A-5110AC706C63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
