@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Frontend", "Frontend\Frontend.csproj", "{2C7A4DC8-FAA6-4EAF-BBA5-164E270413CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{EE9F9309-F849-4592-A0D0-10A6D97B7B88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{EE9F9309-F849-4592-A0D0-10A6D97B7B88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StaticJsonReader", "StaticJsonReader\StaticJsonReader.csproj", "{50274BDF-B240-499F-B630-BDA25A524EBC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE9F9309-F849-4592-A0D0-10A6D97B7B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50274BDF-B240-499F-B630-BDA25A524EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50274BDF-B240-499F-B630-BDA25A524EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50274BDF-B240-499F-B630-BDA25A524EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50274BDF-B240-499F-B630-BDA25A524EBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

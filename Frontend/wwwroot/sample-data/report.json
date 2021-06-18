@@ -1,7 +1,3 @@
-
-> primes@0.1.0 start /home/rutger/source/Primes/tools
-> ts-node ./src/index.ts "report" "-d" "/tmp/tmp.S4XjaUfsab" "--json"
-
 {
     "version": "1",
     "metadata": {
