@@ -1,7 +1,43 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+@using BlazorTable
+@using PrimeView.Entities  
 
-Welcome to your new app.
+@inject IReportReader ReportReader
+<h1>Reports</h1>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<Table TableItem="ReportSummary" Items="summaries" PageSize="100" ColumnReorder="true">
+	<Column TableItem="ReportSummary" Title="Date" Field="@(x => x.Date)" Sortable="true" Filterable="true" Width="12%">
+		<Template>
+			<a href="/report/@context.Id">@context.Date</a>
+		</Template>
+	</Column>
+	<Column TableItem="ReportSummary" Title="CPU Vendor" Field="@(s => s.CpuVendor)" Sortable="true" Filterable="true" Width="12%" />
+	<Column TableItem="ReportSummary" Title="CPU Brand" Field="@(s => s.CpuBrand)" Sortable="true" Filterable="true" Width="12%" />
+	<Column TableItem="ReportSummary" Title="# Processors" Field="@(s => s.CpuProcessors)" Sortable="true" Filterable="true" Width="7%" />
+	<Column TableItem="ReportSummary" Title="# Cores" Field="@(s => s.CpuCores)" Sortable="true" Filterable="true" Width="7%" />
+	<Column TableItem="ReportSummary" Title="Platform" Field="@(s => s.OsPlatform)" Sortable="true" Filterable="true" Width="12%" />
+	<Column TableItem="ReportSummary" Title="OS Release" Field="@(s => s.OsRelease)" Sortable="true" Filterable="true" Width="12%" />
+	<Column TableItem="ReportSummary" Title="Architecture" Field="@(s => s.Architecture)" Sortable="true" Filterable="true" Width="12%" />
+	<Column TableItem="ReportSummary" Title="Virtual" Field="@(s => s.IsSystemVirtual)" Sortable="true" Filterable="true" Width="7%">
+		<Template>
+			<input type="checkbox" disabled checked=@(context.IsSystemVirtual.HasValue && context.IsSystemVirtual.Value) />
+		</Template>
+	</Column>
+	<Column TableItem="ReportSummary" Title="# Results" Field="@(s => s.ResultCount)" Sortable="true" Filterable="true" Width="7%">
+		<Template>
+			<a href="/report/@context.Id">@context.ResultCount</a>
+		</Template>
+	</Column>
+	<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
+</Table>
+
+@code 
+{
+	private ReportSummary[] summaries;
+
+	protected override async Task OnInitializedAsync()
+	{
+		summaries = await ReportReader.GetSummaries();
+	}
+}
