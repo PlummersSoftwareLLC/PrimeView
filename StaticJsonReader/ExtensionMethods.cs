@@ -12,6 +12,12 @@ namespace PrimeView.StaticJsonReader
 {
 	public static class ExtensionMethods
 	{
+		private static readonly JsonSerializerOptions serializerOptions = new()
+		{
+			PropertyNameCaseInsensitive = true,
+			AllowTrailingCommas = true
+		};
+
 		public static IServiceCollection AddStaticJsonReportReader(this IServiceCollection serviceCollection)
 			=> serviceCollection.AddSingleton<IReportReader>(sp => new ReportReader(sp.GetRequiredService<HttpClient>()));
 
@@ -19,7 +25,7 @@ namespace PrimeView.StaticJsonReader
 		{
 			try
 			{
-				return JsonSerializer.Deserialize<T>(element.GetRawText());
+				return JsonSerializer.Deserialize<T>(element.GetRawText(), serializerOptions);
 			}
 			catch { }
 
@@ -40,6 +46,16 @@ namespace PrimeView.StaticJsonReader
 			var childElement = GetElement(element, propertyName);
 
 			return childElement.HasValue && childElement.Value.TryGetInt32(out int value) ? value : null;
+		}
+
+		public static double? GetDouble(this JsonElement? element, string propertyName)
+			=> element.HasValue ? GetDouble(element.Value, propertyName) : null;
+
+		public static double? GetDouble(this JsonElement element, string propertyName)
+		{
+			var childElement = GetElement(element, propertyName);
+
+			return childElement.HasValue && childElement.Value.TryGetDouble(out double value) ? value : null;
 		}
 
 		public static string? GetString(this JsonElement? element, string propertyName)

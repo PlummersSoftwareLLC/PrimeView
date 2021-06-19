@@ -11,7 +11,7 @@ namespace PrimeView.StaticJsonReader
 	{
 		List<ReportSummary>? summaries;
 		Dictionary<string, Report>? reportMap;
-		HttpClient httpClient;
+		readonly HttpClient httpClient;
 		bool haveJsonFilesLoaded = false;
 
 		public ReportReader(HttpClient httpClient)
@@ -23,12 +23,6 @@ namespace PrimeView.StaticJsonReader
 		{
 			if (this.haveJsonFilesLoaded)
 				return;
-
-			JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
-			{
-				PropertyNameCaseInsensitive = true,
-				AllowTrailingCommas = true
-			};
 
 			summaries = new();
 			reportMap = new();
@@ -47,55 +41,91 @@ namespace PrimeView.StaticJsonReader
 				}
 
 				var reportElement = JsonDocument.Parse(reportJson).RootElement;
-				var machineElement = reportElement.GetElement("machine");
+				Report report = ParseReportElement(reportJson, reportElement);
 
-				Report report = new Report()
-				{
-					Id = reportJson.GetHashCode().ToString(),
-					Date = reportElement.GetElement("metadata").GetDateFromUnixTimeSeconds("date"),
-					CPU = machineElement.Get<CPUInfo>("cpu"),
-					OperatingSystem = machineElement.Get<OperatingSystemInfo>("os"),
-					System = machineElement.Get<SystemInfo>("system"),
-					DockerInfo = machineElement.Get<DockerInfo>("docker")
-				};
-
-				var resultsElement = reportElement.GetElement("results");
-				if (!resultsElement.HasValue || resultsElement.Value.ValueKind != JsonValueKind.Array)
-					continue;
-
-				List<Result> results = new();
-
-				foreach (var resultElement in resultsElement.Value.EnumerateArray())
-				{
-					var tagsElement = resultElement.GetElement("tags");
-
-					Result result = new Result()
-					{
-						Algorithm = tagsElement.HasValue ? tagsElement.GetString("algorithm") : "other",
-						Bits = tagsElement.HasValue ? tagsElement.GetInt32("bits") : null,
-						
-					};
-
-					results.Add(result);
-				}
-
-				report.Results = results.ToArray();
-
-				reportMap[report.Id] = report;
+				reportMap[report.Id!] = report;
 				summaries.Add(ExtractSummary(report));
 			}
 
 			haveJsonFilesLoaded = true;
 		}
 
+		private static ReportSummary ExtractSummary(Report report)
+			=> new()
+			{
+				Id = report.Id,
+				Architecture = report.OperatingSystem?.Architecture,
+				CpuBrand = report.CPU?.Brand,
+				CpuCores = report.CPU?.Cores,
+				CpuProcessors = report.CPU?.Processors,
+				CpuVendor = report.CPU?.Vendor,
+				Date = report.Date,
+				DockerArchitecture = report.DockerInfo?.Architecture,
+				IsSystemVirtual = report.System?.IsVirtual,
+				OsPlatform = report.OperatingSystem?.Platform,
+				OsRelease = report.OperatingSystem?.Release,
+				ResultCount = report.Results?.Length ?? 0
+			};
+
+		private static Report ParseReportElement(string json, JsonElement element)
+		{
+			var machineElement = element.GetElement("machine");
+
+			Report report = new()
+			{
+				Id = json.GetHashCode().ToString(),
+				Date = element.GetElement("metadata").GetDateFromUnixTimeSeconds("date"),
+				CPU = machineElement.Get<CPUInfo>("cpu"),
+				OperatingSystem = machineElement.Get<OperatingSystemInfo>("os"),
+				System = machineElement.Get<SystemInfo>("system"),
+				DockerInfo = machineElement.Get<DockerInfo>("docker")
+			};
+
+			var resultsElement = element.GetElement("results");
+
+			List<Result> results = new();
+
+			if (resultsElement.HasValue && resultsElement.Value.ValueKind == JsonValueKind.Array)
+			{
+				foreach (var resultElement in resultsElement.Value.EnumerateArray())
+					results.Add(ParseResultElement(resultElement));
+			}
+
+			report.Results = results.ToArray();
+			
+			return report;
+		}
+
+		private static Result ParseResultElement(JsonElement element)
+		{
+			var tagsElement = element.GetElement("tags");
+
+			return new()
+			{
+				Algorithm = tagsElement.HasValue ? tagsElement.GetString("algorithm") : "other",
+				Bits = tagsElement.HasValue ? tagsElement.GetInt32("bits") : null,
+				Duration = element.GetDouble("duration"),
+				Implementation = element.GetString("implementation"),
+				IsFaithful = tagsElement.HasValue && tagsElement.GetString("faitful")?.ToLower() == "yes",
+				Label = element.GetString("label"),
+				Passes = element.GetInt32("passes"),
+				Solution = element.GetString("solution"),
+				Threads = element.GetInt32("threads")
+			};
+		}
+
 		public async Task<Report> GetReport(string Id)
 		{
-			throw new NotImplementedException();
+			await LoadReportJsonFiles();
+
+			return this.reportMap![Id];
 		}
 
 		public async Task<ReportSummary[]> GetSummaries()
 		{
-			throw new NotImplementedException();
+			await LoadReportJsonFiles();
+
+			return this.summaries!.ToArray();
 		}
 	}
 }

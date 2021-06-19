@@ -8,7 +8,7 @@ namespace PrimeView.Entities
 {
 	public interface IReportReader
 	{
-		Task<ReportSummary[]?> GetSummaries();
+		Task<ReportSummary[]> GetSummaries();
 		Task<Report> GetReport(string Id);
 	}
 }
