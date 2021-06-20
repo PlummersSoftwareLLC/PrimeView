@@ -15,9 +15,9 @@ namespace PrimeView.Entities
 		public string? OSType { get; set; }
 		public string? Architecture { get; set; }
 		[JsonPropertyName("ncpu")]
-		public string? CPUCount { get; set; }
+		public int? CPUCount { get; set; }
 		[JsonPropertyName("memTotal")]
-		public string? TotalMemory { get; set; }
+		public long? TotalMemory { get; set; }
 		public string? ServerVersion { get; set; }
 	}
 }

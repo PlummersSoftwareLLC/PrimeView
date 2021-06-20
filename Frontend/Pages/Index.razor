@@ -1,40 +1,56 @@
 ﻿@page "/"
 
 @using BlazorTable
-@using PrimeView.Entities  
+@using PrimeView.Entities
 
 @inject IReportReader ReportReader
-<h1>Reports</h1>
 
-<Table TableItem="ReportSummary" Items="summaries" PageSize="100" ColumnReorder="true">
-	<Column TableItem="ReportSummary" Title="Date" Field="@(x => x.Date)" Sortable="true" Filterable="true" Width="12%">
-		<Template>
-			<a href="/report/@context.Id">@context.Date</a>
-		</Template>
-	</Column>
-	<Column TableItem="ReportSummary" Title="CPU Vendor" Field="@(s => s.CpuVendor)" Sortable="true" Filterable="true" Width="12%" />
-	<Column TableItem="ReportSummary" Title="CPU Brand" Field="@(s => s.CpuBrand)" Sortable="true" Filterable="true" Width="12%" />
-	<Column TableItem="ReportSummary" Title="# Processors" Field="@(s => s.CpuProcessors)" Sortable="true" Filterable="true" Width="7%" />
-	<Column TableItem="ReportSummary" Title="# Cores" Field="@(s => s.CpuCores)" Sortable="true" Filterable="true" Width="7%" />
-	<Column TableItem="ReportSummary" Title="Platform" Field="@(s => s.OsPlatform)" Sortable="true" Filterable="true" Width="12%" />
-	<Column TableItem="ReportSummary" Title="OS Release" Field="@(s => s.OsRelease)" Sortable="true" Filterable="true" Width="12%" />
-	<Column TableItem="ReportSummary" Title="Architecture" Field="@(s => s.Architecture)" Sortable="true" Filterable="true" Width="12%" />
-	<Column TableItem="ReportSummary" Title="Virtual" Field="@(s => s.IsSystemVirtual)" Sortable="true" Filterable="true" Width="7%">
-		<Template>
-			<input type="checkbox" disabled checked=@(context.IsSystemVirtual.HasValue && context.IsSystemVirtual.Value) />
-		</Template>
-	</Column>
-	<Column TableItem="ReportSummary" Title="# Results" Field="@(s => s.ResultCount)" Sortable="true" Filterable="true" Width="7%">
-		<Template>
-			<a href="/report/@context.Id">@context.ResultCount</a>
-		</Template>
-	</Column>
-	<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
-</Table>
+<div class="row">
+	<div class="col">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item active" aria-current="page">Home</li>
+			</ol>
+		</nav>
+		<h1>Reports</h1>
 
-@code 
+		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date).ToArray()" PageSize="100" ColumnReorder="true">
+			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
+				<Template>
+					<a href="/report/@context.Id">@context.Date</a>
+				</Template>
+			</Column>
+			<Column TableItem="ReportSummary" Title="CPU Vendor" Field="@(s => s.CpuVendor)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="CPU Brand" Field="@(s => s.CpuBrand)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="# Processors" Field="@(s => s.CpuProcessors)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="# Cores" Field="@(s => s.CpuCores)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="Platform" Field="@(s => s.OsPlatform)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="OS Release" Field="@(s => s.OsRelease)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="Architecture" Field="@(s => s.Architecture)" Sortable="true" Filterable="true" />
+			<Column TableItem="ReportSummary" Title="Virtual" Field="@(s => s.IsSystemVirtual)" Sortable="true" Filterable="true">
+				<CustomIFilters>
+					<CustomSelect TableItem="ReportSummary">
+						<CustomSelectOption Key="yes" Value="true" />
+						<CustomSelectOption Key="no" Value="false" />
+					</CustomSelect>
+				</CustomIFilters>
+				<Template>
+					@(context.IsSystemVirtual == true ? "yes" : "no")
+				</Template>
+			</Column>
+			<Column TableItem="ReportSummary" Title="# Results" Field="@(s => s.ResultCount)" Sortable="true" Filterable="true">
+				<Template>
+					<a href="/report/@context.Id">@context.ResultCount</a>
+				</Template>
+			</Column>
+			<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
+		</Table>
+	</div>
+</div>
+
+@code
 {
-	private ReportSummary[] summaries;
+	private ReportSummary[] summaries = null;
 
 	protected override async Task OnInitializedAsync()
 	{

@@ -1,4 +1,9 @@
-﻿.content {
+﻿html, body, .page {
+  min-height: 100%;
+  height: 100%;
+}
+
+.content {
     padding-top: 1.1rem;
 }
 

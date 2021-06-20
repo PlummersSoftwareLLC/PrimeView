@@ -73,7 +73,7 @@ namespace PrimeView.StaticJsonReader
 
 			Report report = new()
 			{
-				Id = json.GetHashCode().ToString(),
+				Id = json.GetStableHashCode().ToString(),
 				Date = element.GetElement("metadata").GetDateFromUnixTimeSeconds("date"),
 				CPU = machineElement.Get<CPUInfo>("cpu"),
 				OperatingSystem = machineElement.Get<OperatingSystemInfo>("os"),
@@ -100,18 +100,22 @@ namespace PrimeView.StaticJsonReader
 		{
 			var tagsElement = element.GetElement("tags");
 
-			return new()
+			Result result = new()
 			{
 				Algorithm = tagsElement.HasValue ? tagsElement.GetString("algorithm") : "other",
-				Bits = tagsElement.HasValue ? tagsElement.GetInt32("bits") : null,
 				Duration = element.GetDouble("duration"),
 				Implementation = element.GetString("implementation"),
-				IsFaithful = tagsElement.HasValue && tagsElement.GetString("faitful")?.ToLower() == "yes",
+				IsFaithful = tagsElement.HasValue && tagsElement.GetString("faithful")?.ToLower() == "yes",
 				Label = element.GetString("label"),
 				Passes = element.GetInt32("passes"),
 				Solution = element.GetString("solution"),
 				Threads = element.GetInt32("threads")
 			};
+
+			if (tagsElement.HasValue && int.TryParse(tagsElement.Value.GetString("bits"), out int bits))
+					result.Bits = bits;
+
+			return result;
 		}
 
 		public async Task<Report> GetReport(string Id)

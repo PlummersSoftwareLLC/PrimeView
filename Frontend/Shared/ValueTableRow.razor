@@ -1,0 +1,21 @@
+﻿@if ((Value is string stringValue && !string.IsNullOrEmpty(stringValue)) || (Value is not string && Value != null))
+{
+	<tr>
+		<th scope="row">@(Label):</th>
+		<td>
+			@(Value switch 
+				{
+					bool boolValue => boolValue ? "yes" : "no",
+					_ => Value.ToString()
+				})
+		</td>
+	</tr>
+}
+
+@code {
+	[Parameter]
+	public object Value { get; set; }
+
+	[Parameter]
+	public string Label { get; set; }
+}

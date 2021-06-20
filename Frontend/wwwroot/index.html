@@ -2,16 +2,26 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Frontend</title>
-    <base href="/" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">    <link href="css/app.css" rel="stylesheet" />
-    <link href="Frontend.styles.css" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Frontend</title>
+  <base href="/" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <link href="css/app.css" rel="stylesheet" />
+  <link href="Frontend.styles.css" rel="stylesheet" />
 </head>
 
 <body>
-  <div id="app">Loading...</div>
+  <div id="app" class="container-fluid page">
+    <div class="row h-100 align-items-center">
+      <div class="col text-success text-right">
+        <div class="spinner-border"></div>
+      </div>
+      <div class="col text-left">
+        Loading...
+      </div>
+    </div>
+  </div>
 
   <div id="blazor-error-ui">
     An unhandled error has occurred.
