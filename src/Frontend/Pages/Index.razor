@@ -9,7 +9,7 @@
 	<div class="col">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item active" aria-current="page">Home</li>
+				<li class="breadcrumb-item active" aria-current="page">Reports</li>
 			</ol>
 		</nav>
 		<h1>Reports</h1>
@@ -40,8 +40,8 @@
 			<Column TableItem="ReportSummary" Title="Virtual" Field="@(s => s.IsSystemVirtual)" Sortable="true" Filterable="true">
 				<CustomIFilters>
 					<CustomSelect TableItem="ReportSummary">
-						<CustomSelectOption Key="yes" Value="true" />
-						<CustomSelectOption Key="no" Value="false" />
+						<CustomSelectOption Key="yes" Value="@("True")" />
+						<CustomSelectOption Key="no" Value="@("False")" />
 					</CustomSelect>
 				</CustomIFilters>
 				<Template>
