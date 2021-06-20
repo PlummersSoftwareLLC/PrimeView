@@ -54,6 +54,8 @@ namespace PrimeView.Frontend.Pages
 			try
 			{
 				languageMap = await Http.GetFromJsonAsync<Dictionary<string, LanguageInfo>>("data/langmap.json");
+				foreach (var entry in languageMap)
+					entry.Value.Key = entry.Key;
 			}
 			catch	{}
 		}
@@ -64,6 +66,6 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
-			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Name = language[0].ToString().ToUpper() + language[1..] };
+			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
 	}
 }

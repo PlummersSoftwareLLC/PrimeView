@@ -2,6 +2,7 @@
 
 @using BlazorTable
 @using PrimeView.Entities
+@using PrimeView.Frontend.Types
 
 <div class="row">
 	<div class="col">
@@ -232,9 +233,9 @@
 				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							@foreach (var implementation in report.Results.Select(r => r.Implementation).Where(i => i != null).Distinct().OrderBy(i => i))
+							@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 							{
-								<CustomSelectOption Key="@implementation" Value="@implementation" />
+								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />
 							}
 						</CustomSelect>
 					</CustomIFilters>
