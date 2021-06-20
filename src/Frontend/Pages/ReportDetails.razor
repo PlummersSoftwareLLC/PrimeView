@@ -10,7 +10,7 @@
 	<div class="col">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="/">Home</a></li>
+				<li class="breadcrumb-item"><a href="/">Reports</a></li>
 				<li class="breadcrumb-item active" aria-current="page">@ReportTitle</li>
 			</ol>
 		</nav>
@@ -227,7 +227,16 @@
 			</div>
 			<br />
 			<Table TableItem="Result" Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="100" ColumnReorder="true" @ref="resultTable">
-				<Column TableItem="Result" Title="Implementation" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" />
+				<Column TableItem="Result" Title="Implementation" Field="@(r => r.Implementation)" Sortable="true" Filterable="true">
+					<CustomIFilters>
+						<CustomSelect TableItem="Result">
+							@foreach (var implementation in report.Results.Select(r => r.Implementation).Where(i => i != null).Distinct().OrderBy(i => i))
+							{
+								<CustomSelectOption Key="@implementation" Value="@implementation" />
+							}
+						</CustomSelect>
+					</CustomIFilters>
+				</Column>
 				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
@@ -237,8 +246,8 @@
 				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							<CustomSelectOption Key="yes" Value="true" />
-							<CustomSelectOption Key="no" Value="false" />
+							<CustomSelectOption Key="yes" Value="@("True")" />
+							<CustomSelectOption Key="no" Value="@("False")" />
 						</CustomSelect>
 					</CustomIFilters>
 					<Template>
@@ -268,8 +277,8 @@
 				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							<CustomSelectOption Key="yes" Value="true" />
-							<CustomSelectOption Key="no" Value="false" />
+							<CustomSelectOption Key="yes" Value="@("True")" />
+							<CustomSelectOption Key="no" Value="@("False")" />
 						</CustomSelect>
 					</CustomIFilters>
 					<Template>
