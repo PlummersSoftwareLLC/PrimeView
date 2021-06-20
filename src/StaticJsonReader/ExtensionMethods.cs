@@ -1,12 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PrimeView.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PrimeView.StaticJsonReader
 {
@@ -50,15 +46,15 @@ namespace PrimeView.StaticJsonReader
 
 			return default;
 		}
-		 
-		public static T? Get<T>(this JsonElement element, string propertyName) where T : class
-		  => GetElement(element, propertyName)?.Get<T>();
 
-		public static T? Get<T>(this JsonElement? element, string propertyName) where T : class 
+		public static T? Get<T>(this JsonElement element, string propertyName) where T : class
+			=> GetElement(element, propertyName)?.Get<T>();
+
+		public static T? Get<T>(this JsonElement? element, string propertyName) where T : class
 			=> element.HasValue ? Get<T>(element.Value, propertyName) : null;
 
 		public static int? GetInt32(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetInt32(element.Value, propertyName) : null; 
+			=> element.HasValue ? GetInt32(element.Value, propertyName) : null;
 
 		public static int? GetInt32(this JsonElement element, string propertyName)
 		{
@@ -93,7 +89,7 @@ namespace PrimeView.StaticJsonReader
 			return seconds.HasValue ? DateTimeOffset.FromUnixTimeSeconds(seconds.Value).DateTime : null;
 		}
 
-		public static JsonElement? GetElement(this JsonElement element, string propertyName) 
+		public static JsonElement? GetElement(this JsonElement element, string propertyName)
 			=> element.TryGetProperty(propertyName, out var childElement) ? childElement : null;
 
 		public static JsonElement? GetElement(this JsonElement? element, string propertyName)

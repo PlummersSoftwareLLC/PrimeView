@@ -2,6 +2,7 @@
 
 @using BlazorTable
 @using PrimeView.Entities
+@using System.Text 
 
 @inject IReportReader ReportReader
 
@@ -214,7 +215,7 @@
 												<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
 												<ValueTableRow Label="#&nbsp;CPUs" Value="@docker.CPUCount" />
 												<ValueTableRow Label="Total&nbsp;memory" Value="@docker.TotalMemory" />
-												<ValueTableRow Label="Server&nbspversion" Value="@docker.ServerVersion" />
+												<ValueTableRow Label="Server&nbsp;version" Value="@docker.ServerVersion" />
 											</tbody>
 										</table>
 									</div>
@@ -317,8 +318,21 @@
 	[Parameter]
 	public string ReportId { get; set; }
 
-	private string ReportTitle 
-		=> "Report" + (report?.Date != null ? $" generated on {report.Date}" : string.Empty);
+	private string ReportTitle
+	{
+		get
+		{
+			StringBuilder titleBuilder = new();
+
+			if (report?.User != null)
+				titleBuilder.Append($" by {report.User}");
+
+			if (report?.Date != null)
+				titleBuilder.Append($" at {report.Date.Value.ToLocalTime()}");
+
+			return titleBuilder.Length > 0 ? $"Report generated{titleBuilder}" : "Report"; 
+		}
+	}
 
 	private Table<Result> resultTable;
 	private Report report = null;

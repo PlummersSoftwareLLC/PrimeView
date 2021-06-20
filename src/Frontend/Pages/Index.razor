@@ -17,8 +17,18 @@
 		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date).ToArray()" PageSize="100" ColumnReorder="true">
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
 				<Template>
-					<a href="/report/@context.Id">@context.Date</a>
+					<a href="/report/@context.Id">@context.Date?.ToLocalTime()</a>
 				</Template>
+			</Column>
+			<Column TableItem="ReportSummary" Title="User" Field="@(s => s.User)" Sortable="true" Filterable="true">
+				<CustomIFilters>
+					<CustomSelect TableItem="ReportSummary">
+						@foreach (var user in summaries.Select(r => r.User).Where(u => u != null).Distinct().OrderBy(u => u))
+						{
+							<CustomSelectOption Key="@user" Value="@user" />
+						}
+					</CustomSelect>
+				</CustomIFilters>
 			</Column>
 			<Column TableItem="ReportSummary" Title="CPU Vendor" Field="@(s => s.CpuVendor)" Sortable="true" Filterable="true" />
 			<Column TableItem="ReportSummary" Title="CPU Brand" Field="@(s => s.CpuBrand)" Sortable="true" Filterable="true" />

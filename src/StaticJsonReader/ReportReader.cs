@@ -1,5 +1,4 @@
 ﻿using PrimeView.Entities;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
@@ -33,7 +32,7 @@ namespace PrimeView.StaticJsonReader
 
 				try
 				{
-					reportJson = await this.httpClient.GetStringAsync($"sample-data/report{index}.json");
+					reportJson = await this.httpClient.GetStringAsync($"data/report{index}.json");
 				}
 				catch (HttpRequestException)
 				{
@@ -64,17 +63,20 @@ namespace PrimeView.StaticJsonReader
 				IsSystemVirtual = report.System?.IsVirtual,
 				OsPlatform = report.OperatingSystem?.Platform,
 				OsRelease = report.OperatingSystem?.Release,
-				ResultCount = report.Results?.Length ?? 0
+				ResultCount = report.Results?.Length ?? 0,
+				User = report.User
 			};
 
 		private static Report ParseReportElement(string json, JsonElement element)
 		{
 			var machineElement = element.GetElement("machine");
+			var metadataElement = element.GetElement("metadata");
 
 			Report report = new()
 			{
 				Id = json.GetStableHashCode().ToString(),
-				Date = element.GetElement("metadata").GetDateFromUnixTimeSeconds("date"),
+				Date = metadataElement.GetDateFromUnixTimeSeconds("date"),
+				User = metadataElement.GetString("user"),
 				CPU = machineElement.Get<CPUInfo>("cpu"),
 				OperatingSystem = machineElement.Get<OperatingSystemInfo>("os"),
 				System = machineElement.Get<SystemInfo>("system"),
@@ -92,7 +94,7 @@ namespace PrimeView.StaticJsonReader
 			}
 
 			report.Results = results.ToArray();
-			
+
 			return report;
 		}
 
@@ -113,7 +115,7 @@ namespace PrimeView.StaticJsonReader
 			};
 
 			if (tagsElement.HasValue && int.TryParse(tagsElement.Value.GetString("bits"), out int bits))
-					result.Bits = bits;
+				result.Bits = bits;
 
 			return result;
 		}

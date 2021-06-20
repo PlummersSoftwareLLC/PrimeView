@@ -1,7 +1,8 @@
 {
     "version": "1",
     "metadata": {
-        "date": 1624002124
+        "date": 1624002124,
+        "user": "rbergen"
     },
     "machine": {
         "cpu": {

@@ -6,6 +6,7 @@ namespace PrimeView.Entities
 	{
 		public string? Id { get; set; }
 		public DateTime? Date { get; set; }
+		public string? User { get; set; }
 		public string? CpuVendor { get; set; }
 		public string? CpuBrand { get; set; }
 		public int? CpuCores { get; set; }
