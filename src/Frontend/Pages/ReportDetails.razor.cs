@@ -1,5 +1,6 @@
 ﻿using BlazorTable;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Rendering;
 using PrimeView.Entities;
 using PrimeView.Frontend.Types;
 using System.Collections.Generic;

@@ -224,13 +224,14 @@
 				</div>
 			</div>
 			<br />
-			<Table TableItem="Result" Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="100" ColumnReorder="true" @ref="resultTable" @onclick="ResetRowNumber">
-				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false">
+			<Table Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="0" ColumnReorder="true" @ref="resultTable" ShowFooter="true">
+				@{ ResetRowNumber(); }
+				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")">
 					<Template>
 						@(++rowNumber)
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true">
+				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Select(r => r.Implementation).Distinct().Count()} languages")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
@@ -251,13 +252,13 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" />
+				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" />
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true" />
-				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true">
+				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsMultiThreaded)} multithreaded")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -268,7 +269,7 @@
 						<span class="text-success">@(context.IsMultiThreaded ? "yes" : "no")</span>
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true">
+				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true"  SetFooterValue="@($"{report.Results.Count(r => r.Algorithm == "base")} base")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var algorithm in report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))
@@ -288,7 +289,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true">
+				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsFaithful == true)} faithful")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -306,7 +307,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true">
+				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.Bits == 1)} single-bit")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var bitCount in report.Results.Select(r => r.Bits).Where(b => b != null).Cast<int>().Distinct().OrderBy(b => b))
@@ -330,7 +331,6 @@
 						}
 					</Template>
 				</Column>
-				<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
 			</Table>
 		}
 	</div>
