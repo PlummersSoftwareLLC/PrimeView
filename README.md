@@ -1,6 +1,6 @@
 # PrimeView
 
-This is a WebAssembly static in-browser web application to view benchmark reports generated in/for the [Primes](https://github.com/PlummersSoftwareLLC/Primes) project.
+This is a Blazor WebAssembly static in-browser web application to view benchmark reports generated in/for the [Primes](https://github.com/PlummersSoftwareLLC/Primes) project.
 
 At the moment, the application loads benchmark reports in JSON format from the `data` directory on the webserver. It starts with loading `report1.json`, then loads `report2.json`, and so on, until it receives an HTTP error on the request for a `report<number>.json` file.
 
