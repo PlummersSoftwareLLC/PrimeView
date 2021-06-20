@@ -226,7 +226,12 @@
 				</div>
 			</div>
 			<br />
-			<Table TableItem="Result" Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="100" ColumnReorder="true" @ref="resultTable">
+			<Table TableItem="Result" Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="100" ColumnReorder="true" @ref="resultTable" @onclick="resetRowNumber">
+				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false">
+					<Template>
+						@(++rowNumber)
+					</Template>
+				</Column>
 				<Column TableItem="Result" Title="Implementation" Field="@(r => r.Implementation)" Sortable="true" Filterable="true">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
@@ -339,16 +344,21 @@
 			if (report?.Date != null)
 				titleBuilder.Append($" at {report.Date.Value.ToLocalTime()}");
 
-			return titleBuilder.Length > 0 ? $"Report generated{titleBuilder}" : "Report"; 
+			return titleBuilder.Length > 0 ? $"Report generated{titleBuilder}" : "Report";
 		}
 	}
 
 	private Table<Result> resultTable;
 	private Report report = null;
+	private int rowNumber = 0;
 
 	protected override async Task OnInitializedAsync()
 	{
 		report = await ReportReader.GetReport(ReportId);
 	}
 
+	private void resetRowNumber()
+	{
+		rowNumber = resultTable.PageNumber * resultTable.PageSize;
+	}
 }
