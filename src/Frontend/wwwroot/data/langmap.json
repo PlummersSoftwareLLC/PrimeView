@@ -1,0 +1,154 @@
+{
+	"ada": {
+		"name": "Ada",
+		"url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
+	},
+	"assembly": {
+		"name": "Assembly",
+		"url": "https://en.wikipedia.org/wiki/Assembly_language"
+	},
+	"assemblyscript": {
+		"name": "AssemblyScript",
+		"url": "https://www.assemblyscript.org/"
+	},
+	"basic": {
+		"name": "BASIC",
+		"url": "https://en.wikipedia.org/wiki/BASIC"
+	},
+	"c": {
+		"name": "C",
+		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
+	},
+	"cobol": {
+		"name": "COBOL",
+		"url": "https://en.wikipedia.org/wiki/COBOL"
+	},
+	"cpp": {
+		"name": "C++",
+		"url": "https://isocpp.org/"
+	},
+	"crystal": {
+		"name": "Crystal",
+		"url": "https://crystal-lang.org/"
+	},
+	"csharp": {
+		"name": "C#",
+		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/"
+	},
+	"d": {
+		"name": "D",
+		"url": "https://dlang.org/"
+	},
+	"dart": {
+		"name": "Dart",
+		"url": "https://dart.dev/"
+	},
+	"delphi": {
+		"name": "Delphi",
+		"url": "https://www.embarcadero.com/products/delphi"
+	},
+	"fortran": {
+		"name": "Fortran",
+		"url": "https://wg5-fortran.org/"
+	},
+	"fsharp": {
+		"name": "F#",
+		"url": "https://fsharp.org/"
+	},
+	"go": {
+		"name": "Go",
+		"url": "https://golang.org/"
+	},
+	"haxe": {
+		"name": "Haxe",
+		"url": "https://haxe.org/"
+	},
+	"java": {
+		"name": "Java",
+		"url": "https://www.java.com/"
+	},
+	"julia": {
+		"name": "Julia",
+		"url": "https://julialang.org/"
+	},
+	"lisp": {
+		"name": "Lisp",
+		"url": "https://en.wikipedia.org/wiki/Lisp_(programming_language)"
+	},
+	"mixal": {
+		"name": "MIXAL",
+		"url": "https://en.wikipedia.org/wiki/MIX"
+	},
+	"nim": {
+		"name": "Nim",
+		"url": "https://nim-lang.org/"
+	},
+	"nodejs": {
+		"name": "Node.js",
+		"url": "https://nodejs.org/"
+	},
+	"ocaml": {
+		"name": "OCaml",
+		"url": "https://ocaml.org/"
+	},
+	"pascal": {
+		"name": "Pascal",
+		"url": "https://en.wikipedia.org/wiki/Pascal_(programming_language)"
+	},
+	"perl": {
+		"name": "Perl",
+		"url": "https://www.perl.org/"
+	},
+	"php": {
+		"name": "PHP",
+		"url": "https://www.php.net/"
+	},
+	"powershell": {
+		"name": "PowerShell",
+		"url": "https://docs.microsoft.com/en-gb/powershell/"
+	},
+	"python": {
+		"name": "Python",
+		"url": "https://www.python.org/"
+	},
+	"r": {
+		"name": "R",
+		"url": "https://www.r-project.org/"
+	},
+	"ruby": {
+		"name": "Ruby",
+		"url": "https://www.ruby-lang.org/"
+	},
+	"rust": {
+		"name": "Rust",
+		"url": "https://www.rust-lang.org/"
+	},
+	"scala": {
+		"name": "Scala",
+		"url": "https://www.scala-lang.org/"
+	},
+	"sqlite": {
+		"name": "SQLite",
+		"url": "https://www.sqlite.org/"
+	},
+	"swift": {
+		"name": "Swift",
+		"url": "https://swift.org/"
+	},
+	"tcl": {
+		"name": "Tcl",
+		"url": "https://www.tcl.tk/"
+	},
+	"typescript": {
+		"name": "TypeScript",
+		"url": "https://www.typescriptlang.org/"
+	},
+	"v": {
+		"name": "V",
+		"url": "https://vlang.io/"
+	},
+	"zig": {
+		"name": "Zig",
+		"url": "https://ziglang.org/"
+	}
+}
