@@ -20,6 +20,8 @@ namespace PrimeView.Frontend.Pages
 		[Inject] 
 		public IReportReader ReportReader { get; set; }
 
+
+
 		[Parameter]
 		public string ReportId { get; set; }
 
