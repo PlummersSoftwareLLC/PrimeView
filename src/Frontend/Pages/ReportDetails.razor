@@ -1,8 +1,8 @@
-﻿@page "/report/{reportId}"
+﻿@page "/report"
 
 @using BlazorTable
 @using PrimeView.Entities
-@using PrimeView.Frontend.Types
+@using PrimeView.Frontend.Tools
 
 <div class="row">
 	<div class="col">
@@ -224,9 +224,9 @@
 				</div>
 			</div>
 			<br />
-			<Table Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="0" ColumnReorder="true" @ref="resultTable" ShowFooter="true">
-				@{ ResetRowNumber(); }
-				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")">
+			<Table Items="report.Results.OrderByDescending(r => r.PassesPerSecond)" PageSize="0" ColumnReorder="false" @ref="resultTable" ShowFooter="true" @onmousedown="SaveScrollOffset">
+				@{ OnTableRefreshStart(); }
+				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")" >
 					<Template>
 						@(++rowNumber)
 					</Template>
@@ -256,7 +256,7 @@
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" />
+				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => !r.IsMultiThreaded)} single-threaded")" />
 				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true" />
 				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsMultiThreaded)} multithreaded")">
 					<CustomIFilters>

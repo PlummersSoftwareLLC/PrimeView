@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.QueryStringParameters
+namespace PrimeView.Frontend.Tools
 {
   public static class QueryStringParameterExtensions
   {

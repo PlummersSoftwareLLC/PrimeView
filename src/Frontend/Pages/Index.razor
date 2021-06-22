@@ -14,10 +14,10 @@
 		</nav>
 		<h1>Reports</h1>
 
-		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date).ToArray()" PageSize="100" ColumnReorder="true">
+		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date)" PageSize="100" ColumnReorder="false">
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
 				<Template>
-					<a href="/report/@context.Id">@context.Date?.ToLocalTime()</a>
+					<a href="/report?id=@context.Id">@context.Date?.ToLocalTime()</a>
 				</Template>
 			</Column>
 			<Column TableItem="ReportSummary" Title="User" Field="@(s => s.User)" Sortable="true" Filterable="true">
@@ -50,10 +50,10 @@
 			</Column>
 			<Column TableItem="ReportSummary" Title="# Results" Field="@(s => s.ResultCount)" Sortable="true" Filterable="true">
 				<Template>
-					<a href="/report/@context.Id">@context.ResultCount</a>
+					<a href="/report?id=@context.Id">@context.ResultCount</a>
 				</Template>
 			</Column>
-			<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" />
+			<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" AlwaysShow="true"/>
 		</Table>
 	</div>
 </div>

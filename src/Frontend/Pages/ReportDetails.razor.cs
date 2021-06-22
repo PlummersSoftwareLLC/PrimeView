@@ -1,8 +1,10 @@
 ﻿using BlazorTable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.JSInterop;
 using PrimeView.Entities;
-using PrimeView.Frontend.Types;
+using PrimeView.Frontend.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,14 +17,24 @@ namespace PrimeView.Frontend.Pages
 	public partial class ReportDetails
 	{
 		[Inject]
+		public NavigationManager NavigationManager { get; set; }
+
+		[Inject]
 		public HttpClient Http { get; set; }
 
 		[Inject] 
 		public IReportReader ReportReader { get; set; }
 
+		[Inject]
+		public IJSRuntime JSRuntime { get; set; }
 
+		[QueryStringParameter("sc")]
+		public string SortColumn { get; set; }
 
-		[Parameter]
+		[QueryStringParameter("sd")]
+		public string SortDescending { get; set; }
+
+		[QueryStringParameter("id")]
 		public string ReportId { get; set; }
 
 		private string ReportTitle
@@ -45,11 +57,37 @@ namespace PrimeView.Frontend.Pages
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
+		private int? scrollOffset = null;
 
 		protected override async Task OnInitializedAsync()
 		{
 			report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
+		}
+
+		public override Task SetParametersAsync(ParameterView parameters)
+		{
+			this.SetParametersFromQueryString(NavigationManager);
+
+			return base.SetParametersAsync(parameters);
+		}
+
+
+
+		protected override async Task OnAfterRenderAsync(bool firstRender)
+		{
+			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
+
+			if (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || !SortDescending.EqualsIgnoreCaseOrNull(sortDescending))
+				resultTable.SetSortParameterValues(SortColumn, SortDescending);
+
+			if (scrollOffset != null)
+			{
+				await JSRuntime.InvokeVoidAsync("PrimeViewJS.SetScrollOffset", scrollOffset.Value);
+				scrollOffset = null;
+			}
+
+			base.OnAfterRender(firstRender);
 		}
 
 		private async Task LoadLanguageMap()
@@ -63,9 +101,35 @@ namespace PrimeView.Frontend.Pages
 			catch	{}
 		}
 
-		private void ResetRowNumber()
+		private async Task SaveScrollOffset()
+		{
+			scrollOffset = await JSRuntime.InvokeAsync<int>("PrimeViewJS.GetScrollOffset");
+		}
+
+		private void OnTableRefreshStart()
 		{
 			rowNumber = resultTable.PageNumber * resultTable.PageSize;
+
+			bool queryStringUpdateRequired = false;
+
+			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
+
+			if (!sortColumn.EqualsIgnoreCaseOrNull(SortColumn))
+			{
+				SortColumn = sortColumn;
+				queryStringUpdateRequired = true;
+			}
+
+			if (!sortDescending.EqualsIgnoreCaseOrNull(SortDescending))
+			{
+				SortDescending = sortDescending;
+				queryStringUpdateRequired = true;
+			}
+
+			if (queryStringUpdateRequired)
+			{
+				this.UpdateQueryString(NavigationManager);
+			}
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
