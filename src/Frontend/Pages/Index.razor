@@ -4,6 +4,7 @@
 @using PrimeView.Entities
 
 @inject IReportReader ReportReader
+@inject NavigationManager NavigationManager
 
 <div class="row">
 	<div class="col">
@@ -17,8 +18,8 @@
 		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date)" PageSize="100" ColumnReorder="false">
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
 				<Template>
-					<a href="/report?id=@context.Id">@context.Date?.ToLocalTime()</a>
-				</Template>
+					<button class="btn btn-link" @onclick="() => LoadReport(context.Id)">@context.Date?.ToLocalTime()</button>
+</Template>
 			</Column>
 			<Column TableItem="ReportSummary" Title="User" Field="@(s => s.User)" Sortable="true" Filterable="true">
 				<CustomIFilters>
@@ -50,7 +51,7 @@
 			</Column>
 			<Column TableItem="ReportSummary" Title="# Results" Field="@(s => s.ResultCount)" Sortable="true" Filterable="true">
 				<Template>
-					<a href="/report?id=@context.Id">@context.ResultCount</a>
+					<button class="btn btn-link" @onclick="() => LoadReport(context.Id)">@context.ResultCount</button>
 				</Template>
 			</Column>
 			<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" AlwaysShow="true"/>
@@ -65,5 +66,10 @@
 	protected override async Task OnInitializedAsync()
 	{
 		summaries = await ReportReader.GetSummaries();
+	}
+
+	private void LoadReport(string reportId)
+	{
+		NavigationManager.NavigateTo($"/report?id={reportId}");
 	}
 }

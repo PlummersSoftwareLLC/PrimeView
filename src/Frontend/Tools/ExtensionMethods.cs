@@ -8,10 +8,10 @@ namespace PrimeView.Frontend.Tools
 {
 	public static class ExtensionMethods
 	{
-		public static (string sortColumn, string sortDescending) GetSortParameterValues<T>(this Table<T> table)
+		public static (string sortColumn, bool sortDescending) GetSortParameterValues<T>(this Table<T> table)
 		{
 			if (table == null)
-				return (null, null);
+				return (null, false);
 
 			foreach (var column in table.Columns)
 			{
@@ -19,13 +19,13 @@ namespace PrimeView.Frontend.Tools
 					continue;
 
 				if (column.SortColumn)
-					return (sortColumn: column.Field.GetPropertyParameterName(), sortDescending: column.SortDescending ? "1" : "0");
+					return (sortColumn: column.Field.GetPropertyParameterName(), sortDescending: column.SortDescending);
 			}
 
-			return (null, null);
+			return (null, false);
 		}
 
-		public static bool SetSortParameterValues<T>(this Table<T> table, string sortColumn, string sortDescending)
+		public static bool SetSortParameterValues<T>(this Table<T> table, string sortColumn, bool sortDescending)
 		{
 			if (table == null || sortColumn == null)
 				return false;
@@ -38,7 +38,7 @@ namespace PrimeView.Frontend.Tools
 				if (column.Field.GetPropertyParameterName().EqualsIgnoreCaseOrNull(sortColumn))
 				{
 					column.SortColumn = true;
-					column.SortDescending = sortDescending == "1";
+					column.SortDescending = sortDescending;
 
 					return true;
 				}

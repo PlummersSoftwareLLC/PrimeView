@@ -1,4 +1,5 @@
-﻿using BlazorTable;
+﻿using Blazored.LocalStorage;
+using BlazorTable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
 using Microsoft.JSInterop;
@@ -22,17 +23,23 @@ namespace PrimeView.Frontend.Pages
 		[Inject]
 		public HttpClient Http { get; set; }
 
+		[Inject]
+		public ISyncLocalStorageService LocalStorage { get; set; }
+
 		[Inject] 
 		public IReportReader ReportReader { get; set; }
 
 		[Inject]
-		public IJSRuntime JSRuntime { get; set; }
+		public IJSInProcessRuntime JSRuntime { get; set; }
 
 		[QueryStringParameter("sc")]
-		public string SortColumn { get; set; }
+		public string SortColumn { get; set; } = "pp";
 
 		[QueryStringParameter("sd")]
-		public string SortDescending { get; set; }
+		public bool SortDescending { get; set; } = true;
+
+		[QueryStringParameter("hi")]
+		public bool HideSystemInformation { get; set; } = false;
 
 		[QueryStringParameter("id")]
 		public string ReportId { get; set; }
@@ -67,20 +74,33 @@ namespace PrimeView.Frontend.Pages
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
-			this.SetParametersFromQueryString(NavigationManager);
+			this.SetParametersFromQueryString(NavigationManager, LocalStorage);
 
 			return base.SetParametersAsync(parameters);
 		}
 
 		protected override async Task OnAfterRenderAsync(bool firstRender)
 		{
-			if (ApplyOrUpdateSortParameters())
+			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
+			Console.WriteLine($"OnAfterRenderAsync: GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
+
+			if (!processTableSortingChange && (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || SortDescending != sortDescending))
 			{
-				await resultTable.UpdateAsync();
-				resultTable.Refresh();
+				Console.WriteLine($"SetSortParameterValues: SortColum = {SortColumn}, SortDescending = {SortDescending}");
+				if (resultTable.SetSortParameterValues(SortColumn, SortDescending))
+					await resultTable.UpdateAsync();
 			}
 
+			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+
 			await base.OnAfterRenderAsync(firstRender);
+		}
+
+		private void ToggleSystemInfoPanel()
+		{
+			HideSystemInformation = !HideSystemInformation;
+
+			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
 		}
 
 		private async Task LoadLanguageMap()
@@ -94,21 +114,15 @@ namespace PrimeView.Frontend.Pages
 			catch	{}
 		}
 
-		private bool ApplyOrUpdateSortParameters()
+		private void OnTableRefreshStart()
 		{
-			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
-			Console.WriteLine($"GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
+			rowNumber = resultTable.PageNumber * resultTable.PageSize;
 
 			if (!processTableSortingChange)
-			{
-				if (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || !SortDescending.EqualsIgnoreCaseOrNull(sortDescending))
-				{
-					Console.WriteLine($"SetSortParameterValues: SortColum = {SortColumn}, SortDescending = {SortDescending}");
-					return resultTable.SetSortParameterValues(SortColumn, SortDescending);
-				}
+				return;
 
-				return false;
-			}
+			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
+			Console.WriteLine($"OnTableRefreshStart: GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
 
 			processTableSortingChange = false;
 
@@ -120,7 +134,7 @@ namespace PrimeView.Frontend.Pages
 				queryStringUpdateRequired = true;
 			}
 
-			if (!sortDescending.EqualsIgnoreCaseOrNull(SortDescending))
+			if (sortDescending != SortDescending)
 			{
 				SortDescending = sortDescending;
 				queryStringUpdateRequired = true;
@@ -129,17 +143,8 @@ namespace PrimeView.Frontend.Pages
 			if (queryStringUpdateRequired)
 			{
 				Console.WriteLine($"UpdateQueryString: SortColum = {SortColumn}, SortDescending = {SortDescending}");
-				this.UpdateQueryString(NavigationManager, JSRuntime);
+				this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
 			}
-
-			return false;
-		}
-
-		private void OnTableRefreshStart()
-		{
-			rowNumber = resultTable.PageNumber * resultTable.PageSize;
-
-			ApplyOrUpdateSortParameters();
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
