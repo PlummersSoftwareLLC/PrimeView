@@ -37,12 +37,14 @@
 			<div class="accordion">
 				<div class="card">
 					<div class="card-header">
-						<button class="btn btn-block text-left" type="button" @onclick="ToggleSystemInfoPanel">
-							<h5 class="text-primary"><i class="fa @(HideSystemInformation ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;System Information</h5>
-						</button>
+						<h2 class="mb-0">
+							<button class="btn btn-block text-primary text-left" type="button" @onclick="ToggleSystemInfoPanel">
+								<i class="fa @(HideSystemInformation ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;System Information
+							</button>
+						</h2>
 					</div>
 
-					<div class="collapse @(HideSystemInformation ? "" : "show")">
+					<div class="collapse@(HideSystemInformation ? "" : ".show")">
 						<div class="row">
 							<div class="col-2">
 								<div class="list-group" id="list-tab" role="tablist">
@@ -244,6 +246,18 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<h2 class="mb-0">
+							<button class="btn btn-block text-primary text-left" type="button" @onclick="ToggleFilterPanel">
+								<i class="fa @(HideFilters ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;Filters
+							</button>
+						</h2>
+					</div>
+
+					<div class="collapse @(HideFilters ? "" : "show")">
 					</div>
 				</div>
 			</div>

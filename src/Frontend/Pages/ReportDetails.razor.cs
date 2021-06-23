@@ -41,6 +41,9 @@ namespace PrimeView.Frontend.Pages
 		[QueryStringParameter("hi")]
 		public bool HideSystemInformation { get; set; } = false;
 
+		[QueryStringParameter("hf")]
+		public bool HideFilters { get; set; } = false;
+
 		[QueryStringParameter("id")]
 		public string ReportId { get; set; }
 
@@ -91,7 +94,7 @@ namespace PrimeView.Frontend.Pages
 					await resultTable.UpdateAsync();
 			}
 
-			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+			UpdateQueryString();
 
 			await base.OnAfterRenderAsync(firstRender);
 		}
@@ -100,7 +103,14 @@ namespace PrimeView.Frontend.Pages
 		{
 			HideSystemInformation = !HideSystemInformation;
 
-			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+			UpdateQueryString();
+		}
+
+		private void ToggleFilterPanel()
+		{
+			HideFilters = !HideFilters;
+
+			UpdateQueryString();
 		}
 
 		private async Task LoadLanguageMap()
@@ -143,11 +153,14 @@ namespace PrimeView.Frontend.Pages
 			if (queryStringUpdateRequired)
 			{
 				Console.WriteLine($"UpdateQueryString: SortColum = {SortColumn}, SortDescending = {SortDescending}");
-				this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+				UpdateQueryString();
 			}
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
 			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
+
+		private void UpdateQueryString()
+			=> this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
 	}
 }
