@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -40,7 +41,7 @@ namespace PrimeView.Frontend.Tools
     }
 
     // Apply the values from the component to the query string
-    public static void UpdateQueryString<T>(this T component, NavigationManager navigationManager)
+    public static void UpdateQueryString<T>(this T component, NavigationManager navigationManager, IJSRuntime runtime)
         where T : ComponentBase
     {
       if (!Uri.TryCreate(navigationManager.Uri, UriKind.RelativeOrAbsolute, out var uri))
@@ -76,7 +77,7 @@ namespace PrimeView.Frontend.Tools
         }
       }
 
-      navigationManager.NavigateTo(newUri);
+      runtime.InvokeVoidAsync("PrimeViewJS.ShowUrl", newUri);
     }
 
     private static object ConvertValue(StringValues value, Type type)

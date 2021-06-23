@@ -224,7 +224,7 @@
 				</div>
 			</div>
 			<br />
-			<Table Items="report.Results.OrderByDescending(r => r.PassesPerSecond)" PageSize="0" ColumnReorder="false" @ref="resultTable" ShowFooter="true" @onmousedown="SaveScrollOffset">
+			<Table TableItem="Result" Items="report.Results.OrderByDescending(r => r.PassesPerSecond)" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
 				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")" >
 					<Template>

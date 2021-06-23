@@ -57,7 +57,7 @@ namespace PrimeView.Frontend.Pages
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
-		private int? scrollOffset = null;
+		private bool processTableSortingChange = false;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -72,22 +72,15 @@ namespace PrimeView.Frontend.Pages
 			return base.SetParametersAsync(parameters);
 		}
 
-
-
 		protected override async Task OnAfterRenderAsync(bool firstRender)
 		{
-			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
-
-			if (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || !SortDescending.EqualsIgnoreCaseOrNull(sortDescending))
-				resultTable.SetSortParameterValues(SortColumn, SortDescending);
-
-			if (scrollOffset != null)
+			if (ApplyOrUpdateSortParameters())
 			{
-				await JSRuntime.InvokeVoidAsync("PrimeViewJS.SetScrollOffset", scrollOffset.Value);
-				scrollOffset = null;
+				await resultTable.UpdateAsync();
+				resultTable.Refresh();
 			}
 
-			base.OnAfterRender(firstRender);
+			await base.OnAfterRenderAsync(firstRender);
 		}
 
 		private async Task LoadLanguageMap()
@@ -101,18 +94,25 @@ namespace PrimeView.Frontend.Pages
 			catch	{}
 		}
 
-		private async Task SaveScrollOffset()
+		private bool ApplyOrUpdateSortParameters()
 		{
-			scrollOffset = await JSRuntime.InvokeAsync<int>("PrimeViewJS.GetScrollOffset");
-		}
+			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
+			Console.WriteLine($"GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
 
-		private void OnTableRefreshStart()
-		{
-			rowNumber = resultTable.PageNumber * resultTable.PageSize;
+			if (!processTableSortingChange)
+			{
+				if (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || !SortDescending.EqualsIgnoreCaseOrNull(sortDescending))
+				{
+					Console.WriteLine($"SetSortParameterValues: SortColum = {SortColumn}, SortDescending = {SortDescending}");
+					return resultTable.SetSortParameterValues(SortColumn, SortDescending);
+				}
+
+				return false;
+			}
+
+			processTableSortingChange = false;
 
 			bool queryStringUpdateRequired = false;
-
-			(string sortColumn, string sortDescending) = resultTable.GetSortParameterValues();
 
 			if (!sortColumn.EqualsIgnoreCaseOrNull(SortColumn))
 			{
@@ -128,8 +128,18 @@ namespace PrimeView.Frontend.Pages
 
 			if (queryStringUpdateRequired)
 			{
-				this.UpdateQueryString(NavigationManager);
+				Console.WriteLine($"UpdateQueryString: SortColum = {SortColumn}, SortDescending = {SortDescending}");
+				this.UpdateQueryString(NavigationManager, JSRuntime);
 			}
+
+			return false;
+		}
+
+		private void OnTableRefreshStart()
+		{
+			rowNumber = resultTable.PageNumber * resultTable.PageSize;
+
+			ApplyOrUpdateSortParameters();
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)

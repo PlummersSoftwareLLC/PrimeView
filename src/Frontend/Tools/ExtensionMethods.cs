@@ -10,6 +10,9 @@ namespace PrimeView.Frontend.Tools
 	{
 		public static (string sortColumn, string sortDescending) GetSortParameterValues<T>(this Table<T> table)
 		{
+			if (table == null)
+				return (null, null);
+
 			foreach (var column in table.Columns)
 			{
 				if (column.Field == null)
@@ -24,7 +27,7 @@ namespace PrimeView.Frontend.Tools
 
 		public static bool SetSortParameterValues<T>(this Table<T> table, string sortColumn, string sortDescending)
 		{
-			if (sortColumn == null)
+			if (table == null || sortColumn == null)
 				return false;
 
 			foreach (var column in table.Columns)
@@ -36,6 +39,7 @@ namespace PrimeView.Frontend.Tools
 				{
 					column.SortColumn = true;
 					column.SortDescending = sortDescending == "1";
+
 					return true;
 				}
 			}
