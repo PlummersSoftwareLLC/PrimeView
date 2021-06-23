@@ -1,10 +1,10 @@
-﻿@page "/report/{*reportId}"
+﻿@page "/report"
 
 @using BlazorTable
 @using PrimeView.Entities
-@using PrimeView.Frontend.Types
+@using PrimeView.Frontend.Tools
 
-<div class="row">
+<div class="row h-100">
 	<div class="col">
 		<nav aria-label="breadcrumb">
 			<ol class="breadcrumb">
@@ -15,217 +15,242 @@
 
 		<h1>@ReportTitle</h1>
 
-		@if (report != null)
+		@if (report == null)
 		{
+			<div class="row">
+				<div class="col-auto text-success">
+					<div class="spinner-border"></div>
+				</div>
+				<div class="col text-left">
+					Loading...
+				</div>
+			</div>
+		}
+		else
+		{
+
 			var cpu = report.CPU;
 			var os = report.OperatingSystem;
 			var system = report.System;
 			var docker = report.DockerInfo;
 
-			<div class="row">
-				<div class="col-2">
-					<div class="list-group" id="list-tab" role="tablist">
-						@if (cpu != null)
-						{
-							<a class="list-group-item list-group-item-action active" id="cpu-list" data-toggle="list" href="#cpu-info" role="tab" aria-controls="cpu">CPU</a>
-						}
-						@if (os != null)
-						{
-							<a class="list-group-item list-group-item-action" id="os-list" data-toggle="list" href="#os-info" role="tab" aria-controls="os">Operating System</a>
-						}
-						@if (system != null)
-						{
-							<a class="list-group-item list-group-item-action" id="system-list" data-toggle="list" href="#system-info" role="tab" aria-controls="system">System</a>
-						}
-						@if (docker != null)
-						{
-							<a class="list-group-item list-group-item-action" id="docker-list" data-toggle="list" href="#docker-info" role="tab" aria-controls="docker">Docker</a>
-						}
+			<div class="accordion">
+				<div class="card">
+					<div class="card-header">
+						<button class="btn btn-block text-left" type="button" @onclick="ToggleSystemInfoPanel">
+							<h5 class="text-primary"><i class="fa @(HideSystemInformation ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;System Information</h5>
+						</button>
 					</div>
-				</div>
-				<div class="col">
-					<div class="tab-content" id="nav-tabContent">
-						@if (cpu != null)
-						{
-							<div class="tab-pane fade show active" id="cpu-info" role="tabpanel" aria-labelledby="cpu-list">
-								<div class="row">
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>  
-											<tbody>
-												<ValueTableRow Label="Manufacturer" Value="cpu.Manufacturer" />
-												<ValueTableRow Label="Brand" Value="cpu.Brand" />
-												<ValueTableRow Label="Vendor" Value="cpu.Vendor" />
-												<ValueTableRow Label="Family" Value="cpu.Family" />
-												<ValueTableRow Label="Model" Value="cpu.Model" />
-												<ValueTableRow Label="Stepping" Value="cpu.Stepping" />
-												<ValueTableRow Label="Revision" Value="cpu.Revision" />
-												<ValueTableRow Label="#&nbsp;Cores" Value="cpu.Cores" />
-												<ValueTableRow Label="#&nbsp;Physical&nbsp;cores" Value="cpu.PhysicalCores" />
-												<ValueTableRow Label="#&nbsp;Processors" Value="cpu.Processors" />
-											</tbody>
-										</table>
-									</div>
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Speed" Value="cpu.Speed" />
-												<ValueTableRow Label="Minimum&nbsp;speed" Value="cpu.MinimumSpeed" />
-												<ValueTableRow Label="Maximum&nbsp;speed" Value="cpu.MaximumSpeed" />
-												<ValueTableRow Label="Voltage" Value="cpu.Voltage" />
-												<ValueTableRow Label="Governor" Value="cpu.Governor" />
-												<ValueTableRow Label="Socket" Value="cpu.Socket" />
-												@if (cpu.FlagValues != null)
-												{
-													<tr>
-														<th scope="row">Flags:</th>
-														<td>@string.Join(", ", cpu.FlagValues.OrderBy(f => f))</td>
-													</tr>
-												}
-												<ValueTableRow Label="Virtualization" Value="cpu.Virtualization" />
-												@if (cpu.Cache != null && cpu.Cache.Count > 0)
-												{
-													<tr>
-														<th scope="row">Cache:</th>
-														<td>
-															<table class="table table-sm table-borderless">
-																<tbody>
-																	@foreach (var cacheLine in cpu.Cache)
-																	{
-																		<tr>
-																			<th scope="row">@(cacheLine.Key):</th>
-																			<rd>@cacheLine.Value</rd>
-																		</tr>
-																	}
-																</tbody>
-															</table>
-														</td>
-													</tr>
-												}
-											</tbody>
-										</table>
-									</div>
+
+					<div class="collapse @(HideSystemInformation ? "" : "show")">
+						<div class="row">
+							<div class="col-2">
+								<div class="list-group" id="list-tab" role="tablist">
+									@if (cpu != null)
+									{
+										<a class="list-group-item list-group-item-action active" id="cpu-list" data-toggle="list" href="#cpu-info" role="tab" aria-controls="cpu">CPU</a>
+									}
+									@if (os != null)
+									{
+										<a class="list-group-item list-group-item-action" id="os-list" data-toggle="list" href="#os-info" role="tab" aria-controls="os">Operating System</a>
+									}
+									@if (system != null)
+									{
+										<a class="list-group-item list-group-item-action" id="system-list" data-toggle="list" href="#system-info" role="tab" aria-controls="system">System</a>
+									}
+									@if (docker != null)
+									{
+										<a class="list-group-item list-group-item-action" id="docker-list" data-toggle="list" href="#docker-info" role="tab" aria-controls="docker">Docker</a>
+									}
 								</div>
 							</div>
-						}
-						@if (os != null)
-						{
-							<div class="tab-pane fade" id="os-info" role="tabpanel" aria-labelledby="os-list">
-								<div class="row">
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Platform" Value="@os.Platform" />
-												<ValueTableRow Label="Distribution" Value="@os.Distribution" />
-												<ValueTableRow Label="Release" Value="@os.Release" />
-												<ValueTableRow Label="Code&nbsp;name" Value="@os.CodeName" />
-												<ValueTableRow Label="Kernel" Value="@os.Kernel" />
-												<ValueTableRow Label="Architecture" Value="@os.Architecture" />
-											</tbody>
-										</table>
-									</div>
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Code&nbsp;page" Value="@os.CodePage" />
-												<ValueTableRow Label="Logo&nbsp;file" Value="@os.LogoFile" />
-												<ValueTableRow Label="Build" Value="@os.Build" />
-												<ValueTableRow Label="Serive&nbsp;pack" Value="@os.ServicePack" />
-												<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
-											</tbody>
-										</table>
-									</div>
+							<div class="col">
+								<div class="tab-content" id="nav-tabContent">
+									@if (cpu != null)
+									{
+										<div class="tab-pane fade show active" id="cpu-info" role="tabpanel" aria-labelledby="cpu-list">
+											<div class="row">
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Manufacturer" Value="cpu.Manufacturer" />
+															<ValueTableRow Label="Brand" Value="cpu.Brand" />
+															<ValueTableRow Label="Vendor" Value="cpu.Vendor" />
+															<ValueTableRow Label="Family" Value="cpu.Family" />
+															<ValueTableRow Label="Model" Value="cpu.Model" />
+															<ValueTableRow Label="Stepping" Value="cpu.Stepping" />
+															<ValueTableRow Label="Revision" Value="cpu.Revision" />
+															<ValueTableRow Label="#&nbsp;Cores" Value="cpu.Cores" />
+															<ValueTableRow Label="#&nbsp;Physical&nbsp;cores" Value="cpu.PhysicalCores" />
+															<ValueTableRow Label="#&nbsp;Processors" Value="cpu.Processors" />
+														</tbody>
+													</table>
+												</div>
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Speed" Value="cpu.Speed" />
+															<ValueTableRow Label="Minimum&nbsp;speed" Value="cpu.MinimumSpeed" />
+															<ValueTableRow Label="Maximum&nbsp;speed" Value="cpu.MaximumSpeed" />
+															<ValueTableRow Label="Voltage" Value="cpu.Voltage" />
+															<ValueTableRow Label="Governor" Value="cpu.Governor" />
+															<ValueTableRow Label="Socket" Value="cpu.Socket" />
+															@if (cpu.FlagValues != null)
+															{
+																<tr>
+																	<th scope="row">Flags:</th>
+																	<td>@string.Join(", ", cpu.FlagValues.OrderBy(f => f))</td>
+																</tr>
+															}
+															<ValueTableRow Label="Virtualization" Value="cpu.Virtualization" />
+															@if (cpu.Cache != null && cpu.Cache.Count > 0)
+															{
+																<tr>
+																	<th scope="row">Cache:</th>
+																	<td>
+																		<table class="table table-sm table-borderless">
+																			<tbody>
+																				@foreach (var cacheLine in cpu.Cache)
+																				{
+																					<tr>
+																						<th scope="row">@(cacheLine.Key):</th>
+																						<rd>@cacheLine.Value</rd>
+																					</tr>
+																				}
+																			</tbody>
+																		</table>
+																	</td>
+																</tr>
+															}
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									}
+									@if (os != null)
+									{
+										<div class="tab-pane fade" id="os-info" role="tabpanel" aria-labelledby="os-list">
+											<div class="row">
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Platform" Value="@os.Platform" />
+															<ValueTableRow Label="Distribution" Value="@os.Distribution" />
+															<ValueTableRow Label="Release" Value="@os.Release" />
+															<ValueTableRow Label="Code&nbsp;name" Value="@os.CodeName" />
+															<ValueTableRow Label="Kernel" Value="@os.Kernel" />
+															<ValueTableRow Label="Architecture" Value="@os.Architecture" />
+														</tbody>
+													</table>
+												</div>
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Code&nbsp;page" Value="@os.CodePage" />
+															<ValueTableRow Label="Logo&nbsp;file" Value="@os.LogoFile" />
+															<ValueTableRow Label="Build" Value="@os.Build" />
+															<ValueTableRow Label="Serive&nbsp;pack" Value="@os.ServicePack" />
+															<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									}
+									@if (system != null)
+									{
+										<div class="tab-pane fade" id="system-info" role="tabpanel" aria-labelledby="system-list">
+											<div class="row">
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
+															<ValueTableRow Label="SKU" Value="@system.SKU" />
+															<ValueTableRow Label="Virtual" Value="@system.IsVirtual" />
+														</tbody>
+													</table>
+												</div>
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Model" Value="@system.Model" />
+															<ValueTableRow Label="Version" Value="@system.Version" />
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									}
+									@if (docker != null)
+									{
+										<div class="tab-pane fade" id="docker-info" role="tabpanel" aria-labelledby="docker-list">
+											<div class="row">
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Kernel&nbsp;version" Value="@docker.KernelVersion" />
+															<ValueTableRow Label="Operating&nbsp;system" Value="@docker.OperatingSystem" />
+															<ValueTableRow Label="OS&nbsp;version" Value="@docker.OSVersion" />
+															<ValueTableRow Label="OS&nbsp;type" Value="@docker.OSType" />
+														</tbody>
+													</table>
+												</div>
+												<div class="col">
+													<table class="table table-sm">
+														<colgroup>
+															<col style="width: min-content" />
+															<col style="width: auto" />
+														</colgroup>
+														<tbody>
+															<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
+															<ValueTableRow Label="#&nbsp;CPUs" Value="@docker.CPUCount" />
+															<ValueTableRow Label="Total&nbsp;memory" Value="@docker.TotalMemory" />
+															<ValueTableRow Label="Server&nbsp;version" Value="@docker.ServerVersion" />
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									}
 								</div>
 							</div>
-						}
-						@if (system != null)
-						{
-							<div class="tab-pane fade" id="system-info" role="tabpanel" aria-labelledby="system-list">
-								<div class="row">
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
-												<ValueTableRow Label="SKU" Value="@system.SKU" />
-												<ValueTableRow Label="Virtual" Value="@system.IsVirtual" />
-											</tbody>
-										</table>
-									</div>
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Model" Value="@system.Model" />
-												<ValueTableRow Label="Version" Value="@system.Version" />
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						}
-						@if (docker != null)
-						{
-							<div class="tab-pane fade" id="docker-info" role="tabpanel" aria-labelledby="docker-list">
-								<div class="row">
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Kernel&nbsp;version" Value="@docker.KernelVersion" />
-												<ValueTableRow Label="Operating&nbsp;system" Value="@docker.OperatingSystem" />
-												<ValueTableRow Label="OS&nbsp;version" Value="@docker.OSVersion" />
-												<ValueTableRow Label="OS&nbsp;type" Value="@docker.OSType" />
-											</tbody>
-										</table>
-									</div>
-									<div class="col">
-										<table class="table table-sm">
-											<colgroup>
-												<col style="width: min-content" />
-												<col style="width: auto" />
-											</colgroup>
-											<tbody>
-												<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
-												<ValueTableRow Label="#&nbsp;CPUs" Value="@docker.CPUCount" />
-												<ValueTableRow Label="Total&nbsp;memory" Value="@docker.TotalMemory" />
-												<ValueTableRow Label="Server&nbsp;version" Value="@docker.ServerVersion" />
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div>
-						}
+						</div>
 					</div>
 				</div>
 			</div>
+
 			<br />
-			<Table Items="report.Results.OrderByDescending(r => r.PassesPerSecond).ToArray()" PageSize="0" ColumnReorder="true" @ref="resultTable" ShowFooter="true">
-				@{ ResetRowNumber(); }
+			<Table TableItem="Result" Items="report.Results" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
+				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")">
 					<Template>
 						@(++rowNumber)
@@ -256,8 +281,8 @@
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true" />
+				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => !r.IsMultiThreaded)} single-threaded")" />
+				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsMultiThreaded)} multithreaded")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
@@ -269,7 +294,7 @@
 						<span class="text-success">@(context.IsMultiThreaded ? "yes" : "no")</span>
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true"  SetFooterValue="@($"{report.Results.Count(r => r.Algorithm == "base")} base")">
+				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.Algorithm == "base")} base")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var algorithm in report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))

@@ -1,8 +1,11 @@
-﻿using BlazorTable;
+﻿using Blazored.LocalStorage;
+using BlazorTable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using Microsoft.JSInterop;
 using PrimeView.Entities;
-using PrimeView.Frontend.Types;
+using PrimeView.Frontend.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,12 +18,30 @@ namespace PrimeView.Frontend.Pages
 	public partial class ReportDetails
 	{
 		[Inject]
+		public NavigationManager NavigationManager { get; set; }
+
+		[Inject]
 		public HttpClient Http { get; set; }
+
+		[Inject]
+		public ISyncLocalStorageService LocalStorage { get; set; }
 
 		[Inject] 
 		public IReportReader ReportReader { get; set; }
 
-		[Parameter]
+		[Inject]
+		public IJSInProcessRuntime JSRuntime { get; set; }
+
+		[QueryStringParameter("sc")]
+		public string SortColumn { get; set; } = "pp";
+
+		[QueryStringParameter("sd")]
+		public bool SortDescending { get; set; } = true;
+
+		[QueryStringParameter("hi")]
+		public bool HideSystemInformation { get; set; } = false;
+
+		[QueryStringParameter("id")]
 		public string ReportId { get; set; }
 
 		private string ReportTitle
@@ -43,11 +64,43 @@ namespace PrimeView.Frontend.Pages
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
+		private bool processTableSortingChange = false;
 
 		protected override async Task OnInitializedAsync()
 		{
 			report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
+		}
+
+		public override Task SetParametersAsync(ParameterView parameters)
+		{
+			this.SetParametersFromQueryString(NavigationManager, LocalStorage);
+
+			return base.SetParametersAsync(parameters);
+		}
+
+		protected override async Task OnAfterRenderAsync(bool firstRender)
+		{
+			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
+			Console.WriteLine($"OnAfterRenderAsync: GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
+
+			if (!processTableSortingChange && (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || SortDescending != sortDescending))
+			{
+				Console.WriteLine($"SetSortParameterValues: SortColum = {SortColumn}, SortDescending = {SortDescending}");
+				if (resultTable.SetSortParameterValues(SortColumn, SortDescending))
+					await resultTable.UpdateAsync();
+			}
+
+			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+
+			await base.OnAfterRenderAsync(firstRender);
+		}
+
+		private void ToggleSystemInfoPanel()
+		{
+			HideSystemInformation = !HideSystemInformation;
+
+			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
 		}
 
 		private async Task LoadLanguageMap()
@@ -61,9 +114,37 @@ namespace PrimeView.Frontend.Pages
 			catch	{}
 		}
 
-		private void ResetRowNumber()
+		private void OnTableRefreshStart()
 		{
 			rowNumber = resultTable.PageNumber * resultTable.PageSize;
+
+			if (!processTableSortingChange)
+				return;
+
+			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
+			Console.WriteLine($"OnTableRefreshStart: GetSortParameterValues: sortColum = {sortColumn}, sortDescending = {sortDescending}");
+
+			processTableSortingChange = false;
+
+			bool queryStringUpdateRequired = false;
+
+			if (!sortColumn.EqualsIgnoreCaseOrNull(SortColumn))
+			{
+				SortColumn = sortColumn;
+				queryStringUpdateRequired = true;
+			}
+
+			if (sortDescending != SortDescending)
+			{
+				SortDescending = sortDescending;
+				queryStringUpdateRequired = true;
+			}
+
+			if (queryStringUpdateRequired)
+			{
+				Console.WriteLine($"UpdateQueryString: SortColum = {SortColumn}, SortDescending = {SortDescending}");
+				this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+			}
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)

@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.Types
+namespace PrimeView.Frontend.Tools
 {
 	public class LanguageInfo
 	{

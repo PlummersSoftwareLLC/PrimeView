@@ -1,6 +1,8 @@
+using Blazored.LocalStorage;
 using BlazorTable;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.JSInterop;
 using PrimeView.StaticJsonReader;
 using System;
 using System.Net.Http;
@@ -18,7 +20,9 @@ namespace PrimeView.Frontend
 			builder.Services
 				.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) })
 				.AddBlazorTable()
-				.AddStaticJsonReportReader();
+				.AddBlazoredLocalStorage()
+				.AddStaticJsonReportReader()
+				.AddSingleton(services => (IJSInProcessRuntime)services.GetRequiredService<IJSRuntime>());
 
 			await builder.Build().RunAsync();
 		}
