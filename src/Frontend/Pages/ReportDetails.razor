@@ -74,10 +74,6 @@
 											<div class="row">
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Manufacturer" Value="cpu.Manufacturer" />
 															<ValueTableRow Label="Brand" Value="cpu.Brand" />
@@ -86,22 +82,18 @@
 															<ValueTableRow Label="Model" Value="cpu.Model" />
 															<ValueTableRow Label="Stepping" Value="cpu.Stepping" />
 															<ValueTableRow Label="Revision" Value="cpu.Revision" />
-															<ValueTableRow Label="#&nbsp;Cores" Value="cpu.Cores" />
-															<ValueTableRow Label="#&nbsp;Physical&nbsp;cores" Value="cpu.PhysicalCores" />
-															<ValueTableRow Label="#&nbsp;Processors" Value="cpu.Processors" />
+															<ValueTableRow Label="# Cores" Value="cpu.Cores" />
+															<ValueTableRow Label="# Physical cores" Value="cpu.PhysicalCores" />
+															<ValueTableRow Label="# Processors" Value="cpu.Processors" />
 														</tbody>
 													</table>
 												</div>
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Speed" Value="cpu.Speed" />
-															<ValueTableRow Label="Minimum&nbsp;speed" Value="cpu.MinimumSpeed" />
-															<ValueTableRow Label="Maximum&nbsp;speed" Value="cpu.MaximumSpeed" />
+															<ValueTableRow Label="Minimum speed" Value="cpu.MinimumSpeed" />
+															<ValueTableRow Label="Maximum speed" Value="cpu.MaximumSpeed" />
 															<ValueTableRow Label="Voltage" Value="cpu.Voltage" />
 															<ValueTableRow Label="Governor" Value="cpu.Governor" />
 															<ValueTableRow Label="Socket" Value="cpu.Socket" />
@@ -144,15 +136,11 @@
 											<div class="row">
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Platform" Value="@os.Platform" />
 															<ValueTableRow Label="Distribution" Value="@os.Distribution" />
 															<ValueTableRow Label="Release" Value="@os.Release" />
-															<ValueTableRow Label="Code&nbsp;name" Value="@os.CodeName" />
+															<ValueTableRow Label="Code name" Value="@os.CodeName" />
 															<ValueTableRow Label="Kernel" Value="@os.Kernel" />
 															<ValueTableRow Label="Architecture" Value="@os.Architecture" />
 														</tbody>
@@ -160,15 +148,11 @@
 												</div>
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
-															<ValueTableRow Label="Code&nbsp;page" Value="@os.CodePage" />
-															<ValueTableRow Label="Logo&nbsp;file" Value="@os.LogoFile" />
+															<ValueTableRow Label="Code page" Value="@os.CodePage" />
+															<ValueTableRow Label="Logo file" Value="@os.LogoFile" />
 															<ValueTableRow Label="Build" Value="@os.Build" />
-															<ValueTableRow Label="Serive&nbsp;pack" Value="@os.ServicePack" />
+															<ValueTableRow Label="Serive pack" Value="@os.ServicePack" />
 															<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
 														</tbody>
 													</table>
@@ -182,10 +166,6 @@
 											<div class="row">
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
 															<ValueTableRow Label="SKU" Value="@system.SKU" />
@@ -195,10 +175,6 @@
 												</div>
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Model" Value="@system.Model" />
 															<ValueTableRow Label="Version" Value="@system.Version" />
@@ -214,29 +190,21 @@
 											<div class="row">
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
-															<ValueTableRow Label="Kernel&nbsp;version" Value="@docker.KernelVersion" />
-															<ValueTableRow Label="Operating&nbsp;system" Value="@docker.OperatingSystem" />
-															<ValueTableRow Label="OS&nbsp;version" Value="@docker.OSVersion" />
-															<ValueTableRow Label="OS&nbsp;type" Value="@docker.OSType" />
+															<ValueTableRow Label="Kernel version" Value="@docker.KernelVersion" />
+															<ValueTableRow Label="Operating system" Value="@docker.OperatingSystem" />
+															<ValueTableRow Label="OS version" Value="@docker.OSVersion" />
+															<ValueTableRow Label="OS type" Value="@docker.OSType" />
 														</tbody>
 													</table>
 												</div>
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
-															<ValueTableRow Label="#&nbsp;CPUs" Value="@docker.CPUCount" />
-															<ValueTableRow Label="Total&nbsp;memory" Value="@docker.TotalMemory" />
-															<ValueTableRow Label="Server&nbsp;version" Value="@docker.ServerVersion" />
+															<ValueTableRow Label="# CPUs" Value="@docker.CPUCount" />
+															<ValueTableRow Label="Total memory" Value="@docker.TotalMemory" />
+															<ValueTableRow Label="Server version" Value="@docker.ServerVersion" />
 														</tbody>
 													</table>
 												</div>
@@ -265,9 +233,9 @@
 										<label for="implementatios">Language</label>
 										<select type="multiple" class="form-control" id="implementatios">
 											@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
-										{
-											<option value="@languageInfo.Key">@languageInfo.Name</option>
-										}
+											{
+												<option value="@languageInfo.Key">@languageInfo.Name</option>
+											}
 										</select>
 									</div>
 									<div class="form-group mb-2">
