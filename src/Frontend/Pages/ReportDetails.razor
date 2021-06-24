@@ -258,6 +258,41 @@
 					</div>
 
 					<div class="collapse @(HideFilters ? "" : "show")">
+						<form>
+							<div class="row">
+								<div class="form-inline">
+									<div class="form-group mb-2">
+										<label for="implementatios">Language</label>
+										<select type="multiple" class="form-control" id="implementatios">
+											@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+										{
+											<option value="@languageInfo.Key">@languageInfo.Name</option>
+										}
+										</select>
+									</div>
+									<div class="form-group mb-2">
+										<label>Parallelism</label>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="parallelism-st" value="parallelism-st" checked>
+											<label class="form-check-label" for="parallelism-st">
+												Single-threaded
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="parallelism-mt" value="parallelism-mt" checked>
+											<label class="form-check-label" for="parallelism-mt">
+												Multithreaded
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col">
+									<button type="submit" class="btn btn-primary mb-2">Apply</button>
+								</div>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
