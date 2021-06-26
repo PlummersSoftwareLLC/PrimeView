@@ -68,6 +68,19 @@ namespace PrimeView.Frontend.Pages
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
 		private bool processTableSortingChange = false;
+		private string fi 
+		{ 
+			get => fi_internal;
+			set
+			{
+				Console.WriteLine(value);
+				fi_internal = value;
+			}
+		}
+		private string fi_internal;
+		private bool fp_st = true, fp_mt = true;
+		private bool fa_ba = true, fa_wh = true, fa_ot = true;
+		private bool fb_uk = true, fb_on = true, fb_ot = true;
 
 		protected override async Task OnInitializedAsync()
 		{

@@ -227,36 +227,84 @@
 
 					<div class="collapse @(HideFilters ? "" : "show")">
 						<form>
-							<div class="row">
-								<div class="form-inline">
-									<div class="form-group mb-2">
-										<label for="implementatios">Language</label>
-										<select type="multiple" class="form-control" id="implementatios">
-											@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
-											{
-												<option value="@languageInfo.Key">@languageInfo.Name</option>
-											}
-										</select>
+							<div class="row m-2 no-gutters">
+								<div class="col-auto mt-2 ml-3 mr-1">
+									<label for="implementatios">Language:</label>
+								</div>
+								<div class="col-auto mt-1 ml-1 mr-3">
+									<select multiple class="form-control" id="implementations" @bind="fi">
+										@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+										{
+											<option value="@languageInfo.Key">@languageInfo.Name</option>
+										}
+									</select>
+								</div>
+								<div class="col-auto mt-2 ml-3 mr-1">
+									<label>Parallelism:</label>
+								</div>
+								<div class="col-auto mt-2 ml-1 mr-3">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fp_st" @bind="fp_st">
+										<label class="form-check-label" for="fp_st">
+											Single-threaded
+										</label>
 									</div>
-									<div class="form-group mb-2">
-										<label>Parallelism</label>
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="parallelism-st" value="parallelism-st" checked>
-											<label class="form-check-label" for="parallelism-st">
-												Single-threaded
-											</label>
-										</div>
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" id="parallelism-mt" value="parallelism-mt" checked>
-											<label class="form-check-label" for="parallelism-mt">
-												Multithreaded
-											</label>
-										</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fp-mt" @bind="fp_mt">
+										<label class="form-check-label" for="fp_mt">
+											Multithreaded
+										</label>
+									</div>
+								</div>
+								<div class="col-auto mt-2 ml-3 mr-1">
+									<label>Algorithm:</label>
+								</div>
+								<div class="col-auto mt-2 ml-1 mr-3">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_ba" @bind="fa_ba">
+										<label class="form-check-label" for="fa_ba">
+											base
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_wh" @bind="fa_wh">
+										<label class="form-check-label" for="fa_wh">
+											wheel
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_ot" @bind="fa_ot">
+										<label class="form-check-label" for="fa_ot">
+											&lt;other&gt;
+										</label>
+									</div>
+								</div>
+								<div class="col-auto mt-2 ml-3 mr-1">
+									<label>Bits per prime:</label>
+								</div>
+								<div class="col-auto mt-2 ml-1 mr-3">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_uk" @bind="fb_uk">
+										<label class="form-check-label" for="fb_uk">
+											<em>Unknown</em>
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_on" @bind="fb_on">
+										<label class="form-check-label" for="fb_on">
+											wheel
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_ot" @bind="fb_ot">
+										<label class="form-check-label" for="fb_ot">
+											&lt;other&gt;
+										</label>
 									</div>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col">
+							<div class="row m-2 no-gutters">
+								<div class="col mt-2 mx-3">
 									<button type="submit" class="btn btn-primary mb-2">Apply</button>
 								</div>
 							</div>
