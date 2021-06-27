@@ -21,3 +21,9 @@ PrimeViewJS.ClearMultiselectValues = function (element) {
 			element.options[i].selected = false;
 	}
 };
+
+PrimeViewJS.SetMultiselectValues = function (element, values) {
+	for (var i = 0; i < element.length; i++) {
+		element.options[i].selected = values.includes(element.options[i].value);
+	}
+};

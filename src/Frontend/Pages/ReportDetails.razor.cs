@@ -18,6 +18,8 @@ namespace PrimeView.Frontend.Pages
 {
 	public partial class ReportDetails
 	{
+		private const string FilterPresetStorageKey = "ResultFilterPresets";
+
 		[Inject]
 		public NavigationManager NavigationManager { get; set; }
 
@@ -45,6 +47,9 @@ namespace PrimeView.Frontend.Pages
 		[QueryStringParameter("hf")]
 		public bool HideFilters { get; set; } = false;
 
+		[QueryStringParameter("hp")]
+		public bool HideFilterPresets { get; set; } = false;
+
 		[QueryStringParameter("id")]
 		public string ReportId { get; set; }
 
@@ -54,63 +59,63 @@ namespace PrimeView.Frontend.Pages
 		[QueryStringParameter("fp")]
 		public string FilterParallelismText
 		{
-			get => GetFilterValueString(!FilterParallelSinglethreaded, "st", !FilterParallelMultithreaded, "mt");
+			get => JoinFilterValueString(!FilterParallelSinglethreaded, "st", !FilterParallelMultithreaded, "mt");
 
 			set
 			{
-				value = $"~{value}~";
+				var values = SplitFilterValueString(value);
 
-				FilterParallelSinglethreaded = !value.Contains("~st~");
-				FilterParallelMultithreaded = !value.Contains("~mt~");
+				FilterParallelSinglethreaded = !values.Contains("st");
+				FilterParallelMultithreaded = !values.Contains("mt");
 			}
 		}
 
 		[QueryStringParameter("fa")]
 		public string FilterAlgorithmText
 		{
-			get => GetFilterValueString(!FilterAlgorithmBase, "ba", !FilterAlgorithmWheel, "wh", !FilterAlgorithmOther, "ot");
+			get => JoinFilterValueString(!FilterAlgorithmBase, "ba", !FilterAlgorithmWheel, "wh", !FilterAlgorithmOther, "ot");
 
 			set
 			{
-				value = $"~{value}~";
+				var values = SplitFilterValueString(value);
 
-				FilterAlgorithmBase = !value.Contains("~ba~");
-				FilterAlgorithmWheel = !value.Contains("~wh~");
-				FilterAlgorithmOther = !value.Contains("~ot~");
+				FilterAlgorithmBase = !values.Contains("ba");
+				FilterAlgorithmWheel = !values.Contains("wh");
+				FilterAlgorithmOther = !values.Contains("ot");
 			}
 		}
 
 		[QueryStringParameter("ff")]
 		public string FilterFaithfulText
 		{
-			get => GetFilterValueString(!FilterFaithful, "ff", !FilterUnfaithful, "uf");
+			get => JoinFilterValueString(!FilterFaithful, "ff", !FilterUnfaithful, "uf");
 
 			set
 			{
-				value = $"~{value}~";
+				var values = SplitFilterValueString(value);
 
-				FilterFaithful = !value.Contains("~ff~");
-				FilterUnfaithful = !value.Contains("~uf~");
+				FilterFaithful = !values.Contains("ff");
+				FilterUnfaithful = !values.Contains("uf");
 			}
 		}
 
 		[QueryStringParameter("fb")]
 		public string FilterBitsText
 		{
-			get => GetFilterValueString(!FilterBitsUnknown, "uk", !FilterBitsOne, "on", !FilterBitsOther, "ot");
+			get => JoinFilterValueString(!FilterBitsUnknown, "uk", !FilterBitsOne, "on", !FilterBitsOther, "ot");
 
 			set
 			{
-				value = $"~{value}~";
+				var values = SplitFilterValueString(value);
 
-				FilterBitsUnknown = !value.Contains("~uk~");
-				FilterBitsOne = !value.Contains("~on~");
-				FilterBitsOther = !value.Contains("~ot~");
+				FilterBitsUnknown = !values.Contains("uk");
+				FilterBitsOne = !values.Contains("on");
+				FilterBitsOther = !values.Contains("ot");
 			}
 		}
 
 		public IList<string> FilterImplementations
-			=> FilterImplementationText.Split("~", StringSplitOptions.RemoveEmptyEntries);
+			=> SplitFilterValueString(FilterImplementationText);
 
 		public bool FilterParallelSinglethreaded { get; set; } = true;
 		public bool FilterParallelMultithreaded { get; set; } = true;
@@ -154,6 +159,8 @@ namespace PrimeView.Frontend.Pages
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
 		private bool processTableSortingChange = false;
+		private List<ResultFilterPreset> filterPresets = null;
+		private string filterPresetName;
 
 		private ElementReference implementationsSelect;
 
@@ -161,6 +168,20 @@ namespace PrimeView.Frontend.Pages
 		{
 			report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
+
+			if (LocalStorage.ContainKey(FilterPresetStorageKey))
+			{
+				try
+				{
+					filterPresets = LocalStorage.GetItem<List<ResultFilterPreset>>(FilterPresetStorageKey);
+				}
+				catch
+				{
+					LocalStorage.RemoveItem(FilterPresetStorageKey);
+				}
+			}
+
+			await base.OnInitializedAsync();
 		}
 
 		public override Task SetParametersAsync(ParameterView parameters)
@@ -199,16 +220,18 @@ namespace PrimeView.Frontend.Pages
 		private void ToggleSystemInfoPanel()
 		{
 			HideSystemInformation = !HideSystemInformation;
-
-			UpdateQueryString();
 		}
 
 		private void ToggleFilterPanel()
 		{
 			HideFilters = !HideFilters;
-
-			UpdateQueryString();
 		}
+
+		private void ToggleFilterPresetPanel()
+		{
+			HideFilterPresets = !HideFilterPresets;
+		}
+
 
 		private async Task LoadLanguageMap()
 		{
@@ -261,7 +284,7 @@ namespace PrimeView.Frontend.Pages
 			FilterImplementationText = await JSRuntime.InvokeAsync<string>("PrimeViewJS.GetMultiselectValues", implementationsSelect, "~") ?? string.Empty;
 		}
 
-		private string GetFilterValueString(params object[] flagSet)
+		private string JoinFilterValueString(params object[] flagSet)
 		{
 			List<string> setFlags = new(); 
 
@@ -272,6 +295,69 @@ namespace PrimeView.Frontend.Pages
 			}
 
 			return setFlags.Count > 0 ? string.Join("~", setFlags) : string.Empty;
+		}
+
+		private IList<string> SplitFilterValueString(string text)
+			=> text.Split("~", StringSplitOptions.RemoveEmptyEntries);
+
+		private async Task ApplyFilterPreset(int index)
+		{
+			var preset = filterPresets?[index];
+
+			if (preset == null)
+				return;
+
+			FilterAlgorithmText = preset.AlgorithmText;
+			FilterBitsText = preset.BitsText;
+			FilterFaithfulText = preset.FaithfulText;
+			FilterImplementationText = preset.ImplementationText;
+			FilterParallelismText = preset.ParallelismText;
+
+			var filterImplementations = FilterImplementations;
+
+			if (filterImplementations.Count > 0)
+				await JSRuntime.InvokeVoidAsync("PrimeViewJS.SetMultiselectValues", implementationsSelect, FilterImplementations.ToArray());
+
+			else
+				await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", implementationsSelect);
+
+			filterPresetName = preset.Name;
+		}
+
+		private void RemoveFilterPreset(int index)
+		{
+			filterPresets?.RemoveAt(index);
+
+			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets);
+		}
+
+		private void AddFilterPreset()
+		{
+			if (string.IsNullOrWhiteSpace(filterPresetName))
+				return;
+
+			if (filterPresets == null)
+				filterPresets = new();
+
+			int i;
+			for (i = 0; i < filterPresets.Count && string.Compare(filterPresetName, filterPresets[i].Name, StringComparison.OrdinalIgnoreCase) > 0; i++);
+
+			if (i < filterPresets.Count && string.Equals(filterPresetName, filterPresets[i].Name, StringComparison.OrdinalIgnoreCase))
+				filterPresets.RemoveAt(i);
+
+			filterPresets.Insert(i, new()
+			{
+				Name = filterPresetName,
+				AlgorithmText = FilterAlgorithmText,
+				BitsText = FilterBitsText,
+				FaithfulText = FilterFaithfulText,
+				ImplementationText = FilterImplementationText,
+				ParallelismText = FilterParallelismText
+			});
+
+			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets);
+
+			filterPresetName = null;
 		}
 	}
 }
