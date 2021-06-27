@@ -24,11 +24,10 @@
 				<div class="col text-left">
 					Loading...
 				</div>
-			</div>
+			</div> 
 		}
 		else
 		{
-
 			var cpu = report.CPU;
 			var os = report.OperatingSystem;
 			var system = report.System;
@@ -37,12 +36,14 @@
 			<div class="accordion">
 				<div class="card">
 					<div class="card-header">
-						<button class="btn btn-block text-left" type="button" @onclick="ToggleSystemInfoPanel">
-							<h5 class="text-primary"><i class="fa @(HideSystemInformation ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;System Information</h5>
-						</button>
+						<h2 class="mb-0">
+							<button class="btn btn-block text-primary text-left" type="button" @onclick="ToggleSystemInfoPanel">
+								<i class="fa @(HideSystemInformation ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;System Information
+							</button>
+						</h2>
 					</div>
 
-					<div class="collapse @(HideSystemInformation ? "" : "show")">
+					<div class="collapse@(HideSystemInformation ? "" : ".show")">
 						<div class="row">
 							<div class="col-2">
 								<div class="list-group" id="list-tab" role="tablist">
@@ -72,10 +73,6 @@
 											<div class="row">
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Manufacturer" Value="cpu.Manufacturer" />
 															<ValueTableRow Label="Brand" Value="cpu.Brand" />
@@ -84,22 +81,18 @@
 															<ValueTableRow Label="Model" Value="cpu.Model" />
 															<ValueTableRow Label="Stepping" Value="cpu.Stepping" />
 															<ValueTableRow Label="Revision" Value="cpu.Revision" />
-															<ValueTableRow Label="#&nbsp;Cores" Value="cpu.Cores" />
-															<ValueTableRow Label="#&nbsp;Physical&nbsp;cores" Value="cpu.PhysicalCores" />
-															<ValueTableRow Label="#&nbsp;Processors" Value="cpu.Processors" />
+															<ValueTableRow Label="# Cores" Value="cpu.Cores" />
+															<ValueTableRow Label="# Physical cores" Value="cpu.PhysicalCores" />
+															<ValueTableRow Label="# Processors" Value="cpu.Processors" />
 														</tbody>
 													</table>
 												</div>
 												<div class="col">
 													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
 														<tbody>
 															<ValueTableRow Label="Speed" Value="cpu.Speed" />
-															<ValueTableRow Label="Minimum&nbsp;speed" Value="cpu.MinimumSpeed" />
-															<ValueTableRow Label="Maximum&nbsp;speed" Value="cpu.MaximumSpeed" />
+															<ValueTableRow Label="Minimum speed" Value="cpu.MinimumSpeed" />
+															<ValueTableRow Label="Maximum speed" Value="cpu.MaximumSpeed" />
 															<ValueTableRow Label="Voltage" Value="cpu.Voltage" />
 															<ValueTableRow Label="Governor" Value="cpu.Governor" />
 															<ValueTableRow Label="Socket" Value="cpu.Socket" />
@@ -125,143 +118,224 @@
 																						<rd>@cacheLine.Value</rd>
 																					</tr>
 																				}
-																			</tbody>
-																		</table>
-																	</td>
-																</tr>
-															}
-														</tbody>
-													</table>
+																				</tbody>
+																			</table>
+																		</td>
+																	</tr>
+																}
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
-										</div>
-									}
-									@if (os != null)
-									{
-										<div class="tab-pane fade" id="os-info" role="tabpanel" aria-labelledby="os-list">
-											<div class="row">
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Platform" Value="@os.Platform" />
-															<ValueTableRow Label="Distribution" Value="@os.Distribution" />
-															<ValueTableRow Label="Release" Value="@os.Release" />
-															<ValueTableRow Label="Code&nbsp;name" Value="@os.CodeName" />
-															<ValueTableRow Label="Kernel" Value="@os.Kernel" />
-															<ValueTableRow Label="Architecture" Value="@os.Architecture" />
-														</tbody>
-													</table>
-												</div>
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Code&nbsp;page" Value="@os.CodePage" />
-															<ValueTableRow Label="Logo&nbsp;file" Value="@os.LogoFile" />
-															<ValueTableRow Label="Build" Value="@os.Build" />
-															<ValueTableRow Label="Serive&nbsp;pack" Value="@os.ServicePack" />
-															<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
-														</tbody>
-													</table>
+										}
+										@if (os != null)
+										{
+											<div class="tab-pane fade" id="os-info" role="tabpanel" aria-labelledby="os-list">
+												<div class="row">
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Platform" Value="@os.Platform" />
+																<ValueTableRow Label="Distribution" Value="@os.Distribution" />
+																<ValueTableRow Label="Release" Value="@os.Release" />
+																<ValueTableRow Label="Code name" Value="@os.CodeName" />
+																<ValueTableRow Label="Kernel" Value="@os.Kernel" />
+																<ValueTableRow Label="Architecture" Value="@os.Architecture" />
+															</tbody>
+														</table>
+													</div>
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Code page" Value="@os.CodePage" />
+																<ValueTableRow Label="Logo file" Value="@os.LogoFile" />
+																<ValueTableRow Label="Build" Value="@os.Build" />
+																<ValueTableRow Label="Serive pack" Value="@os.ServicePack" />
+																<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
-										</div>
-									}
-									@if (system != null)
-									{
-										<div class="tab-pane fade" id="system-info" role="tabpanel" aria-labelledby="system-list">
-											<div class="row">
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
-															<ValueTableRow Label="SKU" Value="@system.SKU" />
-															<ValueTableRow Label="Virtual" Value="@system.IsVirtual" />
-														</tbody>
-													</table>
-												</div>
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Model" Value="@system.Model" />
-															<ValueTableRow Label="Version" Value="@system.Version" />
-														</tbody>
-													</table>
+										}
+										@if (system != null)
+										{
+											<div class="tab-pane fade" id="system-info" role="tabpanel" aria-labelledby="system-list">
+												<div class="row">
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
+																<ValueTableRow Label="SKU" Value="@system.SKU" />
+																<ValueTableRow Label="Virtual" Value="@system.IsVirtual" />
+															</tbody>
+														</table>
+													</div>
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Model" Value="@system.Model" />
+																<ValueTableRow Label="Version" Value="@system.Version" />
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
-										</div>
-									}
-									@if (docker != null)
-									{
-										<div class="tab-pane fade" id="docker-info" role="tabpanel" aria-labelledby="docker-list">
-											<div class="row">
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Kernel&nbsp;version" Value="@docker.KernelVersion" />
-															<ValueTableRow Label="Operating&nbsp;system" Value="@docker.OperatingSystem" />
-															<ValueTableRow Label="OS&nbsp;version" Value="@docker.OSVersion" />
-															<ValueTableRow Label="OS&nbsp;type" Value="@docker.OSType" />
-														</tbody>
-													</table>
-												</div>
-												<div class="col">
-													<table class="table table-sm">
-														<colgroup>
-															<col style="width: min-content" />
-															<col style="width: auto" />
-														</colgroup>
-														<tbody>
-															<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
-															<ValueTableRow Label="#&nbsp;CPUs" Value="@docker.CPUCount" />
-															<ValueTableRow Label="Total&nbsp;memory" Value="@docker.TotalMemory" />
-															<ValueTableRow Label="Server&nbsp;version" Value="@docker.ServerVersion" />
-														</tbody>
-													</table>
+										}
+										@if (docker != null)
+										{
+											<div class="tab-pane fade" id="docker-info" role="tabpanel" aria-labelledby="docker-list">
+												<div class="row">
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Kernel version" Value="@docker.KernelVersion" />
+																<ValueTableRow Label="Operating system" Value="@docker.OperatingSystem" />
+																<ValueTableRow Label="OS version" Value="@docker.OSVersion" />
+																<ValueTableRow Label="OS type" Value="@docker.OSType" />
+															</tbody>
+														</table>
+													</div>
+													<div class="col">
+														<table class="table table-sm">
+															<tbody>
+																<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
+																<ValueTableRow Label="# CPUs" Value="@docker.CPUCount" />
+																<ValueTableRow Label="Total memory" Value="@docker.TotalMemory" />
+																<ValueTableRow Label="Server version" Value="@docker.ServerVersion" />
+															</tbody>
+														</table>
+													</div>
 												</div>
 											</div>
-										</div>
-									}
+										}
 								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<h2 class="mb-0">
+							<button class="btn btn-block text-primary text-left" type="button" @onclick="ToggleFilterPanel">
+								<i class="fa @(HideFilters ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;Filters
+							</button>
+						</h2>
+					</div>
+
+					<div class="collapse@(HideFilters ? "" : ".show")">
+						<div class="row mx-2 mt-3">
+							<div class="col-auto">
+								<div class="form-group">
+									<label for="implementatios">Languages:</label>
+									<select multiple class="form-control" id="implementations" @ref="implementationsSelect" @onchange="ImplementationSelectionChanged">
+										@{ var filterImplementations = FilterImplementations; }
+										@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+										{
+											<option value="@languageInfo.Key" selected="@(filterImplementations.Contains(languageInfo.Key))">@languageInfo.Name</option>
+										}
+									</select>
+								</div>
+							</div>
+							<div class="col-auto form-group">
+								<label>Parallelism:</label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fp_st" @bind="FilterParallelSinglethreaded">
+									<label class="form-check-label" for="fp_st">
+										Single-threaded
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fp-mt" @bind="FilterParallelMultithreaded">
+									<label class="form-check-label" for="fp_mt">
+										Multithreaded
+									</label>
+								</div>
+							</div>
+							<div class="col-auto form-group">
+								<label>Algorithm:</label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fa_ba" @bind="FilterAlgorithmBase">
+									<label class="form-check-label" for="fa_ba">
+										base
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fa_wh" @bind="FilterAlgorithmWheel">
+									<label class="form-check-label" for="fa_wh">
+										wheel
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fa_ot" @bind="FilterAlgorithmOther">
+									<label class="form-check-label" for="fa_ot">
+										&lt;other&gt;
+									</label>
+								</div>
+							</div>
+							<div class="col-auto form-group">
+								<label>Faithful:</label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="ff_ff" @bind="FilterFaithful">
+									<label class="form-check-label" for="ff_ff">
+										yes
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="ff_uf" @bind="FilterUnfaithful">
+									<label class="form-check-label" for="ff_uf">
+										no
+									</label>
+								</div>
+							</div>
+							<div class="col-auto form-group">
+								<label>Bits per prime:</label>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
+									<label class="form-check-label" for="fb_uk">
+										<em>Unknown</em>
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fb_on" @bind="FilterBitsOne">
+									<label class="form-check-label" for="fb_on">
+										1
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fb_ot" @bind="FilterBitsOther">
+									<label class="form-check-label" for="fb_ot">
+										&gt;1
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="row mx-2 mb-3">
+							<div class="col">
+								<button class="btn btn-primary" disabled="@AreFiltersClear" @onclick="ClearFilters">Clear</button>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<br />
-			<Table TableItem="Result" Items="report.Results" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
+			<br /> 
+		
+			var filteredItems = report.Results.ApplyFilters(this);
+			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
 				@{ OnTableRefreshStart(); }
-				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{report.Results.Length}")">
+				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")">
 					<Template>
 						@(++rowNumber)
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Select(r => r.Implementation).Distinct().Count()} languages")">
+				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Select(r => r.Implementation).Distinct().Count()} languages")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 							{
-								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />
+								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />							
 							}
 						</CustomSelect>
 					</CustomIFilters>
@@ -269,7 +343,7 @@
 						@{var languageInfo = GetLanguageInfo(context.Implementation);}
 						@if (languageInfo.URL != null)
 						{
-							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a>
+							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a> 
 						}
 						else
 						{
@@ -281,9 +355,9 @@
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => !r.IsMultiThreaded)} single-threaded")" />
+				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => !r.IsMultiThreaded)} single-threaded")" />
 				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsMultiThreaded)} multithreaded")">
+				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsMultiThreaded)} multithreaded")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -294,7 +368,7 @@
 						<span class="text-success">@(context.IsMultiThreaded ? "yes" : "no")</span>
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.Algorithm == "base")} base")">
+				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Algorithm == "base")} base")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var algorithm in report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))
@@ -306,7 +380,7 @@
 					<Template>
 						@if (context.Algorithm == "base")
 						{
-							<span class="text-success">@context.Algorithm</span>
+							<span class="text-success">@context.Algorithm</span> 
 						}
 						else
 						{
@@ -314,7 +388,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.IsFaithful == true)} faithful")">
+				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsFaithful == true)} faithful")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -324,7 +398,7 @@
 					<Template>
 						@if (context.IsFaithful == true)
 						{
-							<span class="text-success">yes</span>
+							<span class="text-success">yes</span> 
 						}
 						else
 						{
@@ -332,7 +406,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{report.Results.Count(r => r.Bits == 1)} single-bit")">
+				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Bits == 1)} single-bit")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var bitCount in report.Results.Select(r => r.Bits).Where(b => b != null).Cast<int>().Distinct().OrderBy(b => b))
@@ -348,7 +422,7 @@
 						}
 						else if (context.Bits == null)
 						{
-							<em>Unknown</em>
+							<em>Unknown</em> 
 						}
 						else
 						{
