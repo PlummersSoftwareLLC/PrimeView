@@ -1,12 +1,10 @@
 ﻿using BlazorTable;
+using PrimeView.Frontend.Parameters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.Tools
+namespace PrimeView.Frontend.Sorting
 {
-	public static class ExtensionMethods
+	public static class SortingExtensions
 	{
 		public static (string sortColumn, bool sortDescending) GetSortParameterValues<T>(this Table<T> table)
 		{

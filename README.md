@@ -21,6 +21,12 @@ At the end of the build process, the location of the build output will be indica
 Frontend -> <repo root>\src\Frontend\bin\Debug\net5.0\publish\
 ```
 
+## Implementation notes
+Where applicable, implementation notes can be found in README.md files in the directories for the respective C#/Blazor projects.
+
 ## Attribution
 
-The checkered flag in favicon.ico was made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/).
+* The source code that gets and sets query string parameters is based on [a blog post](https://www.meziantou.net/bind-parameters-from-the-query-string-in-blazor.htm) by G&eacute;rald Barr&eacute;.
+* Local storage is implemented using [Blazored LocalStorage](https://github.com/Blazored/LocalStorage).
+* The tables of report summaries and report results are implemented using [BlazorTable](https://github.com/IvanJosipovic/BlazorTable).
+* The checkered flag in favicon.ico was made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/).

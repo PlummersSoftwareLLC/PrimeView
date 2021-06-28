@@ -1,8 +1,12 @@
 ﻿@page "/report"
 
+@inherits SortedTablePage<Result>
+
 @using BlazorTable
 @using PrimeView.Entities
 @using PrimeView.Frontend.Tools
+@using PrimeView.Frontend.Filters
+@using PrimeView.Frontend.Sorting
 
 <div class="row h-100">
 	<div class="col">
@@ -24,7 +28,7 @@
 				<div class="col text-left">
 					Loading...
 				</div>
-			</div> 
+			</div>
 		}
 		else
 		{
@@ -171,7 +175,7 @@
 									var preset = filterPresets[presetIndex];
 
 									<div class="list-group-item py-0 pl-2 pr-0 d-flex justify-content-between align-items-center">
-										<button class="btn btn-link @(string.Equals(preset.Name, filterPresetName, StringComparison.OrdinalIgnoreCase) ? "text-danger" : "text-primary") pl-0 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
+										<button class="btn btn-link @(string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase) ? "text-success" : "text-primary") pl-0 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
 											@preset.Name
 										</button>
 										<button class="btn btn-danger" style="box-shadow: none" @onclick="() => RemoveFilterPreset(presetIndex)">
@@ -180,7 +184,7 @@
 									</div>
 								}
 								<form @onsubmit="AddFilterPreset" class="list-group-item p-0 d-flex justify-content-between align-items-center">
-									<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput" >
+									<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput">
 									<button type="submit" class="btn btn-success" disabled=@(string.IsNullOrWhiteSpace(filterPresetName))>
 										<i class="fas fa-plus"></i>
 									</button>
@@ -191,10 +195,10 @@
 				</div>
 			</div>
 
-			<br /> 
-		
+			<br />
+
 			var filteredItems = report.Results.ApplyFilters(this);
-			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
+			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="sortedTable" @onclick="FlagTableSortingChange">
 				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")">
 					<Template>
@@ -206,7 +210,7 @@
 						<CustomSelect TableItem="Result">
 							@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 							{
-								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />							
+								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />
 							}
 						</CustomSelect>
 					</CustomIFilters>
@@ -214,7 +218,8 @@
 						@{var languageInfo = GetLanguageInfo(context.Implementation);}
 						@if (languageInfo.URL != null)
 						{
-							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a> 
+							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a>
+
 						}
 						else
 						{
@@ -251,7 +256,8 @@
 					<Template>
 						@if (context.Algorithm == "base")
 						{
-							<span class="text-success">@context.Algorithm</span> 
+							<span class="text-success">@context.Algorithm</span>
+
 						}
 						else
 						{
@@ -269,7 +275,8 @@
 					<Template>
 						@if (context.IsFaithful == true)
 						{
-							<span class="text-success">yes</span> 
+							<span class="text-success">yes</span>
+
 						}
 						else
 						{
@@ -293,7 +300,8 @@
 						}
 						else if (context.Bits == null)
 						{
-							<em>Unknown</em> 
+							<em>Unknown</em>
+
 						}
 						else
 						{

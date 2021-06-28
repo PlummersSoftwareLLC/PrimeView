@@ -1,0 +1,7 @@
+﻿# Implementation notes
+
+* The binding of sorting-related query parameters to the tables on [`Index`](Pages/Index.razor) and [`ReportDetails`](Pages/ReportDetails.razor) pages is largely implemented via the [`SortedTablePage<TableItem>`](Sorting/SortedTablePage.razor) page that the other two inherit from. The tables are connected to `SortedTablePage<TableItem>` using a `@ref` to `SortedTablePage<TableItem>.sortedTable`, an `@onclick` calling `SortedTablePage<TableItem>.FlagTableSortingChange` and an invocation of `SortedTablePage<TableItem>.OnTableRefreshStart()` immediately after the `<Table>` opening tag.
+
+* Mapping of [`Result`](../Entities/Result.cs) and [`ReportSummary`](../Entities/ReportSummary.cs) properties to query parameter values for sorting is done via [`PropertyParameterMap`](Parameters/PropertyParameterMap.cs). If other fields are added to either class that are also included in the respective table, `PropertyParameterMap` would thus need to be extended.
+
+* To ensure that filter settings on the `ReportDetails` page are properly mapped to and from query parameters, the query parameter (textual) value properties are used to interact with the underlying fields. Those underlying fields are only used to bind the page's controls to that are used to manipulate the settings, in the Filter panel. This means that any (future) filter fields that are not translated to query parameter values, will also not be included in filter presets.

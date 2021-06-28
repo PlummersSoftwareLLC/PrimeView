@@ -1,11 +1,9 @@
 ﻿using PrimeView.Entities;
 using PrimeView.Frontend.Pages;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.Tools
+namespace PrimeView.Frontend.Filters
 {
 	public static class FilterExtensions
 	{
@@ -16,10 +14,10 @@ namespace PrimeView.Frontend.Tools
 			if (filterImplementations.Count > 0)
 				source = source.Where(r => filterImplementations.Contains(r.Implementation));
 
-			return source.Where(r => 
-				r.IsMultiThreaded switch 
-				{ 
-					true => page.FilterParallelMultithreaded, 
+			return source.Where(r =>
+				r.IsMultiThreaded switch
+				{
+					true => page.FilterParallelMultithreaded,
 					_ => page.FilterParallelSinglethreaded
 				}
 				&& r.Algorithm switch

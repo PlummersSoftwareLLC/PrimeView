@@ -1,10 +1,9 @@
-﻿using Blazored.LocalStorage;
-using BlazorTable;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Components.Rendering;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PrimeView.Entities;
+using PrimeView.Frontend.Filters;
+using PrimeView.Frontend.Parameters;
+using PrimeView.Frontend.Sorting;
 using PrimeView.Frontend.Tools;
 using System;
 using System.Collections.Generic;
@@ -16,30 +15,15 @@ using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages
 {
-	public partial class ReportDetails
+	public partial class ReportDetails : SortedTablePage<Result>
 	{
 		private const string FilterPresetStorageKey = "ResultFilterPresets";
-
-		[Inject]
-		public NavigationManager NavigationManager { get; set; }
 
 		[Inject]
 		public HttpClient Http { get; set; }
 
 		[Inject]
-		public ISyncLocalStorageService LocalStorage { get; set; }
-
-		[Inject]
 		public IReportReader ReportReader { get; set; }
-
-		[Inject]
-		public IJSInProcessRuntime JSRuntime { get; set; }
-
-		[QueryStringParameter("sc")]
-		public string SortColumn { get; set; } = "pp";
-
-		[QueryStringParameter("sd")]
-		public bool SortDescending { get; set; } = true;
 
 		[QueryStringParameter("hi")]
 		public bool HideSystemInformation { get; set; } = false;
@@ -154,15 +138,22 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
-		private Table<Result> resultTable;
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
-		private bool processTableSortingChange = false;
 		private List<ResultFilterPreset> filterPresets = null;
 		private string filterPresetName;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used as @ref in razor file")]
 		private ElementReference implementationsSelect;
+
+		public override Task SetParametersAsync(ParameterView parameters)
+		{
+			SortColumn = "pp";
+			SortDescending = true;
+
+			return base.SetParametersAsync(parameters);
+		}
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -182,28 +173,6 @@ namespace PrimeView.Frontend.Pages
 			}
 
 			await base.OnInitializedAsync();
-		}
-
-		public override Task SetParametersAsync(ParameterView parameters)
-		{
-			this.SetParametersFromQueryString(NavigationManager, LocalStorage);
-
-			return base.SetParametersAsync(parameters);
-		}
-
-		protected override async Task OnAfterRenderAsync(bool firstRender)
-		{
-			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
-
-			if (!processTableSortingChange && (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || SortDescending != sortDescending))
-			{
-				if (resultTable.SetSortParameterValues(SortColumn, SortDescending))
-					await resultTable.UpdateAsync();
-			}
-
-			UpdateQueryString();
-
-			await base.OnAfterRenderAsync(firstRender);
 		}
 
 		private async Task ClearFilters()
@@ -232,61 +201,37 @@ namespace PrimeView.Frontend.Pages
 			HideFilterPresets = !HideFilterPresets;
 		}
 
-
 		private async Task LoadLanguageMap()
 		{
 			try
 			{
 				languageMap = await Http.GetFromJsonAsync<Dictionary<string, LanguageInfo>>("data/langmap.json");
 				foreach (var entry in languageMap)
+				{
 					entry.Value.Key = entry.Key;
+				}
 			}
-			catch	{}
+			catch { }
 		}
 
-		private void OnTableRefreshStart()
+		protected override void OnTableRefreshStart()
 		{
-			rowNumber = resultTable.PageNumber * resultTable.PageSize;
+			rowNumber = sortedTable.PageNumber * sortedTable.PageSize;
 
-			if (!processTableSortingChange)
-				return;
-
-			(string sortColumn, bool sortDescending) = resultTable.GetSortParameterValues();
-
-			processTableSortingChange = false;
-
-			bool queryStringUpdateRequired = false;
-
-			if (!sortColumn.EqualsIgnoreCaseOrNull(SortColumn))
-			{
-				SortColumn = sortColumn;
-				queryStringUpdateRequired = true;
-			}
-
-			if (sortDescending != SortDescending)
-			{
-				SortDescending = sortDescending;
-				queryStringUpdateRequired = true;
-			}
-
-			if (queryStringUpdateRequired)
-				UpdateQueryString();
+			base.OnTableRefreshStart();
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
 			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
-
-		private void UpdateQueryString()
-			=> this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
 
 		private async Task ImplementationSelectionChanged(EventArgs args)
 		{
 			FilterImplementationText = await JSRuntime.InvokeAsync<string>("PrimeViewJS.GetMultiselectValues", implementationsSelect, "~") ?? string.Empty;
 		}
 
-		private string JoinFilterValueString(params object[] flagSet)
+		private static string JoinFilterValueString(params object[] flagSet)
 		{
-			List<string> setFlags = new(); 
+			List<string> setFlags = new();
 
 			for (int i = 0; i < flagSet.Length; i += 2)
 			{
@@ -297,7 +242,7 @@ namespace PrimeView.Frontend.Pages
 			return setFlags.Count > 0 ? string.Join("~", setFlags) : string.Empty;
 		}
 
-		private IList<string> SplitFilterValueString(string text)
+		private static IList<string> SplitFilterValueString(string text) 
 			=> text.Split("~", StringSplitOptions.RemoveEmptyEntries);
 
 		private async Task ApplyFilterPreset(int index)
@@ -335,6 +280,8 @@ namespace PrimeView.Frontend.Pages
 		{
 			if (string.IsNullOrWhiteSpace(filterPresetName))
 				return;
+
+			filterPresetName = filterPresetName.Trim();
 
 			if (filterPresets == null)
 				filterPresets = new();

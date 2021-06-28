@@ -1,12 +1,10 @@
 ﻿using PrimeView.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.Tools
+namespace PrimeView.Frontend.Parameters
 {
 	public static class PropertyParameterMap
 	{
@@ -49,7 +47,7 @@ namespace PrimeView.Frontend.Tools
 		{
 			if (propertyName == null)
 				return null;
-			
+
 			string name = $"{typeof(T).Name}.{propertyName}";
 
 			return map.ContainsKey(name) ? map[name] : null;
