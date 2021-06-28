@@ -8,10 +8,10 @@ namespace PrimeView.StaticJsonReader
 {
 	public class ReportReader : IReportReader
 	{
-		List<ReportSummary>? summaries;
-		Dictionary<string, Report>? reportMap;
-		readonly HttpClient httpClient;
-		bool haveJsonFilesLoaded = false;
+		private List<ReportSummary>? summaries;
+		private Dictionary<string, Report>? reportMap;
+		private readonly HttpClient httpClient;
+		private bool haveJsonFilesLoaded = false;
 
 		public ReportReader(HttpClient httpClient)
 		{
@@ -21,7 +21,9 @@ namespace PrimeView.StaticJsonReader
 		private async Task LoadReportJsonFiles()
 		{
 			if (this.haveJsonFilesLoaded)
+			{
 				return;
+			}
 
 			summaries = new();
 			reportMap = new();
@@ -50,7 +52,8 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		private static ReportSummary ExtractSummary(Report report)
-			=> new()
+		{
+			return new()
 			{
 				Id = report.Id,
 				Architecture = report.OperatingSystem?.Architecture,
@@ -66,6 +69,7 @@ namespace PrimeView.StaticJsonReader
 				ResultCount = report.Results?.Length ?? 0,
 				User = report.User
 			};
+		}
 
 		private static Report ParseReportElement(string json, JsonElement element)
 		{
@@ -90,7 +94,9 @@ namespace PrimeView.StaticJsonReader
 			if (resultsElement.HasValue && resultsElement.Value.ValueKind == JsonValueKind.Array)
 			{
 				foreach (var resultElement in resultsElement.Value.EnumerateArray())
+				{
 					results.Add(ParseResultElement(resultElement));
+				}
 			}
 
 			report.Results = results.ToArray();
@@ -115,7 +121,9 @@ namespace PrimeView.StaticJsonReader
 			};
 
 			if (tagsElement.HasValue && int.TryParse(tagsElement.Value.GetString("bits"), out int bits))
+			{
 				result.Bits = bits;
+			}
 
 			return result;
 		}

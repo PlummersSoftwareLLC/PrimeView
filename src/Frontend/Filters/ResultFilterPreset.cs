@@ -1,15 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PrimeView.Frontend.Tools
+namespace PrimeView.Frontend.Filters
 {
 	public class ResultFilterPreset
 	{
 		[JsonPropertyName("nm")]
-		public string Name { get; set; } 
+		public string Name { get; set; }
 
 		[JsonPropertyName("it")]
 		public string ImplementationText { get; set; }
-		
+
 		[JsonPropertyName("pt")]
 		public string ParallelismText { get; set; }
 

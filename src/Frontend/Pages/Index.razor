@@ -4,6 +4,7 @@
 
 @using BlazorTable
 @using PrimeView.Entities
+@using PrimeView.Frontend.Sorting 
 
 @inject IReportReader ReportReader
 
@@ -16,12 +17,12 @@
 		</nav>
 		<h1>Reports</h1>
 
-		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date)" @ref="sortedTable" PageSize="100" ColumnReorder="false" @onclick="FlagTableSortingChange">
+		<Table TableItem="ReportSummary" Items="summaries" @ref="sortedTable" PageSize="100" ColumnReorder="false" @onclick="FlagTableSortingChange">
 			@{ OnTableRefreshStart(); }
-			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
+			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true">
 				<Template>
 					<button class="btn btn-link" @onclick="() => LoadReport(context.Id)">@context.Date?.ToLocalTime()</button>
-</Template>
+				</Template>
 			</Column>
 			<Column TableItem="ReportSummary" Title="User" Field="@(s => s.User)" Sortable="true" Filterable="true">
 				<CustomIFilters>
@@ -65,11 +66,16 @@
 {
 	private ReportSummary[] summaries = null;
 
-	protected override async Task OnInitializedAsync()
+	public override Task SetParametersAsync(ParameterView parameters)
 	{
 		SortColumn = "dt";
 		SortDescending = true;
 
+		return base.SetParametersAsync(parameters);
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
 		summaries = await ReportReader.GetSummaries();
 	}
 

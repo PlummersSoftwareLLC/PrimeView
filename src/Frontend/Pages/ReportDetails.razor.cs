@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PrimeView.Entities;
-using PrimeView.Frontend.Shared;
+using PrimeView.Frontend.Filters;
+using PrimeView.Frontend.Parameters;
+using PrimeView.Frontend.Sorting;
 using PrimeView.Frontend.Tools;
 using System;
 using System.Collections.Generic;
@@ -142,13 +144,19 @@ namespace PrimeView.Frontend.Pages
 		private List<ResultFilterPreset> filterPresets = null;
 		private string filterPresetName;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used as @ref in razor file")]
 		private ElementReference implementationsSelect;
 
-		protected override async Task OnInitializedAsync()
+		public override Task SetParametersAsync(ParameterView parameters)
 		{
 			SortColumn = "pp";
 			SortDescending = true;
 
+			return base.SetParametersAsync(parameters);
+		}
+
+		protected override async Task OnInitializedAsync()
+		{
 			report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 
@@ -199,9 +207,11 @@ namespace PrimeView.Frontend.Pages
 			{
 				languageMap = await Http.GetFromJsonAsync<Dictionary<string, LanguageInfo>>("data/langmap.json");
 				foreach (var entry in languageMap)
+				{
 					entry.Value.Key = entry.Key;
+				}
 			}
-			catch	{}
+			catch { }
 		}
 
 		protected override void OnTableRefreshStart()
@@ -221,7 +231,7 @@ namespace PrimeView.Frontend.Pages
 
 		private static string JoinFilterValueString(params object[] flagSet)
 		{
-			List<string> setFlags = new(); 
+			List<string> setFlags = new();
 
 			for (int i = 0; i < flagSet.Length; i += 2)
 			{
@@ -232,7 +242,7 @@ namespace PrimeView.Frontend.Pages
 			return setFlags.Count > 0 ? string.Join("~", setFlags) : string.Empty;
 		}
 
-		private static IList<string> SplitFilterValueString(string text)
+		private static IList<string> SplitFilterValueString(string text) 
 			=> text.Split("~", StringSplitOptions.RemoveEmptyEntries);
 
 		private async Task ApplyFilterPreset(int index)

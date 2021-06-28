@@ -25,7 +25,10 @@ namespace PrimeView.StaticJsonReader
 				{
 					hash1 = ((hash1 << 5) + hash1) ^ str[i];
 					if (i == str.Length - 1 || str[i + 1] == '\0')
+					{
 						break;
+					}
+
 					hash2 = ((hash2 << 5) + hash2) ^ str[i + 1];
 				}
 
@@ -34,7 +37,9 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		public static IServiceCollection AddStaticJsonReportReader(this IServiceCollection serviceCollection)
-			=> serviceCollection.AddScoped<IReportReader>(sp => new ReportReader(sp.GetRequiredService<HttpClient>()));
+		{
+			return serviceCollection.AddScoped<IReportReader>(sp => new ReportReader(sp.GetRequiredService<HttpClient>()));
+		}
 
 		public static T? Get<T>(this JsonElement element)
 		{
@@ -48,13 +53,19 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		public static T? Get<T>(this JsonElement element, string propertyName) where T : class
-			=> GetElement(element, propertyName)?.Get<T>();
+		{
+			return GetElement(element, propertyName)?.Get<T>();
+		}
 
 		public static T? Get<T>(this JsonElement? element, string propertyName) where T : class
-			=> element.HasValue ? Get<T>(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? Get<T>(element.Value, propertyName) : null;
+		}
 
 		public static int? GetInt32(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetInt32(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? GetInt32(element.Value, propertyName) : null;
+		}
 
 		public static int? GetInt32(this JsonElement element, string propertyName)
 		{
@@ -64,7 +75,9 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		public static double? GetDouble(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetDouble(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? GetDouble(element.Value, propertyName) : null;
+		}
 
 		public static double? GetDouble(this JsonElement element, string propertyName)
 		{
@@ -74,13 +87,19 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		public static string? GetString(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetString(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? GetString(element.Value, propertyName) : null;
+		}
 
 		public static string? GetString(this JsonElement element, string propertyName)
-			=> GetElement(element, propertyName)?.GetString();
+		{
+			return GetElement(element, propertyName)?.GetString();
+		}
 
 		public static DateTime? GetDateFromUnixTimeSeconds(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetDateFromUnixTimeSeconds(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? GetDateFromUnixTimeSeconds(element.Value, propertyName) : null;
+		}
 
 		public static DateTime? GetDateFromUnixTimeSeconds(this JsonElement element, string propertyName)
 		{
@@ -90,9 +109,13 @@ namespace PrimeView.StaticJsonReader
 		}
 
 		public static JsonElement? GetElement(this JsonElement element, string propertyName)
-			=> element.TryGetProperty(propertyName, out var childElement) ? childElement : null;
+		{
+			return element.TryGetProperty(propertyName, out var childElement) ? childElement : null;
+		}
 
 		public static JsonElement? GetElement(this JsonElement? element, string propertyName)
-			=> element.HasValue ? GetElement(element.Value, propertyName) : null;
+		{
+			return element.HasValue ? GetElement(element.Value, propertyName) : null;
+		}
 	}
 }

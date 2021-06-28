@@ -2,11 +2,11 @@
 using BlazorTable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using PrimeView.Entities;
-using PrimeView.Frontend.Tools;
+using PrimeView.Frontend.Parameters;
+using System;
 using System.Threading.Tasks;
 
-namespace PrimeView.Frontend.Shared
+namespace PrimeView.Frontend.Sorting
 {
 	public partial class SortedTablePage<TableItem> : ComponentBase
 	{
@@ -84,6 +84,8 @@ namespace PrimeView.Frontend.Shared
 		}
 
 		protected virtual void UpdateQueryString()
-			=> this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+		{
+			this.UpdateQueryString(NavigationManager, LocalStorage, JSRuntime);
+		}
 	}
 }
