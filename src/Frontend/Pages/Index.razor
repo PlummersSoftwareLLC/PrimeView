@@ -1,10 +1,11 @@
 ﻿@page "/"
 
+@inherits SortedTablePage<ReportSummary>
+
 @using BlazorTable
 @using PrimeView.Entities
 
 @inject IReportReader ReportReader
-@inject NavigationManager NavigationManager
 
 <div class="row">
 	<div class="col">
@@ -15,7 +16,8 @@
 		</nav>
 		<h1>Reports</h1>
 
-		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date)" PageSize="100" ColumnReorder="false">
+		<Table TableItem="ReportSummary" Items="summaries?.OrderByDescending(s => s?.Date)" @ref="sortedTable" PageSize="100" ColumnReorder="false" @onclick="FlagTableSortingChange">
+			@{ OnTableRefreshStart(); }
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true" DefaultSortColumn="true" DefaultSortDescending="true">
 				<Template>
 					<button class="btn btn-link" @onclick="() => LoadReport(context.Id)">@context.Date?.ToLocalTime()</button>
@@ -65,6 +67,9 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		SortColumn = "dt";
+		SortDescending = true;
+
 		summaries = await ReportReader.GetSummaries();
 	}
 

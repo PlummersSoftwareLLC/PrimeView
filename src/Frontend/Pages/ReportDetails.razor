@@ -1,5 +1,7 @@
 ﻿@page "/report"
 
+@inherits SortedTablePage<Result>
+
 @using BlazorTable
 @using PrimeView.Entities
 @using PrimeView.Frontend.Tools
@@ -171,7 +173,7 @@
 									var preset = filterPresets[presetIndex];
 
 									<div class="list-group-item py-0 pl-2 pr-0 d-flex justify-content-between align-items-center">
-										<button class="btn btn-link @(string.Equals(preset.Name, filterPresetName, StringComparison.OrdinalIgnoreCase) ? "text-danger" : "text-primary") pl-0 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
+										<button class="btn btn-link @(string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase) ? "text-success" : "text-primary") pl-0 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
 											@preset.Name
 										</button>
 										<button class="btn btn-danger" style="box-shadow: none" @onclick="() => RemoveFilterPreset(presetIndex)">
@@ -194,7 +196,7 @@
 			<br /> 
 		
 			var filteredItems = report.Results.ApplyFilters(this);
-			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="resultTable" @onclick="() => processTableSortingChange = true">
+			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="sortedTable" @onclick="FlagTableSortingChange">
 				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")">
 					<Template>

@@ -6,17 +6,14 @@ using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Tools
 {
-  public static class QueryStringParameterExtensions
+	public static class QueryStringParameterExtensions
   {
     // Apply the values from the query string to the current component
-    public static void SetParametersFromQueryString<T>(this T component, NavigationManager navigationManager, ISyncLocalStorageService localStorage)
-        where T : ComponentBase
+    public static void SetParametersFromQueryString(this ComponentBase component, NavigationManager navigationManager, ISyncLocalStorageService localStorage)
     {
       if (!Uri.TryCreate(navigationManager.Uri, UriKind.RelativeOrAbsolute, out var uri))
         return;
@@ -25,7 +22,7 @@ namespace PrimeView.Frontend.Tools
       Dictionary<string, StringValues> queryString = QueryHelpers.ParseQuery(uri.Query);
       Dictionary<string, string> storedParameters = null;
 
-      string storageKey = GetLocalStorageKey<T>();
+      string storageKey = GetLocalStorageKey(component);
 
       if (localStorage.ContainKey(storageKey))
       {
@@ -43,7 +40,7 @@ namespace PrimeView.Frontend.Tools
         storedParameters = new();
 
       // Enumerate all properties of the component
-      foreach (var property in GetProperties<T>())
+      foreach (var property in GetProperties(component))
       {
         // Get the name of the parameter to read from the query string
         var parameterName = GetQueryStringParameterName(property);
@@ -63,8 +60,7 @@ namespace PrimeView.Frontend.Tools
     }
 
     // Apply the values from the component to the query string
-    public static void UpdateQueryString<T>(this T component, NavigationManager navigationManager, ISyncLocalStorageService localStorage, IJSInProcessRuntime runtime)
-        where T : ComponentBase
+    public static void UpdateQueryString(this ComponentBase component, NavigationManager navigationManager, ISyncLocalStorageService localStorage, IJSInProcessRuntime runtime)
     {
       if (!Uri.TryCreate(navigationManager.Uri, UriKind.RelativeOrAbsolute, out var uri))
         uri = new Uri(navigationManager.Uri);
@@ -73,7 +69,7 @@ namespace PrimeView.Frontend.Tools
       Dictionary<string, StringValues> parameters = QueryHelpers.ParseQuery(uri.Query);
       Dictionary<string, string> storedParameters = new();
 
-      foreach (var property in GetProperties<T>())
+      foreach (var property in GetProperties(component))
       {
         var parameterName = GetQueryStringParameterName(property);
         if (parameterName == null)
@@ -103,11 +99,11 @@ namespace PrimeView.Frontend.Tools
       }
 
       runtime.InvokeVoid("PrimeViewJS.ShowUrl", newUri);
-      localStorage.SetItem(GetLocalStorageKey<T>(), storedParameters);
+      localStorage.SetItem(GetLocalStorageKey(component), storedParameters);
     }
 
-    private static string GetLocalStorageKey<T>()
-      => $"{typeof(T).Name}QueryParameters";
+    private static string GetLocalStorageKey(ComponentBase component)
+      => $"{component.GetType().Name}QueryParameters";
 
     private static object ConvertValue(StringValues value, Type type)
     {
@@ -126,8 +122,8 @@ namespace PrimeView.Frontend.Tools
     private static string ConvertToString(object value)
       => Convert.ToString(value, CultureInfo.InvariantCulture);
 
-    private static PropertyInfo[] GetProperties<T>()
-      => typeof(T).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+    private static PropertyInfo[] GetProperties(ComponentBase component)
+      => component.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
  
     private static string GetQueryStringParameterName(PropertyInfo property)
     {
