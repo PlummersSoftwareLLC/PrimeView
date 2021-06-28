@@ -26,7 +26,7 @@ Where applicable, implementation notes can be found in README.md files in the di
 
 ## Attribution
 
-* The source code that gets and sets query string paremeters is based on [a blog post](https://www.meziantou.net/bind-parameters-from-the-query-string-in-blazor.htm) by G&eacute;rald Barr&eacute;.
+* The source code that gets and sets query string parameters is based on [a blog post](https://www.meziantou.net/bind-parameters-from-the-query-string-in-blazor.htm) by G&eacute;rald Barr&eacute;.
 * Local storage is implemented using [Blazored LocalStorage](https://github.com/Blazored/LocalStorage).
 * The tables of report summaries and report results are implemented using [BlazorTable](https://github.com/IvanJosipovic/BlazorTable).
 * The checkered flag in favicon.ico was made by [Freepik](https://www.freepik.com) from [www.flaticon.com](https://www.flaticon.com/).
