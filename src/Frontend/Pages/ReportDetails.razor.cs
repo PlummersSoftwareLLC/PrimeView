@@ -224,7 +224,7 @@ namespace PrimeView.Frontend.Pages
 		private LanguageInfo GetLanguageInfo(string language)
 			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
 
-		private async Task ImplementationSelectionChanged(EventArgs args)
+		private async Task ImplementationSelectionChanged()
 		{
 			FilterImplementationText = await JSRuntime.InvokeAsync<string>("PrimeViewJS.GetMultiselectValues", implementationsSelect, "~") ?? string.Empty;
 		}
