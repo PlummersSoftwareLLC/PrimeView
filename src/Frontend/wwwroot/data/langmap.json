@@ -11,6 +11,10 @@
 		"name": "AssemblyScript",
 		"url": "https://www.assemblyscript.org/"
 	},
+	"awk": {
+		"name": "AWK",
+		"url": "https://en.wikipedia.org/wiki/AWK"
+	},
 	"basic": {
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
@@ -35,6 +39,10 @@
 		"name": "C#",
 		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/"
 	},
+	"cython": {
+		"name": "Cython",
+		"url": "https://cython.org/"
+	},
 	"d": {
 		"name": "D",
 		"url": "https://dlang.org/"
@@ -47,9 +55,17 @@
 		"name": "Delphi",
 		"url": "https://www.embarcadero.com/products/delphi"
 	},
+	"elixir": {
+		"name": "Elixir",
+		"url": "https://elixir-lang.org/"
+	},
 	"fortran": {
 		"name": "Fortran",
 		"url": "https://wg5-fortran.org/"
+	},
+	"forth": {
+		"name": "Forth",
+		"url": "https://en.wikipedia.org/wiki/Forth_(programming_language)"
 	},
 	"fsharp": {
 		"name": "F#",
@@ -58,6 +74,10 @@
 	"go": {
 		"name": "Go",
 		"url": "https://golang.org/"
+	},
+	"haskell": {
+		"name": "Haskell",
+		"url": "https://www.haskell.org/"
 	},
 	"haxe": {
 		"name": "Haxe",
@@ -71,9 +91,21 @@
 		"name": "Julia",
 		"url": "https://julialang.org/"
 	},
+	"kotlin": {
+		"name": "Kotlin",
+		"url": "https://kotlinlang.org/"
+	},
+	"latex": {
+		"name": "LaTeX",
+		"url": "https://www.latex-project.org/"
+	},
 	"lisp": {
 		"name": "Lisp",
 		"url": "https://en.wikipedia.org/wiki/Lisp_(programming_language)"
+	},
+	"lua": {
+		"name": "Lua",
+		"url": "https://www.lua.org/"
 	},
 	"mixal": {
 		"name": "MIXAL",
@@ -103,9 +135,21 @@
 		"name": "PHP",
 		"url": "https://www.php.net/"
 	},
+	"pony": {
+		"name": "Pony",
+		"url": "https://www.ponylang.io/"
+	},
+	"postscript": {
+		"name": "PostScript",
+		"url": "https://nl.wikipedia.org/wiki/PostScript"
+	},
 	"powershell": {
 		"name": "PowerShell",
 		"url": "https://docs.microsoft.com/en-gb/powershell/"
+	},
+	"prolog": {
+		"name": "Prolog",
+		"url": "https://en.wikipedia.org/wiki/Prolog"
 	},
 	"python": {
 		"name": "Python",
@@ -127,6 +171,14 @@
 		"name": "Scala",
 		"url": "https://www.scala-lang.org/"
 	},
+	"smalltalk": {
+		"name": "Smalltalk",
+		"url": "https://en.wikipedia.org/wiki/Smalltalk"
+	},
+	"sql": {
+		"name": "SQL",
+		"url": "https://en.wikipedia.org/wiki/SQL"
+	},
 	"sqlite": {
 		"name": "SQLite",
 		"url": "https://www.sqlite.org/"
@@ -146,6 +198,10 @@
 	"v": {
 		"name": "V",
 		"url": "https://vlang.io/"
+	},
+	"wren": {
+		"name": "Wren",
+		"urk": "https://wren.io/"
 	},
 	"zig": {
 		"name": "Zig",
