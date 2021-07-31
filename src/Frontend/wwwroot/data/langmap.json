@@ -15,6 +15,14 @@
 		"name": "AWK",
 		"url": "https://en.wikipedia.org/wiki/AWK"
 	},
+	"ballerina": {
+		"name": "Ballerina",
+		"url": "https://ballerina.io/"
+	},
+	"bash": {
+		"name": "Bash",
+		"url": "https://www.gnu.org/software/bash/"
+	},
 	"basic": {
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
@@ -59,17 +67,25 @@
 		"name": "Elixir",
 		"url": "https://elixir-lang.org/"
 	},
-	"fortran": {
-		"name": "Fortran",
-		"url": "https://wg5-fortran.org/"
+	"emojicode": {
+		"name": "Emojicode",
+		"url": "https://www.emojicode.org/"
 	},
 	"forth": {
 		"name": "Forth",
 		"url": "https://en.wikipedia.org/wiki/Forth_(programming_language)"
 	},
+	"fortran": {
+		"name": "Fortran",
+		"url": "https://wg5-fortran.org/"
+	},
 	"fsharp": {
 		"name": "F#",
 		"url": "https://fsharp.org/"
+	},
+	"gdscript": {
+		"name": "GDScript",
+		"url": "https://gdscript.com/"
 	},
 	"go": {
 		"name": "Go",
@@ -83,6 +99,10 @@
 		"name": "Haxe",
 		"url": "https://haxe.org/"
 	},
+	"idl": {
+		"name": "IDL",
+		"url": "https://en.wikipedia.org/wiki/IDL_(programming_language)"
+	},
 	"java": {
 		"name": "Java",
 		"url": "https://www.java.com/"
@@ -90,6 +110,10 @@
 	"julia": {
 		"name": "Julia",
 		"url": "https://julialang.org/"
+	},
+	"kos": {
+		"name": "Kos",
+		"url": "https://github.com/kos-lang/kos"
 	},
 	"kotlin": {
 		"name": "Kotlin",
@@ -111,6 +135,9 @@
 		"name": "MIXAL",
 		"url": "https://en.wikipedia.org/wiki/MIX"
 	},
+	"mixed": {
+		"name": "(mixed)"
+	},
 	"nim": {
 		"name": "Nim",
 		"url": "https://nim-lang.org/"
@@ -122,6 +149,10 @@
 	"ocaml": {
 		"name": "OCaml",
 		"url": "https://ocaml.org/"
+	},
+	"odin": {
+		"name": "Odin",
+		"url": "https://www.odin.nl/"
 	},
 	"pascal": {
 		"name": "Pascal",
@@ -159,6 +190,18 @@
 		"name": "R",
 		"url": "https://www.r-project.org/"
 	},
+	"raku": {
+		"name": "Raku",
+		"url": "https://www.raku.org/"
+	},
+	"red": {
+		"name": "Red",
+		"url": "https://www.red-lang.org/"
+	},
+	"rexx": {
+		"name": "Rexx",
+		"url": "http://www.rexxinfo.org/"
+	},
 	"ruby": {
 		"name": "Ruby",
 		"url": "https://www.ruby-lang.org/"
@@ -170,6 +213,10 @@
 	"scala": {
 		"name": "Scala",
 		"url": "https://www.scala-lang.org/"
+	},
+	"scheme": {
+		"name": "Scheme",
+		"url": "https://en.wikipedia.org/wiki/Scheme_(programming_language)"
 	},
 	"smalltalk": {
 		"name": "Smalltalk",
@@ -183,6 +230,10 @@
 		"name": "SQLite",
 		"url": "https://www.sqlite.org/"
 	},
+	"standardml": {
+		"name": "Standard ML",
+		"url": "https://en.wikipedia.org/wiki/Standard_ML"
+	},
 	"swift": {
 		"name": "Swift",
 		"url": "https://swift.org/"
@@ -190,6 +241,10 @@
 	"tcl": {
 		"name": "Tcl",
 		"url": "https://www.tcl.tk/"
+	},
+	"tex": {
+		"name": "TeX",
+		"url": "https://en.wikipedia.org/wiki/TeX"
 	},
 	"typescript": {
 		"name": "TypeScript",

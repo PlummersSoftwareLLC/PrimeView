@@ -27,6 +27,6 @@ namespace PrimeView.Entities
 		public string? Flags { get; set; }
 		public string[]? FlagValues => Flags?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 		public bool? Virtualization { get; set; }
-		public Dictionary<string, int>? Cache { get; set; }
+		public Dictionary<string, object>? Cache { get; set; }
 	}
 }
