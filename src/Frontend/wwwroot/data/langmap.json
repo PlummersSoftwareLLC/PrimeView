@@ -11,6 +11,18 @@
 		"name": "AssemblyScript",
 		"url": "https://www.assemblyscript.org/"
 	},
+	"awk": {
+		"name": "AWK",
+		"url": "https://en.wikipedia.org/wiki/AWK"
+	},
+	"ballerina": {
+		"name": "Ballerina",
+		"url": "https://ballerina.io/"
+	},
+	"bash": {
+		"name": "Bash",
+		"url": "https://www.gnu.org/software/bash/"
+	},
 	"basic": {
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
@@ -35,6 +47,10 @@
 		"name": "C#",
 		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/"
 	},
+	"cython": {
+		"name": "Cython",
+		"url": "https://cython.org/"
+	},
 	"d": {
 		"name": "D",
 		"url": "https://dlang.org/"
@@ -47,6 +63,18 @@
 		"name": "Delphi",
 		"url": "https://www.embarcadero.com/products/delphi"
 	},
+	"elixir": {
+		"name": "Elixir",
+		"url": "https://elixir-lang.org/"
+	},
+	"emojicode": {
+		"name": "Emojicode",
+		"url": "https://www.emojicode.org/"
+	},
+	"forth": {
+		"name": "Forth",
+		"url": "https://en.wikipedia.org/wiki/Forth_(programming_language)"
+	},
 	"fortran": {
 		"name": "Fortran",
 		"url": "https://wg5-fortran.org/"
@@ -55,13 +83,25 @@
 		"name": "F#",
 		"url": "https://fsharp.org/"
 	},
+	"gdscript": {
+		"name": "GDScript",
+		"url": "https://gdscript.com/"
+	},
 	"go": {
 		"name": "Go",
 		"url": "https://golang.org/"
 	},
+	"haskell": {
+		"name": "Haskell",
+		"url": "https://www.haskell.org/"
+	},
 	"haxe": {
 		"name": "Haxe",
 		"url": "https://haxe.org/"
+	},
+	"idl": {
+		"name": "IDL",
+		"url": "https://en.wikipedia.org/wiki/IDL_(programming_language)"
 	},
 	"java": {
 		"name": "Java",
@@ -71,13 +111,32 @@
 		"name": "Julia",
 		"url": "https://julialang.org/"
 	},
+	"kos": {
+		"name": "Kos",
+		"url": "https://github.com/kos-lang/kos"
+	},
+	"kotlin": {
+		"name": "Kotlin",
+		"url": "https://kotlinlang.org/"
+	},
+	"latex": {
+		"name": "LaTeX",
+		"url": "https://www.latex-project.org/"
+	},
 	"lisp": {
 		"name": "Lisp",
 		"url": "https://en.wikipedia.org/wiki/Lisp_(programming_language)"
 	},
+	"lua": {
+		"name": "Lua",
+		"url": "https://www.lua.org/"
+	},
 	"mixal": {
 		"name": "MIXAL",
 		"url": "https://en.wikipedia.org/wiki/MIX"
+	},
+	"mixed": {
+		"name": "(mixed)"
 	},
 	"nim": {
 		"name": "Nim",
@@ -91,6 +150,10 @@
 		"name": "OCaml",
 		"url": "https://ocaml.org/"
 	},
+	"odin": {
+		"name": "Odin",
+		"url": "https://www.odin.nl/"
+	},
 	"pascal": {
 		"name": "Pascal",
 		"url": "https://en.wikipedia.org/wiki/Pascal_(programming_language)"
@@ -103,9 +166,21 @@
 		"name": "PHP",
 		"url": "https://www.php.net/"
 	},
+	"pony": {
+		"name": "Pony",
+		"url": "https://www.ponylang.io/"
+	},
+	"postscript": {
+		"name": "PostScript",
+		"url": "https://nl.wikipedia.org/wiki/PostScript"
+	},
 	"powershell": {
 		"name": "PowerShell",
 		"url": "https://docs.microsoft.com/en-gb/powershell/"
+	},
+	"prolog": {
+		"name": "Prolog",
+		"url": "https://en.wikipedia.org/wiki/Prolog"
 	},
 	"python": {
 		"name": "Python",
@@ -114,6 +189,18 @@
 	"r": {
 		"name": "R",
 		"url": "https://www.r-project.org/"
+	},
+	"raku": {
+		"name": "Raku",
+		"url": "https://www.raku.org/"
+	},
+	"red": {
+		"name": "Red",
+		"url": "https://www.red-lang.org/"
+	},
+	"rexx": {
+		"name": "Rexx",
+		"url": "http://www.rexxinfo.org/"
 	},
 	"ruby": {
 		"name": "Ruby",
@@ -127,9 +214,25 @@
 		"name": "Scala",
 		"url": "https://www.scala-lang.org/"
 	},
+	"scheme": {
+		"name": "Scheme",
+		"url": "https://en.wikipedia.org/wiki/Scheme_(programming_language)"
+	},
+	"smalltalk": {
+		"name": "Smalltalk",
+		"url": "https://en.wikipedia.org/wiki/Smalltalk"
+	},
+	"sql": {
+		"name": "SQL",
+		"url": "https://en.wikipedia.org/wiki/SQL"
+	},
 	"sqlite": {
 		"name": "SQLite",
 		"url": "https://www.sqlite.org/"
+	},
+	"standardml": {
+		"name": "Standard ML",
+		"url": "https://en.wikipedia.org/wiki/Standard_ML"
 	},
 	"swift": {
 		"name": "Swift",
@@ -139,6 +242,10 @@
 		"name": "Tcl",
 		"url": "https://www.tcl.tk/"
 	},
+	"tex": {
+		"name": "TeX",
+		"url": "https://en.wikipedia.org/wiki/TeX"
+	},
 	"typescript": {
 		"name": "TypeScript",
 		"url": "https://www.typescriptlang.org/"
@@ -146,6 +253,10 @@
 	"v": {
 		"name": "V",
 		"url": "https://vlang.io/"
+	},
+	"wren": {
+		"name": "Wren",
+		"urk": "https://wren.io/"
 	},
 	"zig": {
 		"name": "Zig",

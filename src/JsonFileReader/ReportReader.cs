@@ -1,21 +1,25 @@
-﻿using PrimeView.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using PrimeView.Entities;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace PrimeView.StaticJsonReader
+namespace PrimeView.JsonFileReader
 {
 	public class ReportReader : IReportReader
 	{
 		private List<ReportSummary>? summaries;
 		private Dictionary<string, Report>? reportMap;
 		private readonly HttpClient httpClient;
+		private readonly string? indexFileName;
 		private bool haveJsonFilesLoaded = false;
 
-		public ReportReader(HttpClient httpClient)
+		public ReportReader(string baseAddress, IConfiguration configuration)
 		{
-			this.httpClient = httpClient;
+			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue<string?>(Constants.BaseURI, baseAddress)!) };
+			this.indexFileName = configuration.GetValue<string?>(Constants.Index, null);
 		}
 
 		private async Task LoadReportJsonFiles()
@@ -25,30 +29,48 @@ namespace PrimeView.StaticJsonReader
 				return;
 			}
 
-			summaries = new();
-			reportMap = new();
+			string[]? reportFileNames = null;
 
-			for (int index = 1; ; index++)
+			if (this.indexFileName != null)
 			{
+				try
+				{
+					reportFileNames = JsonSerializer.Deserialize<string[]>(await this.httpClient.GetStringAsync(this.indexFileName));
+				}
+				catch {}
+			}
+
+			this.summaries = new();
+			this.reportMap = new();
+
+			for (int fileIndex = 0; fileIndex != reportFileNames?.Length; fileIndex++)
+			{
+				string fileName = reportFileNames != null ? reportFileNames[fileIndex] : $"data/report{fileIndex + 1}.json";
 				string reportJson;
 
 				try
 				{
-					reportJson = await this.httpClient.GetStringAsync($"data/report{index}.json");
+  				reportJson = await this.httpClient.GetStringAsync(fileName);
 				}
 				catch (HttpRequestException)
 				{
-					break;
+					// break out of the loop on error if we're not reading a list of files we retrieved from the index file...
+					if (reportFileNames == null)
+						break;
+
+					// ...otherwise try reading the next file
+					else
+						continue;
 				}
 
 				var reportElement = JsonDocument.Parse(reportJson).RootElement;
-				Report report = ParseReportElement(reportJson, reportElement);
+				Report report = ParseReportElement(reportJson, reportElement, fileName);
 
-				reportMap[report.Id!] = report;
-				summaries.Add(ExtractSummary(report));
+				this.reportMap[report.Id!] = report;
+				this.summaries.Add(ExtractSummary(report));
 			}
 
-			haveJsonFilesLoaded = true;
+			this.haveJsonFilesLoaded = true;
 		}
 
 		private static ReportSummary ExtractSummary(Report report)
@@ -71,14 +93,14 @@ namespace PrimeView.StaticJsonReader
 			};
 		}
 
-		private static Report ParseReportElement(string json, JsonElement element)
+		private static Report ParseReportElement(string json, JsonElement element, string? id = null)
 		{
 			var machineElement = element.GetElement("machine");
 			var metadataElement = element.GetElement("metadata");
 
 			Report report = new()
 			{
-				Id = json.GetStableHashCode().ToString(),
+				Id = metadataElement.GetString("id") ?? id ?? json.GetStableHashCode().ToString(),
 				Date = metadataElement.GetDateFromUnixTimeSeconds("date"),
 				User = metadataElement.GetString("user"),
 				CPU = machineElement.Get<CPUInfo>("cpu"),

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StaticJsonReader\StaticJsonReader.csproj" />
+    <ProjectReference Include="..\JsonFileReader\JsonFileReader.csproj" />
   </ItemGroup>
 
 </Project>

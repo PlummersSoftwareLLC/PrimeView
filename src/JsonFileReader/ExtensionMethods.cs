@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using PrimeView.Entities;
 using System;
 using System.Net.Http;
 using System.Text.Json;
 
-namespace PrimeView.StaticJsonReader
+namespace PrimeView.JsonFileReader
 {
 	public static class ExtensionMethods
 	{
@@ -36,9 +37,9 @@ namespace PrimeView.StaticJsonReader
 			}
 		}
 
-		public static IServiceCollection AddStaticJsonReportReader(this IServiceCollection serviceCollection)
+		public static IServiceCollection AddJsonFileReportReader(this IServiceCollection serviceCollection, string baseAddress, IConfiguration configuration)
 		{
-			return serviceCollection.AddScoped<IReportReader>(sp => new ReportReader(sp.GetRequiredService<HttpClient>()));
+			return serviceCollection.AddScoped<IReportReader>(sp => new ReportReader(baseAddress, configuration));
 		}
 
 		public static T? Get<T>(this JsonElement element)
@@ -47,7 +48,10 @@ namespace PrimeView.StaticJsonReader
 			{
 				return JsonSerializer.Deserialize<T>(element.GetRawText(), serializerOptions);
 			}
-			catch { }
+			catch (Exception ex) 
+			{
+				Console.WriteLine(ex);
+			}
 
 			return default;
 		}
