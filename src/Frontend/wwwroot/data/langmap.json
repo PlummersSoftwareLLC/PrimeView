@@ -3,6 +3,10 @@
 		"name": "Ada",
 		"url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
 	},
+	"apl": {
+		"name": "APL",
+		"url": "https://en.wikipedia.org/wiki/APL_(programming_language)"
+	},
 	"assembly": {
 		"name": "Assembly",
 		"url": "https://en.wikipedia.org/wiki/Assembly_language"
