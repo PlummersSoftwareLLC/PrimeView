@@ -6,8 +6,6 @@
 @using PrimeView.Entities
 @using PrimeView.Frontend.Sorting 
 
-@inject IReportReader ReportReader
-
 <div class="row">
 	<div class="col">
 		<nav aria-label="breadcrumb">
@@ -17,7 +15,14 @@
 		</nav>
 		<h1>Reports</h1>
 
-		<Table TableItem="ReportSummary" Items="summaries" @ref="sortedTable" PageSize="100" ColumnReorder="false" @onclick="FlagTableSortingChange">
+		<form class="form-inline my-2" @onsubmit="ApplyNewMaxReportCount">
+			<label>Maximum number of reports to load:</label>
+			<input type="number" class="form-control mx-2" @bind="newMaxReportCount" @bind:event="oninput">
+			<button type="submit" class="btn btn-primary" disabled="@(newMaxReportCount <= 0 || newMaxReportCount == MaxReportCount)">Apply</button>
+			<button class="btn btn-outline-primary" disabled="@(newMaxReportCount == MaxReportCount)" @onclick="() => newMaxReportCount = MaxReportCount">Reset</button>
+		</form>
+
+		<Table TableItem="ReportSummary" Items="summaries" @ref="sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">
 			@{ OnTableRefreshStart(); }
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true">
 				<Template>
@@ -57,30 +62,6 @@
 					<button class="btn btn-link py-0" @onclick="() => LoadReport(context.Id)">@context.ResultCount</button>
 				</Template>
 			</Column>
-			<Pager ShowPageNumber="true" ShowTotalCount="true" ShowPageSizes="true" AlwaysShow="true"/>
 		</Table>
 	</div>
 </div>
-
-@code
-{
-	private ReportSummary[] summaries = null;
-
-	public override Task SetParametersAsync(ParameterView parameters)
-	{
-		SortColumn = "dt";
-		SortDescending = true;
-
-		return base.SetParametersAsync(parameters);
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		summaries = await ReportReader.GetSummaries();
-	}
-
-	private void LoadReport(string reportId)
-	{
-		NavigationManager.NavigateTo($"report?id={reportId}");
-	}
-}
