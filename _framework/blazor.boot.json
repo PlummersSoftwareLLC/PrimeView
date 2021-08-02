@@ -35,7 +35,7 @@
       "System.IO.Pipelines.dll": "sha256-qZYTUS+ga7CydtH54fYPbehFCvx3B49I74G8dxreTog=",
       "Entities.dll": "sha256-JWKAGwJGH3Bb2qysrnxOdhgL7Mz3VkcUW9bVyprxnbQ=",
       "JsonFileReader.dll": "sha256-CI4RbutZ25dWDRWFAwwkRW8MY5A8Sy8EXJgkQRkx9Bc=",
-      "Frontend.dll": "sha256-0bdW7o4RLsdHW0lIXfvmg89v2fWoNkgBh1Q1FvRWFQE=",
+      "Frontend.dll": "sha256-Mo7WUgq207uk0N2rxVpBoS66ZEZBAwo1djaWE7N9trE=",
       "System.Collections.Concurrent.dll": "sha256-vQfofKvIxTLhvbXaorurVn3miv9vVQ3j65P33aaSCvM=",
       "System.Collections.Immutable.dll": "sha256-VkLGXCctXqC552tUEDndBZ5fgrRiMk7JRkDQHJSUaAk=",
       "System.Collections.NonGeneric.dll": "sha256-hBebAb9lQMdKxDvelVzRKB\/5C1dNzuvBn+z8FexDtt4=",
@@ -58,7 +58,7 @@
       "System.Runtime.CompilerServices.Unsafe.dll": "sha256-dw+MW5vy+3W8yDus4V0nrm3ESzDO3yCq0T\/j+ANKcqI=",
       "System.Runtime.InteropServices.RuntimeInformation.dll": "sha256-7oYDPzYkszkGsej0JsrKWpMArRZ2A8DNE3TUqUPT578=",
       "System.Text.Encodings.Web.dll": "sha256-fQUWP1CabKJo5Wfk6VKWqmJrOmc2c95DuwRCWEPIHI8=",
-      "System.Text.Json.dll": "sha256-ZsQtctxwu0TacnTvHqE80hpXZe27puj5BnaY08zDaw0=",
+      "System.Text.Json.dll": "sha256-OwsHAY0nkwgoOX79AviciApzCwfW9sPfRBVFt7yMkHI=",
       "System.Text.RegularExpressions.dll": "sha256-zVWDTREfC1sLERi3mFz+3r2e17ICedLgK6x\/3ef5+K0=",
       "System.Private.CoreLib.dll": "sha256-yobk80jfq5P1lHaezGmueUGj\/pujN7CXzWWiVvi9010="
     },
