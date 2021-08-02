@@ -21,5 +21,8 @@ namespace PrimeView.Frontend.Filters
 
 		[JsonPropertyName("bt")]
 		public string BitsText { get; set; }
+
+		[JsonIgnore]
+		public virtual bool IsFixed => false;
 	}
 }
