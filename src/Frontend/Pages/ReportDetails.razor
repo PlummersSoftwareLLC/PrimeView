@@ -128,12 +128,6 @@
 							<div class="col-auto form-group">
 								<label>Bits per prime:</label>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
-									<label class="form-check-label" for="fb_uk">
-										<em>Unknown</em>
-									</label>
-								</div>
-								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="fb_on" @bind="FilterBitsOne">
 									<label class="form-check-label" for="fb_on">
 										1
@@ -143,6 +137,12 @@
 									<input class="form-check-input" type="checkbox" id="fb_ot" @bind="FilterBitsOther">
 									<label class="form-check-label" for="fb_ot">
 										&gt;1
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
+									<label class="form-check-label" for="fb_uk">
+										<em>Unknown</em>
 									</label>
 								</div>
 							</div>
@@ -174,18 +174,18 @@
 									int presetIndex = i;
 									var preset = filterPresets[presetIndex];
 
-									<div class="list-group-item py-0 pl-2 pr-0 d-flex justify-content-between align-items-center">
-										<button class="btn btn-link @(string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase) ? "text-success" : "text-primary") pl-0 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
+									<div class="list-group-item py-1 pl-2 pr-0 d-flex justify-content-between align-items-center">
+										<button class="btn btn-link @(preset.IsFixed ? "text-dark" : (string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase)) ? "text-success" : "text-primary") px-1 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
 											@preset.Name
 										</button>
-										<button class="btn btn-danger" style="box-shadow: none" @onclick="() => RemoveFilterPreset(presetIndex)">
+										<button class="btn btn-danger" style="box-shadow: none" disabled="@(preset.IsFixed)" @onclick="() => RemoveFilterPreset(presetIndex)">
 											<i class="fas fa-minus"></i>
 										</button>
 									</div>
 								}
 								<form @onsubmit="AddFilterPreset" class="list-group-item p-0 d-flex justify-content-between align-items-center">
 									<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput">
-									<button type="submit" class="btn btn-success" disabled=@(string.IsNullOrWhiteSpace(filterPresetName))>
+									<button type="submit" class="btn btn-success" disabled=@(!IsFilterPresetNameValid(filterPresetName))>
 										<i class="fas fa-plus"></i>
 									</button>
 								</form>
@@ -200,7 +200,7 @@
 			var filteredItems = report.Results.ApplyFilters(this);
 			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="sortedTable" @onclick="FlagTableSortingChange">
 				@{ OnTableRefreshStart(); }
-				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")">
+				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")" Align="Align.Right">
 					<Template>
 						@(++rowNumber)
 					</Template>
@@ -219,7 +219,6 @@
 						@if (languageInfo.URL != null)
 						{
 							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a>
-
 						}
 						else
 						{
@@ -227,13 +226,13 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" />
+				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right" />
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" />
+				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" Align="Align.Right" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => !r.IsMultiThreaded)} single-threaded")" />
+				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => !r.IsMultiThreaded)} single-threaded")" Align="Align.Right" />
 				<Column TableItem="Result" Title="Passes/s/t" Field="@(r => r.PassesPerSecond)" Sortable="true" Filterable="true" />
-				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsMultiThreaded)} multithreaded")">
+				<Column TableItem="Result" Title="Multithreaded" Field="@(r => r.IsMultiThreaded)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsMultiThreaded)} multithreaded")" Align="Align.Center">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -244,7 +243,7 @@
 						<span class="text-success">@(context.IsMultiThreaded ? "yes" : "no")</span>
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Algorithm == "base")} base")">
+				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Algorithm == "base")} base")" Align="Align.Center">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var algorithm in report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))
@@ -257,7 +256,6 @@
 						@if (context.Algorithm == "base")
 						{
 							<span class="text-success">@context.Algorithm</span>
-
 						}
 						else
 						{
@@ -265,7 +263,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsFaithful == true)} faithful")">
+				<Column TableItem="Result" Title="Faithful" Field="@(r => r.IsFaithful)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.IsFaithful == true)} faithful")" Align="Align.Center">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							<CustomSelectOption Key="yes" Value="@("True")" />
@@ -276,7 +274,6 @@
 						@if (context.IsFaithful == true)
 						{
 							<span class="text-success">yes</span>
-
 						}
 						else
 						{
@@ -284,7 +281,7 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Bits == 1)} single-bit")">
+				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Bits == 1)} single-bit")" Align="Align.Right">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
 							@foreach (var bitCount in report.Results.Select(r => r.Bits).Where(b => b != null).Cast<int>().Distinct().OrderBy(b => b))
@@ -301,7 +298,6 @@
 						else if (context.Bits == null)
 						{
 							<em>Unknown</em>
-
 						}
 						else
 						{

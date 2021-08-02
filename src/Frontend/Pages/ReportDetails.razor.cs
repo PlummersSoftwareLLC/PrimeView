@@ -157,20 +157,26 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			report = await ReportReader.GetReport(ReportId);
+			this.report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 
 			if (LocalStorage.ContainKey(FilterPresetStorageKey))
 			{
 				try
 				{
-					filterPresets = LocalStorage.GetItem<List<ResultFilterPreset>>(FilterPresetStorageKey);
+					this.filterPresets = LocalStorage.GetItem<List<ResultFilterPreset>>(FilterPresetStorageKey);
 				}
 				catch
 				{
 					LocalStorage.RemoveItem(FilterPresetStorageKey);
 				}
+
 			}
+
+			if (this.filterPresets == null)
+				this.filterPresets = new();
+
+			InsertFilterPreset(new LeaderboardFilterPreset());
 
 			await base.OnInitializedAsync();
 		}
@@ -245,9 +251,14 @@ namespace PrimeView.Frontend.Pages
 		private static IList<string> SplitFilterValueString(string text) 
 			=> text.Split("~", StringSplitOptions.RemoveEmptyEntries);
 
+
+		private bool IsFilterPresetNameValid(string name)
+			=> !string.IsNullOrWhiteSpace(name)
+				&& (filterPresets == null || !filterPresets.Any(preset => preset.IsFixed && string.Equals(preset.Name, name, StringComparison.OrdinalIgnoreCase)));
+
 		private async Task ApplyFilterPreset(int index)
 		{
-			var preset = filterPresets?[index];
+			var preset = this.filterPresets?[index];
 
 			if (preset == null)
 				return;
@@ -266,35 +277,47 @@ namespace PrimeView.Frontend.Pages
 			else
 				await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", implementationsSelect);
 
-			filterPresetName = preset.Name;
+			this.filterPresetName = preset.IsFixed ? string.Empty : preset.Name;
 		}
 
 		private void RemoveFilterPreset(int index)
 		{
 			filterPresets?.RemoveAt(index);
 
-			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets);
+			SaveFilterPresets();
+		}
+
+		private void InsertFilterPreset(ResultFilterPreset preset)
+		{
+			if (this.filterPresets == null)
+				this.filterPresets = new();
+
+			int i;
+			for (i = 0; i < this.filterPresets.Count && string.Compare(preset.Name, this.filterPresets[i].Name, StringComparison.OrdinalIgnoreCase) > 0; i++) ;
+
+			if (i < this.filterPresets.Count && string.Equals(preset.Name, this.filterPresets[i].Name, StringComparison.OrdinalIgnoreCase))
+			{
+				if (this.filterPresets[i].IsFixed)
+					return;
+
+				this.filterPresets.RemoveAt(i);
+			}
+
+			this.filterPresets.Insert(i, preset);
+
+			SaveFilterPresets();
 		}
 
 		private void AddFilterPreset()
 		{
-			if (string.IsNullOrWhiteSpace(filterPresetName))
+			if (string.IsNullOrWhiteSpace(this.filterPresetName))
 				return;
 
-			filterPresetName = filterPresetName.Trim();
+			this.filterPresetName = this.filterPresetName.Trim();
 
-			if (filterPresets == null)
-				filterPresets = new();
-
-			int i;
-			for (i = 0; i < filterPresets.Count && string.Compare(filterPresetName, filterPresets[i].Name, StringComparison.OrdinalIgnoreCase) > 0; i++);
-
-			if (i < filterPresets.Count && string.Equals(filterPresetName, filterPresets[i].Name, StringComparison.OrdinalIgnoreCase))
-				filterPresets.RemoveAt(i);
-
-			filterPresets.Insert(i, new()
+			InsertFilterPreset(new()
 			{
-				Name = filterPresetName,
+				Name = this.filterPresetName,
 				AlgorithmText = FilterAlgorithmText,
 				BitsText = FilterBitsText,
 				FaithfulText = FilterFaithfulText,
@@ -302,9 +325,12 @@ namespace PrimeView.Frontend.Pages
 				ParallelismText = FilterParallelismText
 			});
 
-			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets);
+			this.filterPresetName = null;
+		}
 
-			filterPresetName = null;
+		private void SaveFilterPresets()
+		{
+			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets.Where(preset => !preset.IsFixed));
 		}
 	}
 }
