@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PrimeView.Entities;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
@@ -14,24 +15,51 @@ namespace PrimeView.JsonFileReader
 		private Dictionary<string, Report>? reportMap;
 		private readonly HttpClient httpClient;
 		private readonly string? indexFileName;
+		private readonly bool isS3Bucket;
 		private bool haveJsonFilesLoaded = false;
+		private bool reachedMaxFileCount = false;
 
 		public ReportReader(string baseAddress, IConfiguration configuration)
 		{
-			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue<string?>(Constants.BaseURI, baseAddress)!) };
+			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress)!) };
 			this.indexFileName = configuration.GetValue<string?>(Constants.Index, null);
+			this.isS3Bucket = configuration.GetValue(Constants.IsS3Bucket, false);
 		}
 
-		private async Task LoadReportJsonFiles()
+		private async Task<Report?> LoadReportJsonFile(string fileName)
 		{
-			if (this.haveJsonFilesLoaded)
+			if (string.IsNullOrEmpty(fileName))
+				return null;
+
+			if (haveJsonFilesLoaded && reportMap!.ContainsKey(fileName))
+				return reportMap![fileName];
+
+			string reportJson;
+
+			try
 			{
-				return;
+				reportJson = await this.httpClient.GetStringAsync(fileName);
 			}
+			catch	
+			{
+				return null;
+			}
+
+			var reportElement = JsonDocument.Parse(reportJson).RootElement;
+			return ParseReportElement(reportJson, reportElement, fileName);
+		}
+
+		private async Task LoadReportJsonFiles(int maxFileCount)
+		{
+			if (this.haveJsonFilesLoaded && (!this.reachedMaxFileCount || maxFileCount <= this.reportMap!.Count))
+				return;
 
 			string[]? reportFileNames = null;
 
-			if (this.indexFileName != null)
+			if (this.isS3Bucket)
+				reportFileNames = await S3BucketIndexReader.GetFileNames(this.httpClient);
+
+			else if (this.indexFileName != null)
 			{
 				try
 				{
@@ -42,6 +70,7 @@ namespace PrimeView.JsonFileReader
 
 			this.summaries = new();
 			this.reportMap = new();
+			this.reachedMaxFileCount = false;
 
 			for (int fileIndex = 0; fileIndex != reportFileNames?.Length; fileIndex++)
 			{
@@ -63,11 +92,24 @@ namespace PrimeView.JsonFileReader
 						continue;
 				}
 
-				var reportElement = JsonDocument.Parse(reportJson).RootElement;
-				Report report = ParseReportElement(reportJson, reportElement, fileName);
+				try
+				{
+					var reportElement = JsonDocument.Parse(reportJson).RootElement;
+					Report report = ParseReportElement(reportJson, reportElement, fileName);
 
-				this.reportMap[report.Id!] = report;
-				this.summaries.Add(ExtractSummary(report));
+					this.reportMap[fileName] = report;
+					this.summaries.Add(ExtractSummary(report));
+
+					if (--maxFileCount == 0)
+					{
+						this.reachedMaxFileCount = true;
+						break;
+					}
+				}
+				catch 
+				{
+					Console.WriteLine($"Report parsing of file {fileName} failed");
+				}
 			}
 
 			this.haveJsonFilesLoaded = true;
@@ -150,18 +192,16 @@ namespace PrimeView.JsonFileReader
 			return result;
 		}
 
-		public async Task<Report> GetReport(string Id)
+		public async Task<Report> GetReport(string id)
 		{
-			await LoadReportJsonFiles();
-
-			return this.reportMap![Id];
+			return await LoadReportJsonFile(id) ?? new Report();
 		}
 
-		public async Task<ReportSummary[]> GetSummaries()
+		public async Task<ReportSummary[]> GetSummaries(int maxSummaryCount)
 		{
-			await LoadReportJsonFiles();
+			await LoadReportJsonFiles(maxSummaryCount);
 
-			return this.summaries!.ToArray();
+			return this.summaries!.Take(maxSummaryCount).ToArray();
 		}
 	}
 }

@@ -1,8 +1,9 @@
 ﻿namespace PrimeView.JsonFileReader
 {
-	public static class Constants
+	static class Constants
 	{
 		public const string BaseURI = nameof(BaseURI);
 		public const string Index = nameof(Index);
+		public const string IsS3Bucket = nameof(IsS3Bucket);
 	}
 }
