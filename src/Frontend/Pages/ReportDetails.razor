@@ -128,12 +128,6 @@
 							<div class="col-auto form-group">
 								<label>Bits per prime:</label>
 								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
-									<label class="form-check-label" for="fb_uk">
-										<em>Unknown</em>
-									</label>
-								</div>
-								<div class="form-check">
 									<input class="form-check-input" type="checkbox" id="fb_on" @bind="FilterBitsOne">
 									<label class="form-check-label" for="fb_on">
 										1
@@ -143,6 +137,12 @@
 									<input class="form-check-input" type="checkbox" id="fb_ot" @bind="FilterBitsOther">
 									<label class="form-check-label" for="fb_ot">
 										&gt;1
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
+									<label class="form-check-label" for="fb_uk">
+										<em>Unknown</em>
 									</label>
 								</div>
 							</div>
