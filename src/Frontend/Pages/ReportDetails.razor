@@ -236,7 +236,19 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right" />
+				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right">
+					<Template>
+						@{var languageInfo = GetLanguageInfo(context.Implementation);}
+						@if (solutionUrlTemplate != null)
+						{
+							<a href="@(solutionUrlTemplate.Replace("{sln}", context.Solution).Replace("{tag}", languageInfo.Tag ?? languageInfo.Name))" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
+						}
+						else
+						{
+							<span>&nbsp;@context.Solution&nbsp;</span>
+						}
+					</Template>
+				</Column>
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" Align="Align.Right" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using PrimeView.Entities;
 using PrimeView.Frontend.Filters;
@@ -21,6 +22,9 @@ namespace PrimeView.Frontend.Pages
 
 		[Inject]
 		public HttpClient Http { get; set; }
+
+		[Inject]
+		public IConfiguration Configuration { get; set; }
 
 		[Inject]
 		public IReportReader ReportReader { get; set; }
@@ -141,6 +145,7 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
+		private string solutionUrlTemplate;
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
@@ -160,6 +165,7 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
+			this.solutionUrlTemplate = Configuration.GetValue<string>(Constants.SolutionUrlTemplate, null);
 			this.report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 

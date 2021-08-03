@@ -3,6 +3,11 @@
 		"name": "Ada",
 		"url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
 	},
+	"amd64": {
+		"name": "AMD64 machine code",
+		"url": "https://en.wikipedia.org/wiki/X86-64",
+		"tag": "Amd64"
+	},
 	"apl": {
 		"name": "APL",
 		"url": "https://en.wikipedia.org/wiki/APL_(programming_language)"
@@ -33,7 +38,8 @@
 	},
 	"brainfuck": {
 		"name": "Brainfuck",
-		"url": "https://en.wikipedia.org/wiki/Brainfuck"
+		"url": "https://en.wikipedia.org/wiki/Brainfuck",
+		"tag": "BrainFuck"
 	},
 	"c": {
 		"name": "C",
@@ -45,7 +51,8 @@
 	},
 	"cpp": {
 		"name": "C++",
-		"url": "https://isocpp.org/"
+		"url": "https://isocpp.org/",
+		"tag": "CPP"
 	},
 	"crystal": {
 		"name": "Crystal",
@@ -53,7 +60,8 @@
 	},
 	"csharp": {
 		"name": "C#",
-		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/"
+		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/",
+		"tag": "CSharp"
 	},
 	"cython": {
 		"name": "Cython",
@@ -89,7 +97,8 @@
 	},
 	"fsharp": {
 		"name": "F#",
-		"url": "https://fsharp.org/"
+		"url": "https://fsharp.org/",
+		"tag": "FSharp"
 	},
 	"gdscript": {
 		"name": "GDScript",
@@ -144,7 +153,8 @@
 		"url": "https://en.wikipedia.org/wiki/MIX"
 	},
 	"mixed": {
-		"name": "(mixed)"
+		"name": "(mixed)",
+		"tag": "Mixed"
 	},
 	"nim": {
 		"name": "Nim",
@@ -152,7 +162,8 @@
 	},
 	"nodejs": {
 		"name": "Node.js",
-		"url": "https://nodejs.org/"
+		"url": "https://nodejs.org/",
+		"tag": "NodeJS"
 	},
 	"ocaml": {
 		"name": "OCaml",
@@ -212,7 +223,8 @@
 	},
 	"rexx": {
 		"name": "Rexx",
-		"url": "http://www.rexxinfo.org/"
+		"url": "http://www.rexxinfo.org/",
+		"tag": "REXX"
 	},
 	"ruby": {
 		"name": "Ruby",
@@ -244,7 +256,8 @@
 	},
 	"standardml": {
 		"name": "Standard ML",
-		"url": "https://en.wikipedia.org/wiki/Standard_ML"
+		"url": "https://en.wikipedia.org/wiki/Standard_ML",
+		"tag": "StandardML"
 	},
 	"swift": {
 		"name": "Swift",
