@@ -274,6 +274,10 @@
 		"name": "Wren",
 		"url": "https://wren.io/"
 	},
+	"yoix": {
+		"name": "Yoix",
+		"url": "https://en.wikipedia.org/wiki/Yoix"
+	},
 	"zig": {
 		"name": "Zig",
 		"url": "https://ziglang.org/"
