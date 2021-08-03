@@ -31,6 +31,10 @@
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
 	},
+	"brainfuck": {
+		"name": "Brainfuck",
+		"url": "https://en.wikipedia.org/wiki/Brainfuck"
+	},
 	"c": {
 		"name": "C",
 		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
@@ -257,6 +261,10 @@
 	"typescript": {
 		"name": "TypeScript",
 		"url": "https://www.typescriptlang.org/"
+	},
+	"umple": {
+		"name": "Umple",
+		"url": "https://cruise.umple.org/umple/"
 	},
 	"v": {
 		"name": "V",
