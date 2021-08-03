@@ -154,9 +154,13 @@
 		"name": "OCaml",
 		"url": "https://ocaml.org/"
 	},
+	"octave": {
+		"name": "Octave",
+		"url": "https://www.gnu.org/software/octave/"
+	},
 	"odin": {
 		"name": "Odin",
-		"url": "https://www.odin.nl/"
+		"url": "https://odin-lang.org/"
 	},
 	"pascal": {
 		"name": "Pascal",
@@ -260,7 +264,7 @@
 	},
 	"wren": {
 		"name": "Wren",
-		"urk": "https://wren.io/"
+		"url": "https://wren.io/"
 	},
 	"zig": {
 		"name": "Zig",
