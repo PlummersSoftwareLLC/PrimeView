@@ -39,10 +39,11 @@ namespace PrimeView.Frontend.Filters
 				}
 			);
 
-			return !page.OnlyHighestPassesPerSecondPerThreadPerLanguage ? filteredResults :
-				filteredResults
+			return page.OnlyHighestPassesPerSecondPerThreadPerLanguage 
+				? filteredResults
 					.GroupBy(r => r.Implementation)
-					.SelectMany(group => group.Where(r => r.PassesPerSecond == group.Max(r => r.PassesPerSecond)));
+					.SelectMany(group => group.Where(r => r.PassesPerSecond == group.Max(r => r.PassesPerSecond)))
+				: filteredResults;
 		}
 	}
 }
