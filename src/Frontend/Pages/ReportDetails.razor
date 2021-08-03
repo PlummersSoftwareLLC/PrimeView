@@ -152,6 +152,16 @@
 								<button class="btn btn-primary" disabled="@AreFiltersClear" @onclick="ClearFilters">Clear filter</button>
 							</div>
 						</div>
+						<div class="row mx-2 mb-3">
+							<div class="col">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" id="bl" @bind="OnlyHighestPassesPerSecondPerThreadPerLanguage">
+									<label class="form-check-label" for="bl">
+										For each language, only show the result with the highest passes per second, per thread
+									</label>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

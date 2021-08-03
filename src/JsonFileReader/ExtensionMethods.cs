@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PrimeView.Entities;
 using System;
-using System.Net.Http;
 using System.Text.Json;
 
 namespace PrimeView.JsonFileReader

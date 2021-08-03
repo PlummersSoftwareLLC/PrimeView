@@ -98,6 +98,9 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
+		[QueryStringParameter("tp")]
+		public bool OnlyHighestPassesPerSecondPerThreadPerLanguage { get; set; } = false;
+
 		public IList<string> FilterImplementations
 			=> SplitFilterValueString(FilterImplementationText);
 

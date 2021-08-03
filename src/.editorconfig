@@ -1,7 +1,7 @@
 ﻿[*.{cs,vb}]
 
 # IDE0003: Remove qualification
-dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_field =false:suggestion
 
 # IDE0003: Remove qualification
 dotnet_diagnostic.IDE0003.severity = none
