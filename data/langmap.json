@@ -31,6 +31,10 @@
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
 	},
+	"brainfuck": {
+		"name": "Brainfuck",
+		"url": "https://en.wikipedia.org/wiki/Brainfuck"
+	},
 	"c": {
 		"name": "C",
 		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
@@ -154,9 +158,13 @@
 		"name": "OCaml",
 		"url": "https://ocaml.org/"
 	},
+	"octave": {
+		"name": "Octave",
+		"url": "https://www.gnu.org/software/octave/"
+	},
 	"odin": {
 		"name": "Odin",
-		"url": "https://www.odin.nl/"
+		"url": "https://odin-lang.org/"
 	},
 	"pascal": {
 		"name": "Pascal",
@@ -254,13 +262,21 @@
 		"name": "TypeScript",
 		"url": "https://www.typescriptlang.org/"
 	},
+	"umple": {
+		"name": "Umple",
+		"url": "https://cruise.umple.org/umple/"
+	},
 	"v": {
 		"name": "V",
 		"url": "https://vlang.io/"
 	},
 	"wren": {
 		"name": "Wren",
-		"urk": "https://wren.io/"
+		"url": "https://wren.io/"
+	},
+	"yoix": {
+		"name": "Yoix",
+		"url": "https://en.wikipedia.org/wiki/Yoix"
 	},
 	"zig": {
 		"name": "Zig",
