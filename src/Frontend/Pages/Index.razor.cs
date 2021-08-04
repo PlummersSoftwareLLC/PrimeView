@@ -3,9 +3,6 @@ using Microsoft.Extensions.Configuration;
 using PrimeView.Entities;
 using PrimeView.Frontend.Parameters;
 using PrimeView.Frontend.Tools;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PrimeView.Entities;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;

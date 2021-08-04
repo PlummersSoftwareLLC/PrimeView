@@ -14,7 +14,7 @@ namespace PrimeView.Frontend.Filters
 			if (filterImplementations.Count > 0)
 				source = source.Where(r => filterImplementations.Contains(r.Implementation));
 
-			return source.Where(r =>
+			var filteredResults = source.Where(r =>
 				r.IsMultiThreaded switch
 				{
 					true => page.FilterParallelMultithreaded,
@@ -38,6 +38,12 @@ namespace PrimeView.Frontend.Filters
 					_ => page.FilterBitsOther
 				}
 			);
+
+			return page.OnlyHighestPassesPerSecondPerThreadPerLanguage 
+				? filteredResults
+					.GroupBy(r => r.Implementation)
+					.SelectMany(group => group.Where(r => r.PassesPerSecond == group.Max(r => r.PassesPerSecond)))
+				: filteredResults;
 		}
 	}
 }

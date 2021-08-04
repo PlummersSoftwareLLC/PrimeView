@@ -3,7 +3,6 @@ using BlazorTable;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using PrimeView.Frontend.Parameters;
-using System;
 using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Sorting
