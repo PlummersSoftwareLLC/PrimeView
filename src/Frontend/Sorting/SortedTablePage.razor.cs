@@ -37,12 +37,12 @@ namespace PrimeView.Frontend.Sorting
 
 		protected override async Task OnAfterRenderAsync(bool firstRender)
 		{
-			(string sortColumn, bool sortDescending) = sortedTable.GetSortParameterValues();
+			(string sortColumn, bool sortDescending) = this.sortedTable.GetSortParameterValues();
 
-			if (!processTableSortingChange && (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || SortDescending != sortDescending))
+			if (!this.processTableSortingChange && (!SortColumn.EqualsIgnoreCaseOrNull(sortColumn) || SortDescending != sortDescending))
 			{
-				if (sortedTable.SetSortParameterValues(SortColumn, SortDescending))
-					await sortedTable.UpdateAsync();
+				if (this.sortedTable.SetSortParameterValues(SortColumn, SortDescending))
+					await this.sortedTable.UpdateAsync();
 			}
 
 			UpdateQueryString();
@@ -52,17 +52,17 @@ namespace PrimeView.Frontend.Sorting
 
 		protected void FlagTableSortingChange()
 		{
-			processTableSortingChange = true;
+			this.processTableSortingChange = true;
 		}
 
 		protected virtual void OnTableRefreshStart()
 		{
-			if (!processTableSortingChange)
+			if (!this.processTableSortingChange)
 				return;
 
-			(string sortColumn, bool sortDescending) = sortedTable.GetSortParameterValues();
+			(string sortColumn, bool sortDescending) = this.sortedTable.GetSortParameterValues();
 
-			processTableSortingChange = false;
+			this.processTableSortingChange = false;
 
 			bool queryStringUpdateRequired = false;
 
