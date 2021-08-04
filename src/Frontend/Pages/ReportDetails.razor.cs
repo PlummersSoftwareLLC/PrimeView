@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration;
 using Microsoft.JSInterop;
 using PrimeView.Entities;
 using PrimeView.Frontend.Filters;
@@ -21,6 +22,9 @@ namespace PrimeView.Frontend.Pages
 
 		[Inject]
 		public HttpClient Http { get; set; }
+
+		[Inject]
+		public IConfiguration Configuration { get; set; }
 
 		[Inject]
 		public IReportReader ReportReader { get; set; }
@@ -141,6 +145,7 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
+		private string solutionUrlTemplate;
 		private Report report = null;
 		private int rowNumber = 0;
 		private Dictionary<string, LanguageInfo> languageMap = null;
@@ -160,6 +165,7 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
+			this.solutionUrlTemplate = Configuration.GetValue<string>(Constants.SolutionUrlTemplate, null);
 			this.report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 
@@ -214,7 +220,7 @@ namespace PrimeView.Frontend.Pages
 		{
 			try
 			{
-				languageMap = await Http.GetFromJsonAsync<Dictionary<string, LanguageInfo>>("data/langmap.json");
+				this.languageMap = await Http.GetFromJsonAsync<Dictionary<string, LanguageInfo>>("data/langmap.json");
 				foreach (var entry in languageMap)
 				{
 					entry.Value.Key = entry.Key;
@@ -225,13 +231,25 @@ namespace PrimeView.Frontend.Pages
 
 		protected override void OnTableRefreshStart()
 		{
-			rowNumber = sortedTable.PageNumber * sortedTable.PageSize;
+			rowNumber = this.sortedTable.PageNumber * this.sortedTable.PageSize;
 
 			base.OnTableRefreshStart();
 		}
 
 		private LanguageInfo GetLanguageInfo(string language)
-			=> languageMap != null && languageMap.ContainsKey(language) ? languageMap[language] : new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
+		{
+			if (this.languageMap == null)
+				this.languageMap = new();
+
+			if (languageMap.ContainsKey(language))
+				return this.languageMap[language];
+
+			LanguageInfo info = new() { Key = language, Name = language[0].ToString().ToUpper() + language[1..] };
+
+			this.languageMap[language] = info;
+
+			return info;
+		}
 
 		private async Task ImplementationSelectionChanged()
 		{
@@ -285,7 +303,7 @@ namespace PrimeView.Frontend.Pages
 
 		private void RemoveFilterPreset(int index)
 		{
-			filterPresets?.RemoveAt(index);
+			this.filterPresets?.RemoveAt(index);
 
 			SaveFilterPresets();
 		}

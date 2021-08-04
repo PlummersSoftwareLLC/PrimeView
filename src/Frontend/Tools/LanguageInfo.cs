@@ -8,6 +8,7 @@ namespace PrimeView.Frontend.Tools
 		public string Key { get; set; }
 		public string Name { get; set; }
 		public string URL { get; set; }
+		public string Tag { get; set; }
 
 		public class KeyEqualityComparer : IEqualityComparer<LanguageInfo>
 		{
