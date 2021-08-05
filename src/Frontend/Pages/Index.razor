@@ -17,12 +17,12 @@
 
 		<form class="form-inline my-2" @onsubmit="ApplyNewMaxReportCount">
 			<label>Maximum number of reports to load:</label>
-			<input type="number" class="form-control mx-2" @bind="newMaxReportCount" @bind:event="oninput">
-			<button type="submit" class="btn btn-primary" disabled="@(newMaxReportCount <= 0 || newMaxReportCount == MaxReportCount)">Apply</button>
-			<button class="btn btn-outline-primary" disabled="@(newMaxReportCount == MaxReportCount)" @onclick="() => newMaxReportCount = MaxReportCount">Reset</button>
+			<input type="number" class="form-control mx-2" @bind="this.newMaxReportCount" @bind:event="oninput">
+			<button type="submit" class="btn btn-primary" disabled="@(this.newMaxReportCount <= 0 || this.newMaxReportCount == MaxReportCount)">Apply</button>
+			<button class="btn btn-outline-primary" disabled="@(this.newMaxReportCount == MaxReportCount)" @onclick="() => this.newMaxReportCount = MaxReportCount">Reset</button>
 		</form>
 
-		<Table TableItem="ReportSummary" Items="summaries" @ref="sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">
+		<Table TableItem="ReportSummary" Items="this.summaries" @ref="this.sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">
 			@{ OnTableRefreshStart(); }
 			<Column TableItem="ReportSummary" Title="Date" Field="@(s => s.Date)" Sortable="true" Filterable="true">
 				<Template>
@@ -32,7 +32,7 @@
 			<Column TableItem="ReportSummary" Title="User" Field="@(s => s.User)" Sortable="true" Filterable="true" Class="align-middle">
 				<CustomIFilters>
 					<CustomSelect TableItem="ReportSummary">
-						@foreach (var user in summaries.Select(r => r.User).Where(u => u != null).Distinct().OrderBy(u => u))
+						@foreach (var user in this.summaries.Select(r => r.User).Where(u => u != null).Distinct().OrderBy(u => u))
 						{
 							<CustomSelectOption Key="@user" Value="@user" />
 						}

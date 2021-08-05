@@ -19,7 +19,7 @@
 
 		<h1>@ReportTitle</h1>
 
-		@if (report == null)
+		@if (this.report == null)
 		{
 			<div class="row">
 				<div class="col-auto text-success">
@@ -43,7 +43,7 @@
 					</div>
 
 					<div class="collapse@(HideSystemInformation ? "" : ".show")">
-						<SystemInformation Report="report" />
+						<SystemInformation Report="this.report" />
 					</div>
 				</div>
 
@@ -63,7 +63,7 @@
 									<label for="implementatios">Languages:</label>
 									<select multiple class="form-control" id="implementations" @ref="implementationsSelect" @onchange="ImplementationSelectionChanged">
 										@{ var filterImplementations = FilterImplementations; }
-										@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+										@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 										{
 											<option value="@languageInfo.Key" selected="@(filterImplementations.Contains(languageInfo.Key))">@languageInfo.Name</option>
 										}
@@ -179,10 +179,10 @@
 					<div class="row">
 						<div class="col">
 							<div class="list-group list-group-flush">
-								@for (int i = 0; i < (filterPresets?.Count ?? 0); i++)
+								@for (int i = 0; i < (this.filterPresets?.Count ?? 0); i++)
 								{
 									int presetIndex = i;
-									var preset = filterPresets[presetIndex];
+									var preset = this.filterPresets[presetIndex];
 
 									<div class="list-group-item py-1 pl-2 pr-0 d-flex justify-content-between align-items-center">
 										<button class="btn btn-link @(preset.IsFixed ? "text-dark" : (string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase)) ? "text-success" : "text-primary") px-1 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
@@ -207,7 +207,7 @@
 
 			<br />
 
-			var filteredItems = report.Results.ApplyFilters(this);
+			var filteredItems = this.report.Results.ApplyFilters(this);
 			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="sortedTable" @onclick="FlagTableSortingChange">
 				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")" Align="Align.Right">
@@ -218,7 +218,7 @@
 				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Select(r => r.Implementation).Distinct().Count()} languages")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							@foreach (var languageInfo in report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+							@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 							{
 								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />
 							}
@@ -226,6 +226,7 @@
 					</CustomIFilters>
 					<Template>
 						@{var languageInfo = GetLanguageInfo(context.Implementation);}
+						
 						@if (languageInfo.URL != null)
 						{
 							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a>
@@ -236,7 +237,24 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right" />
+				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right">
+					<Template>
+						@if (solutionUrlTemplate != null)
+						{
+							var languageInfo = GetLanguageInfo(context.Implementation);
+
+							var solutionUrl = this.solutionUrlTemplate
+								.Replace("{sln}", context.Solution)
+								.Replace("{tag}", languageInfo.Tag ?? languageInfo.Name);
+
+							<a href="@solutionUrl" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
+						}
+						else
+						{
+							<span>&nbsp;@context.Solution&nbsp;</span>
+						}
+					</Template>
+				</Column>
 				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" Align="Align.Right" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
@@ -256,7 +274,7 @@
 				<Column TableItem="Result" Title="Algorithm" Field="@(r => r.Algorithm)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Algorithm == "base")} base")" Align="Align.Center">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							@foreach (var algorithm in report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))
+							@foreach (var algorithm in this.report.Results.Select(r => r.Algorithm).Where(a => a != null).Distinct().OrderBy(a => a))
 							{
 								<CustomSelectOption Key="@algorithm" Value="@algorithm" />
 							}
@@ -294,7 +312,7 @@
 				<Column TableItem="Result" Title="Bits" Field="@(r => r.Bits)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => r.Bits == 1)} single-bit")" Align="Align.Right">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							@foreach (var bitCount in report.Results.Select(r => r.Bits).Where(b => b != null).Cast<int>().Distinct().OrderBy(b => b))
+							@foreach (var bitCount in this.report.Results.Select(r => r.Bits).Where(b => b != null).Cast<int>().Distinct().OrderBy(b => b))
 							{
 								<CustomSelectOption Key="@bitCount.ToString()" Value="@bitCount" />
 							}
