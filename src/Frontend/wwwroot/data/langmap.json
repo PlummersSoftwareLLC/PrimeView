@@ -108,6 +108,14 @@
 		"name": "Go",
 		"url": "https://golang.org/"
 	},
+	"groovy": {
+		"name": "Groovy",
+		"url": "https://groovy-lang.org/"
+	},
+	"hack": {
+		"name": "Hack",
+		"url": "https://hacklang.org/"
+	},
 	"haskell": {
 		"name": "Haskell",
 		"url": "https://www.haskell.org/"
