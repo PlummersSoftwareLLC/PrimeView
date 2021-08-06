@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages
 {
-	public partial class ReportDetails : SortedTablePage<Result>
+	public partial class ReportDetails : SortedTablePage<Result>, IFilterPropertyProvider, ILanguageInfoProvider
 	{
 		private const string FilterPresetStorageKey = "ResultFilterPresets";
 
@@ -47,58 +47,58 @@ namespace PrimeView.Frontend.Pages
 		[QueryStringParameter("fp")]
 		public string FilterParallelismText
 		{
-			get => JoinFilterValueString(!FilterParallelSinglethreaded, "st", !FilterParallelMultithreaded, "mt");
+			get => JoinFilterValueString(!FilterParallelSinglethreaded, Constants.SinglethreadedTag, !FilterParallelMultithreaded, Constants.MultithreadedTag);
 
 			set
 			{
-				var values = SplitFilterValueString(value);
+				var values = value.SplitFilterValues();
 
-				FilterParallelSinglethreaded = !values.Contains("st");
-				FilterParallelMultithreaded = !values.Contains("mt");
+				FilterParallelSinglethreaded = !values.Contains(Constants.SinglethreadedTag);
+				FilterParallelMultithreaded = !values.Contains(Constants.MultithreadedTag);
 			}
 		}
 
 		[QueryStringParameter("fa")]
 		public string FilterAlgorithmText
 		{
-			get => JoinFilterValueString(!FilterAlgorithmBase, "ba", !FilterAlgorithmWheel, "wh", !FilterAlgorithmOther, "ot");
+			get => JoinFilterValueString(!FilterAlgorithmBase, Constants.BaseTag, !FilterAlgorithmWheel, Constants.WheelTag, !FilterAlgorithmOther, Constants.OtherTag);
 
 			set
 			{
-				var values = SplitFilterValueString(value);
+				var values = value.SplitFilterValues();
 
-				FilterAlgorithmBase = !values.Contains("ba");
-				FilterAlgorithmWheel = !values.Contains("wh");
-				FilterAlgorithmOther = !values.Contains("ot");
+				FilterAlgorithmBase = !values.Contains(Constants.BaseTag);
+				FilterAlgorithmWheel = !values.Contains(Constants.WheelTag);
+				FilterAlgorithmOther = !values.Contains(Constants.OtherTag);
 			}
 		}
 
 		[QueryStringParameter("ff")]
 		public string FilterFaithfulText
 		{
-			get => JoinFilterValueString(!FilterFaithful, "ff", !FilterUnfaithful, "uf");
+			get => JoinFilterValueString(!FilterFaithful, Constants.FaithfulTag, !FilterUnfaithful, Constants.UnfaithfulTag);
 
 			set
 			{
-				var values = SplitFilterValueString(value);
+				var values = value.SplitFilterValues();
 
-				FilterFaithful = !values.Contains("ff");
-				FilterUnfaithful = !values.Contains("uf");
+				FilterFaithful = !values.Contains(Constants.FaithfulTag);
+				FilterUnfaithful = !values.Contains(Constants.UnfaithfulTag);
 			}
 		}
 
 		[QueryStringParameter("fb")]
 		public string FilterBitsText
 		{
-			get => JoinFilterValueString(!FilterBitsUnknown, "uk", !FilterBitsOne, "on", !FilterBitsOther, "ot");
+			get => JoinFilterValueString(!FilterBitsUnknown, Constants.UnknownTag, !FilterBitsOne, Constants.OneTag, !FilterBitsOther, Constants.OtherTag);
 
 			set
 			{
-				var values = SplitFilterValueString(value);
+				var values = value.SplitFilterValues();
 
-				FilterBitsUnknown = !values.Contains("uk");
-				FilterBitsOne = !values.Contains("on");
-				FilterBitsOther = !values.Contains("ot");
+				FilterBitsUnknown = !values.Contains(Constants.UnknownTag);
+				FilterBitsOne = !values.Contains(Constants.OneTag);
+				FilterBitsOther = !values.Contains(Constants.OtherTag);
 			}
 		}
 
@@ -106,7 +106,7 @@ namespace PrimeView.Frontend.Pages
 		public bool OnlyHighestPassesPerSecondPerThreadPerLanguage { get; set; } = false;
 
 		public IList<string> FilterImplementations
-			=> SplitFilterValueString(FilterImplementationText);
+			=> FilterImplementationText.SplitFilterValues();
 
 		public bool FilterParallelSinglethreaded { get; set; } = true;
 		public bool FilterParallelMultithreaded { get; set; } = true;
@@ -237,7 +237,7 @@ namespace PrimeView.Frontend.Pages
 			base.OnTableRefreshStart();
 		}
 
-		private LanguageInfo GetLanguageInfo(string language)
+		public LanguageInfo GetLanguageInfo(string language)
 		{
 			if (this.languageMap == null)
 				this.languageMap = new();
@@ -267,12 +267,8 @@ namespace PrimeView.Frontend.Pages
 					setFlags.Add(flagSet[i + 1].ToString());
 			}
 
-			return setFlags.Count > 0 ? string.Join("~", setFlags) : string.Empty;
+			return setFlags.JoinFilterValues();
 		}
-
-		private static IList<string> SplitFilterValueString(string text) 
-			=> text.Split("~", StringSplitOptions.RemoveEmptyEntries);
-
 
 		private bool IsFilterPresetNameValid(string name)
 			=> !string.IsNullOrWhiteSpace(name)

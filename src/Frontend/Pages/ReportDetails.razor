@@ -47,11 +47,21 @@
 					</div>
 				</div>
 
+				@{ 
+					string filterSummary = string.Empty;
+
+					if (HideFilters)
+					{
+						filterSummary = $": {this.CreateSummary(this)}";
+						if (OnlyHighestPassesPerSecondPerThreadPerLanguage)
+							filterSummary += ", only show highest passes/s/t";
+					}
+				}
 				<div class="card">
 					<div class="card-header">
 						<h2 class="mb-0">
 							<button class="btn btn-block text-primary text-left" @onclick="ToggleFilterPanel">
-								<i class="fa @(HideFilters ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;Filter
+								<i class="fa @(HideFilters ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;Filter@(filterSummary)
 							</button>
 						</h2>
 					</div>
@@ -148,7 +158,7 @@
 							</div>
 						</div>
 						<div class="row mx-2 mb-3">
-							<div class="col">
+							<div class="col-auto">
 								<button class="btn btn-primary" disabled="@AreFiltersClear" @onclick="ClearFilters">Clear filter</button>
 							</div>
 						</div>
@@ -186,7 +196,7 @@
 
 									<div class="list-group-item py-1 pl-2 pr-0 d-flex justify-content-between align-items-center">
 										<button class="btn btn-link @(preset.IsFixed ? "text-dark" : (string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase)) ? "text-success" : "text-primary") px-1 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
-											@preset.Name
+											@preset.Name <span class="font-italic text-secondary">(@preset.CreateSummary(this))</span>
 										</button>
 										<button class="btn btn-danger" style="box-shadow: none" disabled="@(preset.IsFixed)" @onclick="() => RemoveFilterPreset(presetIndex)">
 											<i class="fas fa-minus"></i>
