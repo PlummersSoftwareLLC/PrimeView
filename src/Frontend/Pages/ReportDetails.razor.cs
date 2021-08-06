@@ -186,6 +186,7 @@ namespace PrimeView.Frontend.Pages
 				this.filterPresets = new();
 
 			InsertFilterPreset(new LeaderboardFilterPreset());
+			InsertFilterPreset(new MultithreadedLeaderboardFilterPreset());
 
 			await base.OnInitializedAsync();
 		}
