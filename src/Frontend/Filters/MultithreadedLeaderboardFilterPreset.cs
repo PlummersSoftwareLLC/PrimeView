@@ -2,14 +2,14 @@
 
 namespace PrimeView.Frontend.Filters
 {
-	public class LeaderboardFilterPreset : ResultFilterPreset
+	public class MultithreadedLeaderboardFilterPreset : ResultFilterPreset
 	{
-		public LeaderboardFilterPreset()
+		public MultithreadedLeaderboardFilterPreset()
 		{
-			Name = "Leaderboard";
+			Name = "Multithreaded leaderboard";
 			ImplementationText = string.Empty;
-			ParallelismText = Constants.MultithreadedTag;
-			AlgorithmText = new string[] { Constants.WheelTag, Constants.OtherTag}.JoinFilterValues();
+			ParallelismText = Constants.SinglethreadedTag;
+			AlgorithmText = new string[] { Constants.WheelTag, Constants.OtherTag }.JoinFilterValues();
 			FaithfulText = Constants.UnfaithfulTag;
 			BitsText = new string[] { Constants.UnknownTag, Constants.OtherTag }.JoinFilterValues();
 		}
