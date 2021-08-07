@@ -28,36 +28,47 @@ namespace PrimeView.Frontend.Filters
 		[JsonIgnore]
 		public virtual bool IsFixed => false;
 
+		[JsonIgnore]
 		public IList<string> FilterImplementations
 			=> ImplementationText.SplitFilterValues();
 
+		[JsonIgnore]
 		public bool FilterParallelSinglethreaded 
 			=> !ParallelismText.SplitFilterValues().Contains(Constants.SinglethreadedTag);
 
+		[JsonIgnore]
 		public bool FilterParallelMultithreaded
 			=> !ParallelismText.SplitFilterValues().Contains(Constants.MultithreadedTag);
 
+		[JsonIgnore]
 		public bool FilterAlgorithmBase 
 			=> !AlgorithmText.SplitFilterValues().Contains(Constants.BaseTag);
 
+		[JsonIgnore]
 		public bool FilterAlgorithmWheel
 			=> !AlgorithmText.SplitFilterValues().Contains(Constants.WheelTag);
 
+		[JsonIgnore]
 		public bool FilterAlgorithmOther
 			=> !AlgorithmText.SplitFilterValues().Contains(Constants.OtherTag);
 
+		[JsonIgnore]
 		public bool FilterFaithful
 			=> !FaithfulText.SplitFilterValues().Contains(Constants.FaithfulTag);
 
+		[JsonIgnore]
 		public bool FilterUnfaithful
 			=> !FaithfulText.SplitFilterValues().Contains(Constants.UnfaithfulTag);
 
+		[JsonIgnore]
 		public bool FilterBitsUnknown
 			=> !BitsText.SplitFilterValues().Contains(Constants.UnknownTag);
 
+		[JsonIgnore]
 		public bool FilterBitsOne
 			=> !BitsText.SplitFilterValues().Contains(Constants.OneTag);
 
+		[JsonIgnore]
 		public bool FilterBitsOther
 			=> !BitsText.SplitFilterValues().Contains(Constants.OtherTag);
 	}
