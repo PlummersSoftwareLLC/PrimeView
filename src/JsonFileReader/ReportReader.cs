@@ -72,14 +72,29 @@ namespace PrimeView.JsonFileReader
 			this.reportMap = new();
 			this.reachedMaxFileCount = false;
 
+			Dictionary<string, Task<string>> stringReaderMap = new();
+
 			for (int fileIndex = 0; fileIndex != reportFileNames?.Length; fileIndex++)
 			{
 				string fileName = reportFileNames != null ? reportFileNames[fileIndex] : $"data/report{fileIndex + 1}.json";
+
+				stringReaderMap[fileName] = this.httpClient.GetStringAsync(fileName);
+
+				if (--maxFileCount == 0)
+				{
+					this.reachedMaxFileCount = true;
+					break;
+				}
+			}
+
+			foreach (var item in stringReaderMap) 
+			{
 				string reportJson;
+				string fileName = item.Key;
 
 				try
 				{
-  				reportJson = await this.httpClient.GetStringAsync(fileName);
+					reportJson = await item.Value;
 				}
 				catch (HttpRequestException)
 				{
@@ -99,14 +114,8 @@ namespace PrimeView.JsonFileReader
 
 					this.reportMap[fileName] = report;
 					this.summaries.Add(ExtractSummary(report));
-
-					if (--maxFileCount == 0)
-					{
-						this.reachedMaxFileCount = true;
-						break;
-					}
 				}
-				catch 
+				catch
 				{
 					Console.WriteLine($"Report parsing of file {fileName} failed");
 				}
