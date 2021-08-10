@@ -1,7 +1,7 @@
 {
     "navigationFallback": {
       "rewrite": "/index.html",
-      "exclude": ["/_content/*", "/_framework/*", "/css/*.{css}", "/data/*.{json}", "/js/*.{js}", "/*.{ico,png}", "/appsettings.*"]
+      "exclude": ["/_content/*", "/_framework/*", "/css/*.{css}", "/data/*.{json}", "/img/*", "/js/*.{js}", "/*.{ico,png}", "/appsettings.*"]
     },
     "responseOverrides": {
         "404": {

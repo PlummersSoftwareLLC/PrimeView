@@ -10,12 +10,22 @@
 
 <div class="row h-100">
 	<div class="col">
-		<nav aria-label="breadcrumb">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="">Reports</a></li>
-				<li class="breadcrumb-item active" aria-current="page">@ReportTitle</li>
-			</ol>
-		</nav>
+		<div class="row align-items-center bg-light no-gutter rounded border border-secondary mx-0 mb-3">
+			<div class="col-auto pr-0">
+				<a href="https://github.com/PlummersSoftwareLLC/Primes"><img src="img/logo.svg" width="30" height="30" alt=""></a>
+			</div>
+			<div class="col px-0">
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb bg-transparent m-0">
+						<li class="breadcrumb-item"><a href="">Reports</a></li>
+						<li class="breadcrumb-item active" aria-current="page">@ReportTitle</li>
+					</ol>
+				</nav>
+			</div>
+			<div class="col-auto pl-y">
+				<a href="https://github.com/PlummersSoftwareLLC/PrimeView"><i class="text-secondary fas fa-info-circle"></i></a>
+			</div>
+		</div>
 
 		<h1>@ReportTitle</h1>
 
@@ -47,7 +57,7 @@
 					</div>
 				</div>
 
-				@{ 
+				@{
 					string filterSummary = string.Empty;
 
 					if (HideFilters)
@@ -236,7 +246,7 @@
 					</CustomIFilters>
 					<Template>
 						@{var languageInfo = GetLanguageInfo(context.Implementation);}
-						
+
 						@if (languageInfo.URL != null)
 						{
 							<a href="@languageInfo.URL" target="_blank" rel="noreferrer noopener">@languageInfo.Name</a>
