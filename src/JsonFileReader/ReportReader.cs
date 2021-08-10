@@ -80,7 +80,7 @@ namespace PrimeView.JsonFileReader
 
 				stringReaderMap[fileName] = this.httpClient.GetStringAsync(fileName);
 
-				if (--maxFileCount == 0)
+				if (--maxFileCount <= 0)
 				{
 					this.reachedMaxFileCount = true;
 					break;
