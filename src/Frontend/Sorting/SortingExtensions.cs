@@ -46,6 +46,8 @@ namespace PrimeView.Frontend.Sorting
 		}
 
 		public static bool EqualsIgnoreCaseOrNull(this string x, string y)
-			=> (x == null && y == null) || (x != null && y != null && x.Equals(y, StringComparison.OrdinalIgnoreCase));
+		{
+			return (x == null && y == null) || (x != null && y != null && x.Equals(y, StringComparison.OrdinalIgnoreCase));
+		}
 	}
 }

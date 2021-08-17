@@ -271,8 +271,10 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private bool IsFilterPresetNameValid(string name)
-			=> !string.IsNullOrWhiteSpace(name)
-				&& (filterPresets == null || !filterPresets.Any(preset => preset.IsFixed && string.Equals(preset.Name, name, StringComparison.OrdinalIgnoreCase)));
+		{
+			return !string.IsNullOrWhiteSpace(name)
+						 && (filterPresets == null || !filterPresets.Any(preset => preset.IsFixed && string.Equals(preset.Name, name, StringComparison.OrdinalIgnoreCase)));
+		}
 
 		private async Task ApplyFilterPreset(int index)
 		{

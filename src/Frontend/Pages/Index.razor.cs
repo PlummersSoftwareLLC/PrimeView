@@ -19,7 +19,7 @@ namespace PrimeView.Frontend.Pages
 		public int MaxReportCount { get; set; }
 
 		private ReportSummary[] summaries = null;
-		private int newMaxReportCount; 
+		private int newMaxReportCount;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{

@@ -47,7 +47,7 @@ namespace PrimeView.JsonFileReader
 			{
 				return JsonSerializer.Deserialize<T>(element.GetRawText(), serializerOptions);
 			}
-			catch (Exception ex) 
+			catch (Exception ex)
 			{
 				Console.WriteLine(ex);
 			}

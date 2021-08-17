@@ -227,7 +227,7 @@
 
 			<br />
 
-			var filteredItems = this.report.Results.ApplyFilters(this);
+			var filteredItems = this.report.Results.Viewable().ApplyFilters(this);
 			<Table TableItem="Result" Items="filteredItems" PageSize="0" ColumnReorder="false" ShowFooter="true" @ref="sortedTable" @onclick="FlagTableSortingChange">
 				@{ OnTableRefreshStart(); }
 				<Column TableItem="Result" Title="#" Sortable="false" Filterable="false" SetFooterValue="@($"{filteredItems.Count()}")" Align="Align.Right">
