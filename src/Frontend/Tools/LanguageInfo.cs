@@ -13,10 +13,14 @@ namespace PrimeView.Frontend.Tools
 		public class KeyEqualityComparer : IEqualityComparer<LanguageInfo>
 		{
 			public bool Equals(LanguageInfo x, LanguageInfo y)
-				=> (x == null && y == null) || (x != null && y != null && x.Key == y.Key);
+			{
+				return (x == null && y == null) || (x != null && y != null && x.Key == y.Key);
+			}
 
 			public int GetHashCode([DisallowNull] LanguageInfo obj)
-				=> obj.Key.GetHashCode();
+			{
+				return obj.Key.GetHashCode();
+			}
 		}
 	}
 }

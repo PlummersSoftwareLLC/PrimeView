@@ -4,11 +4,25 @@ using PrimeView.Frontend.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace PrimeView.Frontend.Filters
 {
 	public static class FilterExtensions
 	{
+		private static readonly Func<Result, bool> successfulResult;
+
+		static FilterExtensions()
+		{
+			Expression<Func<Result, bool>> successfulResultExpression = result => result.Status == null || result.Status == "success";
+			successfulResult = successfulResultExpression.Compile();
+		}
+
+		public static IEnumerable<Result> Viewable(this IEnumerable<Result> source)
+		{
+			return source.Where(successfulResult);
+		}
+
 		public static IEnumerable<Result> ApplyFilters(this IEnumerable<Result> source, ReportDetails page)
 		{
 			var filterImplementations = page.FilterImplementations;
@@ -41,7 +55,7 @@ namespace PrimeView.Frontend.Filters
 				}
 			);
 
-			return page.OnlyHighestPassesPerSecondPerThreadPerLanguage 
+			return page.OnlyHighestPassesPerSecondPerThreadPerLanguage
 				? filteredResults
 					.GroupBy(r => r.Implementation)
 					.SelectMany(group => group.Where(r => r.PassesPerSecond == group.Max(r => r.PassesPerSecond)))
@@ -83,8 +97,8 @@ namespace PrimeView.Frontend.Filters
 				_ => null
 			});
 
-			segments.Add((filter.FilterBitsOne, filter.FilterBitsOther, filter.FilterBitsUnknown) switch 
-			{ 
+			segments.Add((filter.FilterBitsOne, filter.FilterBitsOther, filter.FilterBitsUnknown) switch
+			{
 				(true, false, false) => "one bit",
 				(false, true, false) => "multiple bits",
 				(false, false, true) => "unknown bits",
@@ -98,9 +112,13 @@ namespace PrimeView.Frontend.Filters
 		}
 
 		public static IList<string> SplitFilterValues(this string text)
-			=> text.Split('~', StringSplitOptions.RemoveEmptyEntries);
+		{
+			return text.Split('~', StringSplitOptions.RemoveEmptyEntries);
+		}
 
 		public static string JoinFilterValues(this IEnumerable<string> values)
-			=> string.Join('~', values);
+		{
+			return string.Join('~', values);
+		}
 	}
 }

@@ -101,7 +101,9 @@ namespace PrimeView.Frontend.Parameters
 		}
 
 		private static string GetLocalStorageKey(ComponentBase component)
-			=> $"{component.GetType().Name}QueryParameters";
+		{
+			return $"{component.GetType().Name}QueryParameters";
+		}
 
 		private static object ConvertValue(StringValues value, Type type)
 		{
@@ -115,13 +117,19 @@ namespace PrimeView.Frontend.Parameters
 		}
 
 		private static object GetDefault(Type type)
-			=> type.IsValueType ? Activator.CreateInstance(type) : null;
+		{
+			return type.IsValueType ? Activator.CreateInstance(type) : null;
+		}
 
 		private static string ConvertToString(object value)
-			=> Convert.ToString(value, CultureInfo.InvariantCulture);
+		{
+			return Convert.ToString(value, CultureInfo.InvariantCulture);
+		}
 
 		private static PropertyInfo[] GetProperties(ComponentBase component)
-			=> component.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+		{
+			return component.GetType().GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+		}
 
 		private static string GetQueryStringParameterName(PropertyInfo property)
 		{

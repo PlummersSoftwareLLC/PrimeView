@@ -18,7 +18,7 @@ namespace PrimeView.JsonFileReader
 			{
 				indexElement = XElement.Parse(await httpClient.GetStringAsync(""));
 			}
-			catch 
+			catch
 			{
 				return null;
 			}

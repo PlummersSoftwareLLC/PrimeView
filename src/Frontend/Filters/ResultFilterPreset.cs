@@ -1,6 +1,5 @@
 ﻿using PrimeView.Frontend.Tools;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace PrimeView.Frontend.Filters
@@ -33,7 +32,7 @@ namespace PrimeView.Frontend.Filters
 			=> ImplementationText.SplitFilterValues();
 
 		[JsonIgnore]
-		public bool FilterParallelSinglethreaded 
+		public bool FilterParallelSinglethreaded
 			=> !ParallelismText.SplitFilterValues().Contains(Constants.SinglethreadedTag);
 
 		[JsonIgnore]
@@ -41,7 +40,7 @@ namespace PrimeView.Frontend.Filters
 			=> !ParallelismText.SplitFilterValues().Contains(Constants.MultithreadedTag);
 
 		[JsonIgnore]
-		public bool FilterAlgorithmBase 
+		public bool FilterAlgorithmBase
 			=> !AlgorithmText.SplitFilterValues().Contains(Constants.BaseTag);
 
 		[JsonIgnore]

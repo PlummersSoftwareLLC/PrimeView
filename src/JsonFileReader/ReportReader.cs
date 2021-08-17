@@ -40,7 +40,7 @@ namespace PrimeView.JsonFileReader
 			{
 				reportJson = await this.httpClient.GetStringAsync(fileName);
 			}
-			catch	
+			catch
 			{
 				return null;
 			}
@@ -65,7 +65,7 @@ namespace PrimeView.JsonFileReader
 				{
 					reportFileNames = JsonSerializer.Deserialize<string[]>(await this.httpClient.GetStringAsync(this.indexFileName));
 				}
-				catch {}
+				catch { }
 			}
 
 			this.summaries = new();
@@ -87,7 +87,7 @@ namespace PrimeView.JsonFileReader
 				}
 			}
 
-			foreach (var item in stringReaderMap) 
+			foreach (var item in stringReaderMap)
 			{
 				string reportJson;
 				string fileName = item.Key;
