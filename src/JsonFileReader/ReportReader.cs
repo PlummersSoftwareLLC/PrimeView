@@ -190,7 +190,8 @@ namespace PrimeView.JsonFileReader
 				Label = element.GetString("label"),
 				Passes = element.GetInt32("passes"),
 				Solution = element.GetString("solution"),
-				Threads = element.GetInt32("threads")
+				Threads = element.GetInt32("threads"),
+				Status = element.GetString("status")
 			};
 
 			if (tagsElement.HasValue && int.TryParse(tagsElement.Value.GetString("bits"), out int bits))
