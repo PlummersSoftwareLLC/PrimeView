@@ -28,7 +28,7 @@ namespace PrimeView.Frontend.Filters
 		public virtual bool IsFixed => false;
 
 		[JsonIgnore]
-		public IList<string> FilterImplementations
+		public IList<string> FilterLanguages
 			=> ImplementationText.SplitFilterValues();
 
 		[JsonIgnore]

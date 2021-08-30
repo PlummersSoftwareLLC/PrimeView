@@ -42,7 +42,7 @@ namespace PrimeView.Frontend.Pages
 		public string ReportId { get; set; }
 
 		[QueryStringParameter("fi")]
-		public string FilterImplementationText { get; set; } = string.Empty;
+		public string FilterLanguageText { get; set; } = string.Empty;
 
 		[QueryStringParameter("fp")]
 		public string FilterParallelismText
@@ -105,8 +105,8 @@ namespace PrimeView.Frontend.Pages
 		[QueryStringParameter("tp")]
 		public bool OnlyHighestPassesPerSecondPerThreadPerLanguage { get; set; } = false;
 
-		public IList<string> FilterImplementations
-			=> FilterImplementationText.SplitFilterValues();
+		public IList<string> FilterLanguages
+			=> FilterLanguageText.SplitFilterValues();
 
 		public bool FilterParallelSinglethreaded { get; set; } = true;
 		public bool FilterParallelMultithreaded { get; set; } = true;
@@ -123,7 +123,7 @@ namespace PrimeView.Frontend.Pages
 		public bool FilterBitsOther { get; set; } = true;
 
 		private bool AreFiltersClear
-			=> FilterImplementationText == string.Empty
+			=> FilterLanguageText == string.Empty
 				&& FilterParallelismText == string.Empty
 				&& FilterAlgorithmText == string.Empty
 				&& FilterFaithfulText == string.Empty
@@ -153,7 +153,7 @@ namespace PrimeView.Frontend.Pages
 		private string filterPresetName;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "Used as @ref in razor file")]
-		private ElementReference implementationsSelect;
+		private ElementReference languagesSelect;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
@@ -193,13 +193,13 @@ namespace PrimeView.Frontend.Pages
 
 		private async Task ClearFilters()
 		{
-			FilterImplementationText = string.Empty;
+			FilterLanguageText = string.Empty;
 			FilterParallelismText = string.Empty;
 			FilterAlgorithmText = string.Empty;
 			FilterFaithfulText = string.Empty;
 			FilterBitsText = string.Empty;
 
-			await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", implementationsSelect);
+			await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", languagesSelect);
 		}
 
 		private void ToggleSystemInfoPanel()
@@ -252,9 +252,9 @@ namespace PrimeView.Frontend.Pages
 			return info;
 		}
 
-		private async Task ImplementationSelectionChanged()
+		private async Task LanguageSelectionChanged()
 		{
-			FilterImplementationText = await JSRuntime.InvokeAsync<string>("PrimeViewJS.GetMultiselectValues", implementationsSelect, "~") ?? string.Empty;
+			FilterLanguageText = await JSRuntime.InvokeAsync<string>("PrimeViewJS.GetMultiselectValues", languagesSelect, "~") ?? string.Empty;
 		}
 
 		private static string JoinFilterValueString(params object[] flagSet)
@@ -286,16 +286,16 @@ namespace PrimeView.Frontend.Pages
 			FilterAlgorithmText = preset.AlgorithmText;
 			FilterBitsText = preset.BitsText;
 			FilterFaithfulText = preset.FaithfulText;
-			FilterImplementationText = preset.ImplementationText;
+			FilterLanguageText = preset.ImplementationText;
 			FilterParallelismText = preset.ParallelismText;
 
-			var filterImplementations = FilterImplementations;
+			var filterImplementations = FilterLanguages;
 
 			if (filterImplementations.Count > 0)
-				await JSRuntime.InvokeVoidAsync("PrimeViewJS.SetMultiselectValues", implementationsSelect, FilterImplementations.ToArray());
+				await JSRuntime.InvokeVoidAsync("PrimeViewJS.SetMultiselectValues", languagesSelect, FilterLanguages.ToArray());
 
 			else
-				await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", implementationsSelect);
+				await JSRuntime.InvokeVoidAsync("PrimeViewJS.ClearMultiselectValues", languagesSelect);
 
 			this.filterPresetName = preset.IsFixed ? string.Empty : preset.Name;
 		}
@@ -341,7 +341,7 @@ namespace PrimeView.Frontend.Pages
 				AlgorithmText = FilterAlgorithmText,
 				BitsText = FilterBitsText,
 				FaithfulText = FilterFaithfulText,
-				ImplementationText = FilterImplementationText,
+				ImplementationText = FilterLanguageText,
 				ParallelismText = FilterParallelismText
 			});
 
