@@ -49,6 +49,10 @@
 		"name": "C",
 		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
 	},
+	"chapel": {
+		"name": "Chapel",
+		"url": "https://chapel-lang.org/"
+	},
 	"clojure": {
 		"name": "Clojure",
 		"url": "https://clojure.org/"
@@ -56,6 +60,10 @@
 	"cobol": {
 		"name": "COBOL",
 		"url": "https://en.wikipedia.org/wiki/COBOL"
+	},
+	"comal": {
+		"name": "COMAL",
+		"url": "https://en.wikipedia.org/wiki/COMAL"
 	},
 	"cpp": {
 		"name": "C++",
@@ -155,6 +163,11 @@
 	"latex": {
 		"name": "LaTeX",
 		"url": "https://www.latex-project.org/"
+	},
+	"lean4": {
+		"name": "Lean 4",
+		"url": "https://leanprover.github.io/",
+		"tag": "Lean4"
 	},
 	"lisp": {
 		"name": "Lisp",
