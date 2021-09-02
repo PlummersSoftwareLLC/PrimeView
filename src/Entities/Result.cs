@@ -2,7 +2,7 @@
 {
 	public class Result
 	{
-		public string? Implementation { get; set; }
+		public string? Language { get; set; }
 		public string? Solution { get; set; }
 		public string? Label { get; set; }
 		public int? Passes { get; set; }

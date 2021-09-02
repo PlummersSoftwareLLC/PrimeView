@@ -4,7 +4,7 @@ namespace PrimeView.Frontend.Filters
 {
 	public interface IFilterPropertyProvider
 	{
-		public IList<string> FilterImplementations { get; }
+		public IList<string> FilterLanguages { get; }
 
 		public bool FilterParallelSinglethreaded { get; }
 		public bool FilterParallelMultithreaded { get; }

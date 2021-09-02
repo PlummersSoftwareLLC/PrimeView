@@ -17,7 +17,7 @@ namespace PrimeView.Frontend.Parameters
 
 			map = new()
 			{
-				{ $"{result}.{nameof(Result.Implementation)}", "im" },
+				{ $"{result}.{nameof(Result.Language)}", "im" },
 				{ $"{result}.{nameof(Result.Solution)}", "so" },
 				{ $"{result}.{nameof(Result.Label)}", "la" },
 				{ $"{result}.{nameof(Result.Passes)}", "ps" },

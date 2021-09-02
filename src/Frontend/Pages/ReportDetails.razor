@@ -80,12 +80,12 @@
 						<div class="row mx-2 mt-3">
 							<div class="col-auto">
 								<div class="form-group">
-									<label for="implementatios">Languages:</label>
-									<select multiple class="form-control" id="implementations" @ref="implementationsSelect" @onchange="ImplementationSelectionChanged">
-										@{ var filterImplementations = FilterImplementations; }
-										@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+									<label for="languages">Languages:</label>
+									<select multiple class="form-control" id="languages" @ref="languagesSelect" @onchange="LanguageSelectionChanged">
+										@{ var filterLanguages = FilterLanguages; }
+										@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Language)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 										{
-											<option value="@languageInfo.Key" selected="@(filterImplementations.Contains(languageInfo.Key))">@languageInfo.Name</option>
+											<option value="@languageInfo.Key" selected="@(filterLanguages.Contains(languageInfo.Key))">@languageInfo.Name</option>
 										}
 									</select>
 								</div>
@@ -235,17 +235,17 @@
 						@(++rowNumber)
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Language" Field="@(r => r.Implementation)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Select(r => r.Implementation).Distinct().Count()} languages")">
+				<Column TableItem="Result" Title="Language" Field="@(r => r.Language)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Select(r => r.Language).Distinct().Count()} languages")">
 					<CustomIFilters>
 						<CustomSelect TableItem="Result">
-							@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Implementation)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+							@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Language)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
 							{
 								<CustomSelectOption Key="@languageInfo.Name" Value="@languageInfo.Key" />
 							}
 						</CustomSelect>
 					</CustomIFilters>
 					<Template>
-						@{var languageInfo = GetLanguageInfo(context.Implementation);}
+						@{var languageInfo = GetLanguageInfo(context.Language);}
 
 						@if (languageInfo.URL != null)
 						{
@@ -261,7 +261,7 @@
 					<Template>
 						@if (solutionUrlTemplate != null)
 						{
-							var languageInfo = GetLanguageInfo(context.Implementation);
+							var languageInfo = GetLanguageInfo(context.Language);
 
 							var solutionUrl = this.solutionUrlTemplate
 								.Replace("{sln}", context.Solution)

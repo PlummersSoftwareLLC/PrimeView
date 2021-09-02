@@ -25,10 +25,10 @@ namespace PrimeView.Frontend.Filters
 
 		public static IEnumerable<Result> ApplyFilters(this IEnumerable<Result> source, ReportDetails page)
 		{
-			var filterImplementations = page.FilterImplementations;
+			var filterLanguages = page.FilterLanguages;
 
-			if (filterImplementations.Count > 0)
-				source = source.Where(r => filterImplementations.Contains(r.Implementation));
+			if (filterLanguages.Count > 0)
+				source = source.Where(r => filterLanguages.Contains(r.Language));
 
 			var filteredResults = source.Where(r =>
 				r.IsMultiThreaded switch
@@ -57,7 +57,7 @@ namespace PrimeView.Frontend.Filters
 
 			return page.OnlyHighestPassesPerSecondPerThreadPerLanguage
 				? filteredResults
-					.GroupBy(r => r.Implementation)
+					.GroupBy(r => r.Language)
 					.SelectMany(group => group.Where(r => r.PassesPerSecond == group.Max(r => r.PassesPerSecond)))
 				: filteredResults;
 		}
@@ -66,11 +66,11 @@ namespace PrimeView.Frontend.Filters
 		{
 			List<string> segments = new();
 
-			segments.Add(filter.FilterImplementations.Count switch
+			segments.Add(filter.FilterLanguages.Count switch
 			{
 				0 => "all languages",
-				1 => $"{languageInfoProvider.GetLanguageInfo(filter.FilterImplementations[0]).Name}",
-				_ => $"{filter.FilterImplementations.Count} languages"
+				1 => $"{languageInfoProvider.GetLanguageInfo(filter.FilterLanguages[0]).Name}",
+				_ => $"{filter.FilterLanguages.Count} languages"
 			});
 
 			segments.Add((filter.FilterParallelSinglethreaded, filter.FilterParallelMultithreaded) switch
