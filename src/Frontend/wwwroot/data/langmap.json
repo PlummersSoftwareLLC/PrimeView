@@ -312,6 +312,10 @@
 		"name": "V",
 		"url": "https://vlang.io/"
 	},
+	"verilog": {
+		"name": "Verilog",
+		"url": "https://en.wikipedia.org/wiki/Verilog"
+	},
 	"wren": {
 		"name": "Wren",
 		"url": "https://wren.io/"
