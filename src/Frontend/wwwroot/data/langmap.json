@@ -49,6 +49,10 @@
 		"name": "C",
 		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
 	},
+	"clipper": {
+		"name": "Clipper",
+		"url": "https://en.wikipedia.org/wiki/Clipper_(programming_language)"
+	},
 	"chapel": {
 		"name": "Chapel",
 		"url": "https://chapel-lang.org/"
