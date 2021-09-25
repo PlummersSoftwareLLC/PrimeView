@@ -1,4 +1,7 @@
 # PrimeView
+![CI](https://github.com/rbergen/PrimeView/actions/workflows/azure-static-web-apps-agreeable-mud-0b27ba210.yml/badge.svg)
+![CI](https://github.com/PlummersSoftwareLLC/PrimeView/actions/workflows/github-pages.yml/badge.svg)
+
 
 This is a Blazor WebAssembly static in-browser web application to view benchmark reports generated in/for the [Primes](https://github.com/PlummersSoftwareLLC/Primes) project.
 
