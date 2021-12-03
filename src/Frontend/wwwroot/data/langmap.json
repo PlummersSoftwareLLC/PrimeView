@@ -216,7 +216,7 @@
 	},
 	"pdl": {
 		"name": "Perl Data Language",
-		"url": "https://pdl.perl.org/",
+		"url": "http://pdl.perl.org/",
 		"tag": "PDL"
 	},
 	"perl": {
