@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<RootNamespace>PrimeView.Entities</RootNamespace>
 		<TargetFramework>net6.0</TargetFramework>
-		<RunAOTCompilation>true</RunAOTCompilation>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
