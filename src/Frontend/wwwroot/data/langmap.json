@@ -214,6 +214,11 @@
 		"name": "Pascal",
 		"url": "https://en.wikipedia.org/wiki/Pascal_(programming_language)"
 	},
+	"pdl": {
+		"name": "Perl Data Language",
+		"url": "http://pdl.perl.org/",
+		"tag": "PDL"
+	},
 	"perl": {
 		"name": "Perl",
 		"url": "https://www.perl.org/"
