@@ -1,9 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+	<PropertyGroup>
 		<RootNamespace>PrimeView.Entities</RootNamespace>
 		<TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+		<RunAOTCompilation>true</RunAOTCompilation>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 </Project>
