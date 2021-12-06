@@ -1,23 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
+    <PropertyGroup>
 		<RootNamespace>PrimeView.JsonFileReader</RootNamespace>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
-  </PropertyGroup>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
-    <PackageReference Include="microsoft.extensions.configuration.binder" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+		<PackageReference Include="microsoft.extensions.configuration.binder" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Entities\Entities.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Entities\Entities.csproj" />
+	</ItemGroup>
 
 </Project>

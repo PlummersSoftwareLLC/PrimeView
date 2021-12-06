@@ -13,15 +13,20 @@ As the report reader back-end is isolated from the front-end (and added via depe
 
 ## Building
 
-The solution can be built by running the following command from the repository root directory, once [.NET 5.0](https://dotnet.microsoft.com/download/dotnet/5.0) is installed:
+The solution can be built by running the following commands from the repository root directory, once [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0) is installed:
 
 ```
+dotnet workload install wasm-tools
 dotnet publish
 ```
 
+Note that:
+* the first command installs the tools required for AOT compilation. That command has to be executed only once for any system PrimeView is built on.
+* the AOT compilation can take multiple minutes to complete.
+
 At the end of the build process, the location of the build output will be indicated in the following line:
 ```
-Frontend -> <repo root>\src\Frontend\bin\Debug\net5.0\publish\
+Frontend -> <repo root>\src\Frontend\bin\Debug\net6.0\publish\
 ```
 
 ## Implementation notes
