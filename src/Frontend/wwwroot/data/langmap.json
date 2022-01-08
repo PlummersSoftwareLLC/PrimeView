@@ -152,6 +152,10 @@
 		"name": "Java",
 		"url": "https://www.java.com/"
 	},
+	"javascript": {
+		"name": "JavaScript",
+		"url": "https://www.javascript.com/"
+	},
 	"julia": {
 		"name": "Julia",
 		"url": "https://julialang.org/"
@@ -180,6 +184,11 @@
 	"lua": {
 		"name": "Lua",
 		"url": "https://www.lua.org/"
+	},
+	"m": {
+		"name": "M (MUMPS)",
+		"url": "https://en.wikipedia.org/wiki/MUMPS",
+		"tag": "M"
 	},
 	"mixal": {
 		"name": "MIXAL",
