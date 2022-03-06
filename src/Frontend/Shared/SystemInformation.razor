@@ -38,6 +38,7 @@
 							<table class="table table-sm">
 								<tbody>
 									<ValueTableRow Label="Manufacturer" Value="cpu.Manufacturer" />
+									<ValueTableRow Label="Raspberry processor" Value="cpu.RaspberryProcessor" />
 									<ValueTableRow Label="Brand" Value="cpu.Brand" />
 									<ValueTableRow Label="Vendor" Value="cpu.Vendor" />
 									<ValueTableRow Label="Family" Value="cpu.Family" />
@@ -45,6 +46,8 @@
 									<ValueTableRow Label="Stepping" Value="cpu.Stepping" />
 									<ValueTableRow Label="Revision" Value="cpu.Revision" />
 									<ValueTableRow Label="# Cores" Value="cpu.Cores" />
+									<ValueTableRow Label="# Efficiency cores" Value="cpu.EfficiencyCores" />
+									<ValueTableRow Label="# Performance ores" Value="cpu.PerformanceCores" />
 									<ValueTableRow Label="# Physical cores" Value="cpu.PhysicalCores" />
 									<ValueTableRow Label="# Processors" Value="cpu.Processors" />
 								</tbody>
@@ -99,23 +102,23 @@
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Platform" Value="@os.Platform" />
-									<ValueTableRow Label="Distribution" Value="@os.Distribution" />
-									<ValueTableRow Label="Release" Value="@os.Release" />
-									<ValueTableRow Label="Code name" Value="@os.CodeName" />
-									<ValueTableRow Label="Kernel" Value="@os.Kernel" />
-									<ValueTableRow Label="Architecture" Value="@os.Architecture" />
+									<ValueTableRow Label="Platform" Value="os.Platform" />
+									<ValueTableRow Label="Distribution" Value="os.Distribution" />
+									<ValueTableRow Label="Release" Value="os.Release" />
+									<ValueTableRow Label="Code name" Value="os.CodeName" />
+									<ValueTableRow Label="Kernel" Value="os.Kernel" />
+									<ValueTableRow Label="Architecture" Value="os.Architecture" />
 								</tbody>
 							</table>
 						</div>
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Code page" Value="@os.CodePage" />
-									<ValueTableRow Label="Logo file" Value="@os.LogoFile" />
-									<ValueTableRow Label="Build" Value="@os.Build" />
-									<ValueTableRow Label="Serive pack" Value="@os.ServicePack" />
-									<ValueTableRow Label="UEFI" Value="@os.IsUefi" />
+									<ValueTableRow Label="Code page" Value="os.CodePage" />
+									<ValueTableRow Label="Logo file" Value="os.LogoFile" />
+									<ValueTableRow Label="Build" Value="os.Build" />
+									<ValueTableRow Label="Serive pack" Value="os.ServicePack" />
+									<ValueTableRow Label="UEFI" Value="os.IsUefi" />
 								</tbody>
 							</table>
 						</div>
@@ -129,17 +132,20 @@
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Manufacturer" Value="@system.Manufacturer" />
-									<ValueTableRow Label="SKU" Value="@system.SKU" />
-									<ValueTableRow Label="Virtual" Value="@system.IsVirtual" />
+									<ValueTableRow Label="Manufacturer" Value="system.Manufacturer" />
+									<ValueTableRow Label="Raspberry manufacturer" Value="system.RaspberryManufacturer" />
+									<ValueTableRow Label="SKU" Value="system.SKU" />
+									<ValueTableRow Label="Virtual" Value="system.IsVirtual" />
 								</tbody>
 							</table>
 						</div>
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Model" Value="@system.Model" />
-									<ValueTableRow Label="Version" Value="@system.Version" />
+									<ValueTableRow Label="Model" Value="system.Model" />
+									<ValueTableRow Label="Version" Value="system.Version" />
+									<ValueTableRow Label="Raspberry type" Value="system.RaspberryType" />
+									<ValueTableRow Label="Raspberry revision" Value="system.RaspberryRevision" />
 								</tbody>
 							</table>
 						</div>
@@ -153,20 +159,20 @@
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Kernel version" Value="@docker.KernelVersion" />
-									<ValueTableRow Label="Operating system" Value="@docker.OperatingSystem" />
-									<ValueTableRow Label="OS version" Value="@docker.OSVersion" />
-									<ValueTableRow Label="OS type" Value="@docker.OSType" />
+									<ValueTableRow Label="Kernel version" Value="docker.KernelVersion" />
+									<ValueTableRow Label="Operating system" Value="docker.OperatingSystem" />
+									<ValueTableRow Label="OS version" Value="docker.OSVersion" />
+									<ValueTableRow Label="OS type" Value="docker.OSType" />
 								</tbody>
 							</table>
 						</div>
 						<div class="col">
 							<table class="table table-sm">
 								<tbody>
-									<ValueTableRow Label="Architecture" Value="@docker.Architecture" />
-									<ValueTableRow Label="# CPUs" Value="@docker.CPUCount" />
-									<ValueTableRow Label="Total memory" Value="@docker.TotalMemory" />
-									<ValueTableRow Label="Server version" Value="@docker.ServerVersion" />
+									<ValueTableRow Label="Architecture" Value="docker.Architecture" />
+									<ValueTableRow Label="# CPUs" Value="docker.CPUCount" />
+									<ValueTableRow Label="Total memory" Value="docker.TotalMemory" />
+									<ValueTableRow Label="Server version" Value="docker.ServerVersion" />
 								</tbody>
 							</table>
 						</div>
