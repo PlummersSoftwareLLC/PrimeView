@@ -18,34 +18,33 @@ namespace PrimeView.RestAPIReader
 
 		public ReportReader(IConfiguration configuration)
 		{
-			this.primesAPI = new Service.PrimesAPI(configuration.GetValue<string>(Constants.APIBaseURI), new HttpClient());
+			this.primesAPI = new(configuration.GetValue<string>(Constants.APIBaseURI), new HttpClient());
 		}
 
 		private async Task LoadMissingSummaries(int skipFirst, int maxSummaryCount)
 		{
-			for (int i = skipFirst; i < skipFirst + maxSummaryCount; i++)
+			for (int missingIndex = skipFirst; missingIndex < skipFirst + maxSummaryCount; missingIndex++)
 			{
 				// find gaps in the requested key space, and fill them
-				if (!this.summaries.ContainsKey(i))
+				if (!this.summaries.ContainsKey(missingIndex))
 				{
-					int firstMissing = i;
 					int missingCount = 0;
 
 					// count number of missing keys, but stop when we've reached the end of the key space we were asked to load
-					while (!this.summaries.ContainsKey(firstMissing + ++missingCount) && (firstMissing + missingCount) < (skipFirst + maxSummaryCount));
+					while (!this.summaries.ContainsKey(missingIndex + ++missingCount) && (missingIndex + missingCount) < (skipFirst + maxSummaryCount));
 
-					await LoadSummaries(firstMissing, missingCount);
+					await LoadSummaries(missingIndex, missingCount);
 
 					// we may not actually have been able to load all requested missing summaries, but for the sake of filling gaps
 					//  for which data is available in an efficient manner, we'll act like we did; it just means some gaps may remain
-					i += missingCount;
+					missingIndex += missingCount;
 				}
 			}
 		}
 
 		private async Task LoadSummaries(int skipFirst, int maxSummaryCount)
 		{
-			Service.SessionsResponseDto? sessionsResult = null;
+			Service.SessionsResponseDto sessionsResult;
 			try
 			{
 				sessionsResult = await this.primesAPI.GetSessionsAsync(skipFirst, maxSummaryCount);
@@ -53,10 +52,8 @@ namespace PrimeView.RestAPIReader
 			catch (Service.ApiException e)
 			{
 				Console.Error.WriteLine(e);
-			}
-
-			if (sessionsResult == null)
 				return;
+			}
 
 			int i = 0;
 			foreach (var session in sessionsResult.Sessions)
@@ -76,7 +73,8 @@ namespace PrimeView.RestAPIReader
 					DockerArchitecture = runner.DockerArchitecture,
 					IsSystemVirtual = runner.SystemVirtual,
 					OsPlatform = runner.OsPlatform,
-					OsRelease = runner.OsRelease
+					OsRelease = runner.OsRelease,
+					ResultCount = (int)session.ResultCount
 				};
 
 				this.summaries.Add(skipFirst + i++, summary);
@@ -88,10 +86,10 @@ namespace PrimeView.RestAPIReader
 			if (this.reportMap.ContainsKey(id))
 				return this.reportMap[id];
 
-			Service.Session? sessionResult;
+			Service.Session? sessionResponse;
 			try
 			{
-				sessionResult = await this.primesAPI.GetSessionAsync(id);
+				sessionResponse = await this.primesAPI.GetSessionResultsAsync(id);
 			}
 			catch (Service.ApiException e)
 			{
@@ -99,7 +97,7 @@ namespace PrimeView.RestAPIReader
 				return new Report();
 			}
 
-			var runner = sessionResult.Runner;
+			var runner = sessionResponse.Runner;
 
 			CPUInfo cpu = new()
 			{
@@ -127,17 +125,15 @@ namespace PrimeView.RestAPIReader
 			};
 
 			Dictionary<string, object> cache = new();
+
 			if (runner.CpuCacheL1d != null)
-				cache["l1d"] = (int)runner.CpuCacheL1d;
-
+				cache["l1d"] = (long)runner.CpuCacheL1d;
 			if (runner.CpuCacheL1i != null)
-				cache["l1i"] = (int)runner.CpuCacheL1i;
-
+				cache["l1i"] = (long)runner.CpuCacheL1i;
 			if (runner.CpuCacheL2 != null)
-				cache["l2"] = (int)runner.CpuCacheL2;
-
+				cache["l2"] = (long)runner.CpuCacheL2;
 			if (runner.CpuCacheL3 != null)
-				cache["l3"] = (int)runner.CpuCacheL3;
+				cache["l3"] = (long)runner.CpuCacheL3;
 
 			if (cache.Count > 0)
 				cpu.Cache = cache;
@@ -182,7 +178,7 @@ namespace PrimeView.RestAPIReader
 			};
 
 			List<Result> results = new();
-			foreach(var apiResult in sessionResult.Results)
+			foreach(var apiResult in sessionResponse.Results)
 			{
 				Result result = new()
 				{
@@ -204,6 +200,9 @@ namespace PrimeView.RestAPIReader
 
 			Report report = new()
 			{
+				Id = sessionResponse.Id,
+				Date = sessionResponse.Created.DateTime,
+				User = sessionResponse.Runner.Name,
 				CPU = cpu,
 				System = system,
 				OperatingSystem = operatingSystem,
