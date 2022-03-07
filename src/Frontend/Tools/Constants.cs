@@ -7,6 +7,7 @@
 		public const string SolutionUrlTemplate = nameof(SolutionUrlTemplate);
 		public const string Readers = nameof(Readers);
 		public const string JsonFileReader = nameof(JsonFileReader);
+		public const string RestAPIReader = nameof(RestAPIReader);
 
 		public const string SinglethreadedTag = "st";
 		public const string MultithreadedTag = "mt";

@@ -22,7 +22,10 @@ namespace PrimeView.Entities
 		public string? Governor { get; set; }
 		public int? Cores { get; set; }
 		public int? PhysicalCores { get; set; }
+		public int? EfficiencyCores { get; set; }
+		public int? PerformanceCores { get; set; }
 		public int? Processors { get; set; }
+		public string? RaspberryProcessor { get; set; }
 		public string? Socket { get; set; }
 		public string? Flags { get; set; }
 		public string[]? FlagValues => Flags?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
