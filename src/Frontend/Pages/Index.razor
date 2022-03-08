@@ -28,13 +28,81 @@
 
 		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
 			<label>Reports per page:&nbsp;</label>
-			<button class="btn btn-outline-primary" @onclick="() => this.newReportCount = 25">25</button>
-			<button class="btn btn-outline-primary" @onclick="() => this.newReportCount = 50">50</button>
-			<button class="btn btn-outline-primary" @onclick="() => this.newReportCount = 100">100</button>
+			@foreach(int reportNumber in new int[] {25, 50, 100}) 
+			{
+				int loopNumber = reportNumber;
+
+				<button class="btn @(ReportCount == loopNumber ? "btn-primary" : "btn-outline-primary")" disabled="@(ReportCount == loopNumber)" @onclick="() => this.newReportCount = loopNumber">@loopNumber</button>
+			}
 			<input type="number" class="form-control mx-2" @bind="this.newReportCount" @bind:event="oninput">
 			<button type="submit" class="btn btn-primary" disabled="@(this.newReportCount <= 0 || this.newReportCount == ReportCount)">Apply</button>
 			<button type="button" class="btn btn-outline-primary" disabled="@(this.newReportCount == ReportCount)" @onclick="() => this.newReportCount = ReportCount">Reset</button>
 		</form>
+
+		@if (this.pageCount > 1)
+		{
+			int pageIndexStart = this.pageNumber - 2;
+			int pageIndexEnd = this.pageNumber + 2;
+			if (pageIndexStart < 1)
+			{
+				pageIndexStart = 1;
+				pageIndexEnd = Math.Min(this.pageCount, 5);
+			}
+			else if (pageIndexEnd > this.pageCount)
+			{
+				pageIndexEnd = this.pageCount;
+				pageIndexStart = Math.Max(pageCount - 4, 1);
+			}
+
+			<nav aria-label="Report pagination">
+				<ul class="pagination justify-content-end">
+					<li class="page-item @(this.pageNumber == 1 ? "disabled" : "")" aria-label="Previous">
+						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber - 1)">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					@if (this.pageNumber >= 4)
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(1)">1</a></li>
+					}
+					
+					@if (pageIndexStart == 3)
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(2)">2</a></li>
+					}
+					else if (this.pageNumber > 5)
+					{
+						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
+					}
+
+					@for (int pageIndex = pageIndexStart; pageIndex <= pageIndexEnd; pageIndex++)
+					{
+						int loopIndex = pageIndex;
+
+						<li class="page-item @(this.pageNumber == loopIndex ? "active" : "")"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(loopIndex)">@loopIndex</a></li>						
+					}
+
+					@if (pageIndexEnd == this.pageCount - 2)
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount - 1)">@(this.pageCount - 1)</a></li>
+					}
+					else if (this.pageNumber < this.pageCount - 4)
+					{
+						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
+					}
+
+					@if (this.pageNumber <= this.pageCount - 3)
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount)">@this.pageCount</a></li>
+					}
+					<li class="page-item @(this.pageNumber == this.pageCount ? "disabled" : "")">
+						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber + 1)" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		}
 
 		<Table TableItem="ReportSummary" Items="this.summaries" @ref="this.sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">
 			@{ OnTableRefreshStart(); }
@@ -77,57 +145,5 @@
 				</Template>
 			</Column>
 		</Table>
-
-		@if (this.pageCount > 1)
-		{
-			<nav aria-label="Report pagination">
-				<ul class="pagination">
-					<li class="page-item @(this.pageNumber == 1 ? "disabled" : "")" aria-label="Previous">
-						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber - 1)">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					@if (this.pageNumber >= 4)
-					{
-						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(1)">1</a></li>
-					}
-					
-					@if (this.pageNumber == 5)
-					{
-						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(2)">2</a></li>
-					}
-					else if (this.pageNumber > 5)
-					{
-						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
-					}
-
-					@for (int pageIndex = Math.Max(this.pageNumber - 2, 1); pageIndex <= Math.Min(this.pageNumber + 2, this.pageCount); pageIndex++)
-					{
-						int loopIndex = pageIndex;
-
-						<li class="page-item @(this.pageNumber == loopIndex ? "active" : "")"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(loopIndex)">@loopIndex</a></li>						
-					}
-
-					@if (this.pageNumber < this.pageCount - 4)
-					{
-						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
-					}
-					else if (this.pageNumber == this.pageCount - 4)
-					{
-						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount - 1)">@(this.pageCount - 1)</a></li>
-					}
-
-					@if (this.pageNumber <= this.pageCount - 3)
-					{
-						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount)">@this.pageCount</a></li>
-					}
-					<li class="page-item @(this.pageNumber == this.pageCount ? "disabled" : "")">
-						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber + 1)" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
-		}
 	</div>
 </div>
