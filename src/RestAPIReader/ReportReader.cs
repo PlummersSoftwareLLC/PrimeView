@@ -227,7 +227,7 @@ namespace PrimeView.RestAPIReader
 		{
 			await LoadMissingSummaries(skipFirst, maxSummaryCount);
 
-			return (this.summaries.Skip(skipFirst).Take(maxSummaryCount).Select(pair => pair.Value).ToArray(), this.totalReports);
+			return (this.summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), this.totalReports);
 		}
 	}
 }

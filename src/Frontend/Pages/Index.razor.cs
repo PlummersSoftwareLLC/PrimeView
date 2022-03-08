@@ -24,6 +24,8 @@ namespace PrimeView.Frontend.Pages
 		private ReportSummary[] summaries = null;
 		private int totalReports = 0;
 		private int newReportCount;
+		private int pageNumber = 1;
+		private int pageCount = 1;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
@@ -50,9 +52,9 @@ namespace PrimeView.Frontend.Pages
 				await LoadSummaries();
 		}
 
-		private async Task ApplySkipReports(int skipReports)
+		private async Task ApplyPageNumber(int pageNumber)
         {
-			SkipReports = skipReports;
+			SkipReports = (pageNumber - 1) * ReportCount;
 
 			if (summaries != null)
 				await LoadSummaries();
@@ -61,7 +63,12 @@ namespace PrimeView.Frontend.Pages
 		private async Task LoadSummaries()
         {
 			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
-        }
+
+			this.pageNumber = this.SkipReports / this.ReportCount + 1;
+			this.pageCount = this.totalReports / this.ReportCount;
+			if (this.totalReports % this.ReportCount > 0)
+				this.pageCount++;
+		}
 
 		private void LoadReport(string reportId)
 		{
