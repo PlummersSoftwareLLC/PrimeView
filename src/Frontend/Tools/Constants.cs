@@ -2,7 +2,7 @@
 {
 	public static class Constants
 	{
-		public const string MaxReportCount = nameof(MaxReportCount);
+		public const string ReportCount = nameof(ReportCount);
 		public const string ActiveReader = nameof(ActiveReader);
 		public const string SolutionUrlTemplate = nameof(SolutionUrlTemplate);
 		public const string Readers = nameof(Readers);

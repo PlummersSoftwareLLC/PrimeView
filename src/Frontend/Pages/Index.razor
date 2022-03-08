@@ -26,11 +26,11 @@
 
 		<h1>Reports</h1>
 
-		<form class="form-inline my-2" @onsubmit="ApplyNewMaxReportCount">
+		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
 			<label>Maximum number of reports to load:</label>
-			<input type="number" class="form-control mx-2" @bind="this.newMaxReportCount" @bind:event="oninput">
-			<button type="submit" class="btn btn-primary" disabled="@(this.newMaxReportCount <= 0 || this.newMaxReportCount == MaxReportCount)">Apply</button>
-			<button class="btn btn-outline-primary" disabled="@(this.newMaxReportCount == MaxReportCount)" @onclick="() => this.newMaxReportCount = MaxReportCount">Reset</button>
+			<input type="number" class="form-control mx-2" @bind="this.newReportCount" @bind:event="oninput">
+			<button type="submit" class="btn btn-primary" disabled="@(this.newReportCount <= 0 || this.newReportCount == ReportCount)">Apply</button>
+			<button class="btn btn-outline-primary" disabled="@(this.newReportCount == ReportCount)" @onclick="() => this.newReportCount = ReportCount">Reset</button>
 		</form>
 
 		<Table TableItem="ReportSummary" Items="this.summaries" @ref="this.sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">

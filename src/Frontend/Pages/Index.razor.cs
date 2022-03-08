@@ -16,14 +16,19 @@ namespace PrimeView.Frontend.Pages
 		public IReportReader ReportReader { get; set; }
 
 		[QueryStringParameter("rc")]
-		public int MaxReportCount { get; set; }
+		public int ReportCount { get; set; }
+
+		[QueryStringParameter("rs")]
+		public int SkipReports { get; set; }
 
 		private ReportSummary[] summaries = null;
-		private int newMaxReportCount;
+		private int totalReports = 0;
+		private int newReportCount;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
-			MaxReportCount = Configuration.GetValue(Constants.MaxReportCount, 30);
+			ReportCount = Configuration.GetValue(Constants.ReportCount, 50);
+			SkipReports = 0;
 			SortColumn = "dt";
 			SortDescending = true;
 
@@ -32,17 +37,31 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			this.summaries = await ReportReader.GetSummaries(MaxReportCount);
-			this.newMaxReportCount = MaxReportCount;
+			SkipReports -= SkipReports % ReportCount;
+			await LoadSummaries(); 
+			this.newReportCount = ReportCount;
 		}
 
-		private async Task ApplyNewMaxReportCount()
+		private async Task ApplyNewReportCount()
 		{
-			MaxReportCount = newMaxReportCount;
+			ReportCount = newReportCount;
 
 			if (summaries != null)
-				summaries = await ReportReader.GetSummaries(MaxReportCount);
+				await LoadSummaries();
 		}
+
+		private async Task ApplySkipReports(int skipReports)
+        {
+			SkipReports = skipReports;
+
+			if (summaries != null)
+				await LoadSummaries();
+		}
+
+		private async Task LoadSummaries()
+        {
+			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+        }
 
 		private void LoadReport(string reportId)
 		{

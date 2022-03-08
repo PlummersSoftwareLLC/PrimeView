@@ -18,6 +18,7 @@ namespace PrimeView.JsonFileReader
 		private readonly bool isS3Bucket;
 		private bool haveJsonFilesLoaded = false;
 		private bool reachedMaxFileCount = false;
+		private int totalReports = 0;
 
 		public ReportReader(string baseAddress, IConfiguration configuration)
 		{
@@ -71,6 +72,7 @@ namespace PrimeView.JsonFileReader
 			this.summaries = new();
 			this.reportMap = new();
 			this.reachedMaxFileCount = false;
+			this.totalReports = reportFileNames?.Length ?? maxFileCount;
 
 			Dictionary<string, Task<string>> stringReaderMap = new();
 
@@ -207,16 +209,16 @@ namespace PrimeView.JsonFileReader
 			return await LoadReportJsonFile(id) ?? new Report();
 		}
 
-		public async Task<ReportSummary[]> GetSummaries(int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount)
 		{
 			return await GetSummaries(0, maxSummaryCount);
 		}
 
-		public async Task<ReportSummary[]> GetSummaries(int skipFirst, int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int skipFirst, int maxSummaryCount)
 		{
 			await LoadReportJsonFiles(skipFirst + maxSummaryCount);
 
-			return this.summaries!.Skip(skipFirst).Take(maxSummaryCount).ToArray();
+			return (this.summaries!.Skip(skipFirst).Take(maxSummaryCount).ToArray(), totalReports);
 		}
 	}
 }

@@ -4,8 +4,8 @@ namespace PrimeView.Entities
 {
 	public interface IReportReader
 	{
-		Task<ReportSummary[]> GetSummaries(int maxSummaryCount);
-		Task<ReportSummary[]> GetSummaries(int skipFirst, int maxSummaryCount);
+		Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount);
+		Task<(ReportSummary[] summaries, int total)> GetSummaries(int skipFirst, int maxSummaryCount);
 		Task<Report> GetReport(string id);
 	}
 }

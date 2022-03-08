@@ -15,6 +15,7 @@ namespace PrimeView.RestAPIReader
 		private readonly SortedList<int, ReportSummary> summaries = new();
 		private readonly Dictionary<string, Report> reportMap = new();
 		private readonly Service.PrimesAPI primesAPI;
+		private int totalReports = 0;
 
 		public ReportReader(IConfiguration configuration)
 		{
@@ -79,6 +80,8 @@ namespace PrimeView.RestAPIReader
 
 				this.summaries.Add(skipFirst + i++, summary);
 			}
+
+			this.totalReports = (int)sessionsResult.Total;
 		}
 
 		public async Task<Report> GetReport(string id)
@@ -215,16 +218,16 @@ namespace PrimeView.RestAPIReader
 			return report;
 		}
 
-		public async Task<ReportSummary[]> GetSummaries(int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount)
 		{
 			return await GetSummaries(0, maxSummaryCount);
 		}
 
-		public async Task<ReportSummary[]> GetSummaries(int skipFirst, int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int skipFirst, int maxSummaryCount)
 		{
 			await LoadMissingSummaries(skipFirst, maxSummaryCount);
 
-			return this.summaries.Skip(skipFirst).Take(maxSummaryCount).Select(pair => pair.Value).ToArray();
+			return (this.summaries.Skip(skipFirst).Take(maxSummaryCount).Select(pair => pair.Value).ToArray(), this.totalReports);
 		}
 	}
 }
