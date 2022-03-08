@@ -47,6 +47,7 @@ namespace PrimeView.Frontend.Pages
 		private async Task ApplyNewReportCount()
 		{
 			ReportCount = newReportCount;
+			SkipReports -= SkipReports % ReportCount;
 
 			if (summaries != null)
 				await LoadSummaries();
