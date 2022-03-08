@@ -16,14 +16,21 @@ namespace PrimeView.Frontend.Pages
 		public IReportReader ReportReader { get; set; }
 
 		[QueryStringParameter("rc")]
-		public int MaxReportCount { get; set; }
+		public int ReportCount { get; set; }
+
+		[QueryStringParameter("rs")]
+		public int SkipReports { get; set; }
 
 		private ReportSummary[] summaries = null;
-		private int newMaxReportCount;
+		private int totalReports = 0;
+		private int newReportCount;
+		private int pageNumber = 1;
+		private int pageCount = 1;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
-			MaxReportCount = Configuration.GetValue(Constants.MaxReportCount, 30);
+			ReportCount = Configuration.GetValue(Constants.ReportCount, 50);
+			SkipReports = 0;
 			SortColumn = "dt";
 			SortDescending = true;
 
@@ -32,16 +39,36 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			this.summaries = await ReportReader.GetSummaries(MaxReportCount);
-			this.newMaxReportCount = MaxReportCount;
+			SkipReports -= SkipReports % ReportCount;
+			await LoadSummaries(); 
+			this.newReportCount = ReportCount;
 		}
 
-		private async Task ApplyNewMaxReportCount()
+		private async Task ApplyNewReportCount()
 		{
-			MaxReportCount = newMaxReportCount;
+			ReportCount = newReportCount;
+			SkipReports -= SkipReports % ReportCount;
 
 			if (summaries != null)
-				summaries = await ReportReader.GetSummaries(MaxReportCount);
+				await LoadSummaries();
+		}
+
+		private async Task ApplyPageNumber(int pageNumber)
+        {
+			SkipReports = (pageNumber - 1) * ReportCount;
+
+			if (summaries != null)
+				await LoadSummaries();
+		}
+
+		private async Task LoadSummaries()
+        {
+			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+
+			this.pageNumber = this.SkipReports / this.ReportCount + 1;
+			this.pageCount = this.totalReports / this.ReportCount;
+			if (this.totalReports % this.ReportCount > 0)
+				this.pageCount++;
 		}
 
 		private void LoadReport(string reportId)
