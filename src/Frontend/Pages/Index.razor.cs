@@ -44,9 +44,15 @@ namespace PrimeView.Frontend.Pages
 			this.newReportCount = ReportCount;
 		}
 
+		private async Task ApplyNewReportCount(int reportCount)
+        {
+			this.newReportCount = reportCount;
+			await ApplyNewReportCount();
+        }
+
 		private async Task ApplyNewReportCount()
 		{
-			ReportCount = newReportCount;
+			ReportCount = this.newReportCount;
 			SkipReports -= SkipReports % ReportCount;
 
 			if (summaries != null)

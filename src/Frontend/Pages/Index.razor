@@ -32,7 +32,7 @@
 			{
 				int loopNumber = reportNumber;
 
-				<button class="btn @(ReportCount == loopNumber ? "btn-primary" : "btn-outline-primary")" disabled="@(ReportCount == loopNumber)" @onclick="() => this.newReportCount = loopNumber">@loopNumber</button>
+				<button type="button" class="btn @(ReportCount == loopNumber ? "btn-primary" : "btn-outline-primary")" disabled="@(ReportCount == loopNumber)" @onclick="() => ApplyNewReportCount(loopNumber)">@loopNumber</button>
 			}
 			<input type="number" class="form-control mx-2" @bind="this.newReportCount" @bind:event="oninput">
 			<button type="submit" class="btn btn-primary" disabled="@(this.newReportCount <= 0 || this.newReportCount == ReportCount)">Apply</button>
