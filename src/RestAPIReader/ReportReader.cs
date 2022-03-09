@@ -229,5 +229,11 @@ namespace PrimeView.RestAPIReader
 
 			return (this.summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), this.totalReports);
 		}
+
+		public void FlushCache()
+        {
+			this.summaries.Clear();
+			this.reportMap.Clear();
+        }
 	}
 }

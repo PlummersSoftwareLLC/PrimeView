@@ -82,5 +82,10 @@ namespace PrimeView.Frontend.Pages
 			NavigationManager.NavigateTo($"report?id={reportId}");
 		}
 
+		private async Task Refresh()
+        {
+			ReportReader.FlushCache();
+			await LoadSummaries();
+        }
 	}
 }

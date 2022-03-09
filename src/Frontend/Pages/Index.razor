@@ -24,7 +24,10 @@
 			</div>
 		</div>
 
-		<h1>Reports</h1>
+		<div class="d-flex">
+			<div><h1>Reports</h1></div>
+			<div class="ml-auto"><button class="btn btn-outline-secondary" @onclick="Refresh"><i class="fa fa-refresh" role="button" aria-hidden="true"></i></button></div>
+		</div>
 
 		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
 			<label>Reports per page:&nbsp;</label>
