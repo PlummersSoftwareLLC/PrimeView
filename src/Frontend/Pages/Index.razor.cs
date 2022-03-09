@@ -15,11 +15,31 @@ namespace PrimeView.Frontend.Pages
 		[Inject]
 		public IReportReader ReportReader { get; set; }
 
+		private int reportCount;
+
 		[QueryStringParameter("rc")]
-		public int ReportCount { get; set; }
+		public int ReportCount 
+		{ 
+			get => this.reportCount; 
+			set
+            {
+				if (value > 0)
+					this.reportCount = value;
+            } 
+		}
+
+		private int skipReports;
 
 		[QueryStringParameter("rs")]
-		public int SkipReports { get; set; }
+		public int SkipReports 
+		{ 
+			get => this.skipReports; 
+			set 
+			{
+				if (value >= 0)
+					this.skipReports = value;
+			} 
+		}
 
 		private ReportSummary[] summaries = null;
 		private int totalReports = 0;
@@ -68,8 +88,15 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private async Task LoadSummaries()
-        {
+		{
 			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+
+			// adjust SkipReports if we're skipping all reports that we have
+			if (this.totalReports > 0 && SkipReports >= this.totalReports)
+			{
+				SkipReports = this.totalReports - 1 - ((this.totalReports - 1) % ReportCount);
+				(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+			}
 
 			this.pageNumber = this.SkipReports / this.ReportCount + 1;
 			this.pageCount = this.totalReports / this.ReportCount;
