@@ -220,5 +220,14 @@ namespace PrimeView.JsonFileReader
 
 			return (this.summaries!.Skip(skipFirst).Take(maxSummaryCount).ToArray(), totalReports);
 		}
+
+		public void FlushCache()
+        {
+			this.totalReports = 0;
+			this.haveJsonFilesLoaded = false;
+			this.summaries = null;
+			this.reportMap = null;
+			this.reachedMaxFileCount = false;
+		}
 	}
 }
