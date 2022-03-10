@@ -22,10 +22,10 @@ namespace PrimeView.Frontend.Pages
 		{ 
 			get => this.reportCount; 
 			set
-            {
+			{
 				if (value > 0)
 					this.reportCount = value;
-            } 
+			} 
 		}
 
 		private int skipReports;
@@ -65,10 +65,10 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private async Task ApplyNewReportCount(int reportCount)
-        {
+		{
 			this.newReportCount = reportCount;
 			await ApplyNewReportCount();
-        }
+		}
 
 		private async Task ApplyNewReportCount()
 		{
@@ -80,7 +80,7 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private async Task ApplyPageNumber(int pageNumber)
-        {
+		{
 			SkipReports = (pageNumber - 1) * ReportCount;
 
 			if (summaries != null)
@@ -110,9 +110,9 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private async Task Refresh()
-        {
+		{
 			ReportReader.FlushCache();
 			await LoadSummaries();
-        }
+		}
 	}
 }

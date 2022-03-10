@@ -229,9 +229,9 @@ namespace PrimeView.RestAPIReader
 		}
 
 		public void FlushCache()
-        {
+		{
 			this.summaries.Clear();
 			this.reportMap.Clear();
-        }
+		}
 	}
 }
