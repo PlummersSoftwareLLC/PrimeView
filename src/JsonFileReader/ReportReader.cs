@@ -222,7 +222,7 @@ namespace PrimeView.JsonFileReader
 		}
 
 		public void FlushCache()
-        {
+		{
 			this.totalReports = 0;
 			this.haveJsonFilesLoaded = false;
 			this.summaries = null;
