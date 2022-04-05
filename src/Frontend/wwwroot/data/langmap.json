@@ -160,6 +160,10 @@
 		"name": "Julia",
 		"url": "https://julialang.org/"
 	},
+	"kermit": {
+		"name": "Kermit",
+		"url": "https://www.kermitproject.org/index.html"
+	},
 	"kos": {
 		"name": "Kos",
 		"url": "https://github.com/kos-lang/kos"
