@@ -1,6 +1,7 @@
 name: Azure Static Web Apps CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - staging
@@ -8,6 +9,7 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - staging
+      - main
 
 jobs:
   build_and_deploy_job:

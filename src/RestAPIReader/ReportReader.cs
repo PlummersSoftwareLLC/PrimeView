@@ -188,7 +188,7 @@ namespace PrimeView.RestAPIReader
 					IsFaithful = apiResult.Faithful,
 					Label = apiResult.Label,
 					Language = apiResult.Implementation,
-					Passes = (int)apiResult.Passes,
+					Passes = (long)apiResult.Passes,
 					Solution = apiResult.Solution,
 					Threads = (int)apiResult.Threads
 				};

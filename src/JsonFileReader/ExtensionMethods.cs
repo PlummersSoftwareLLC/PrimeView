@@ -77,6 +77,18 @@ namespace PrimeView.JsonFileReader
 			return childElement.HasValue && childElement.Value.TryGetInt32(out int value) ? value : null;
 		}
 
+		public static long? GetInt64(this JsonElement? element, string propertyName)
+		{
+			return element.HasValue ? GetInt64(element.Value, propertyName) : null;
+		}
+
+		public static long? GetInt64(this JsonElement element, string propertyName)
+		{
+			var childElement = GetElement(element, propertyName);
+
+			return childElement.HasValue && childElement.Value.TryGetInt64(out long value) ? value : null;
+		}
+
 		public static double? GetDouble(this JsonElement? element, string propertyName)
 		{
 			return element.HasValue ? GetDouble(element.Value, propertyName) : null;
