@@ -188,7 +188,7 @@ namespace PrimeView.JsonFileReader
 				Language = element.GetString("implementation"),
 				IsFaithful = tagsElement.HasValue && tagsElement.GetString("faithful")?.ToLower() == "yes",
 				Label = element.GetString("label"),
-				Passes = element.GetInt32("passes"),
+				Passes = element.GetInt64("passes"),
 				Solution = element.GetString("solution"),
 				Threads = element.GetInt32("threads"),
 				Status = element.GetString("status")
