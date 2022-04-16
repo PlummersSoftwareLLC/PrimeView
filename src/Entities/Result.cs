@@ -5,7 +5,7 @@
 		public string? Language { get; set; }
 		public string? Solution { get; set; }
 		public string? Label { get; set; }
-		public int? Passes { get; set; }
+		public long? Passes { get; set; }
 		public double? Duration { get; set; }
 		public int? Threads { get; set; }
 		public string? Algorithm { get; set; }

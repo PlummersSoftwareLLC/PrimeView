@@ -1,6 +1,7 @@
 name: Azure Static Web Apps CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - staging
@@ -8,6 +9,7 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches:
       - staging
+      - main
 
 jobs:
   build_and_deploy_job:
@@ -30,6 +32,7 @@ jobs:
           app_location: "src/Frontend" # App source code path
           api_location: "" # Api source code path - optional
           output_location: "wwwroot" # Built app content directory - optional
+          skip_deploy_on_missing_secrets: true
           build_timeout_in_minutes: 30
           ###### End of Repository/Build Configurations ######
 
