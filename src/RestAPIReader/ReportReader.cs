@@ -192,7 +192,7 @@ namespace PrimeView.RestAPIReader
 					Language = apiResult.Implementation,
 					Passes = (long)apiResult.Passes,
 					Solution = apiResult.Solution,
-					Threads = (int)apiResult.Threads
+					Threads = apiResult.Threads
 				};
 
 				if (int.TryParse(apiResult.Bits, out int bits))
