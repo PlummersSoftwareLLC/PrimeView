@@ -24,14 +24,100 @@
 			</div>
 		</div>
 
-		<h1>Reports</h1>
+		<div class="d-flex">
+			<div><h1>Reports</h1></div>
+			<div class="ml-auto"><button class="btn btn-outline-secondary" @onclick="Refresh"><i class="fa fa-refresh" role="button" aria-hidden="true"></i></button></div>
+		</div>
 
-		<form class="form-inline my-2" @onsubmit="ApplyNewMaxReportCount">
-			<label>Maximum number of reports to load:</label>
-			<input type="number" class="form-control mx-2" @bind="this.newMaxReportCount" @bind:event="oninput">
-			<button type="submit" class="btn btn-primary" disabled="@(this.newMaxReportCount <= 0 || this.newMaxReportCount == MaxReportCount)">Apply</button>
-			<button class="btn btn-outline-primary" disabled="@(this.newMaxReportCount == MaxReportCount)" @onclick="() => this.newMaxReportCount = MaxReportCount">Reset</button>
+		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
+			<label>Reports per page:&nbsp;</label>
+			@foreach(int reportNumber in new int[] {25, 50, 100}) 
+			{
+				int loopNumber = reportNumber;
+
+				<button type="button" class="btn @(ReportCount == loopNumber ? "btn-primary" : "btn-outline-primary")" disabled="@(ReportCount == loopNumber)" @onclick="() => ApplyNewReportCount(loopNumber)">@loopNumber</button>
+			}
+			<input type="number" class="form-control mx-2" @bind="this.newReportCount" @bind:event="oninput">
+			<button type="submit" class="btn btn-primary" disabled="@(this.newReportCount <= 0 || this.newReportCount == ReportCount)">Apply</button>
+			<button type="button" class="btn btn-outline-primary" disabled="@(this.newReportCount == ReportCount)" @onclick="() => this.newReportCount = ReportCount">Reset</button>
 		</form>
+
+		@if (this.pageCount > 1)
+		{
+			// We include 5 pages around and including the current page. We put the current page in the middle, except if we're at one end of the range of pages 
+			int pageIndexStart = this.pageNumber - 2;
+			int pageIndexEnd = this.pageNumber + 2;
+
+			if (pageIndexStart < 1)
+			{
+				pageIndexStart = 1;
+				pageIndexEnd = Math.Min(this.pageCount, 5);
+			}
+			else if (pageIndexEnd > this.pageCount)
+			{
+				pageIndexStart = Math.Max(pageCount - 4, 1);
+				pageIndexEnd = this.pageCount;
+			}
+
+			<nav aria-label="Report pagination">
+				<ul class="pagination justify-content-end">
+					<li class="page-item @(this.pageNumber == 1 ? "disabled" : "")" aria-label="Previous">
+						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber - 1)">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+
+					@if (pageIndexStart > 1)
+					// Always include first page
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(1)">1</a></li>
+					}
+					
+					
+					@if (pageIndexStart == 3)
+					// Insert second page if we're between pages 1 and 3
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(2)">2</a></li>
+					}
+					else if (pageIndexStart > 3)
+					// Otherwise, insert ellipsis if there is a bigger gap
+					{
+						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
+					}
+
+					@for (int pageIndex = pageIndexStart; pageIndex <= pageIndexEnd; pageIndex++)
+					// Add pages surrounding current page
+					{
+						int loopIndex = pageIndex;
+
+						<li class="page-item @(this.pageNumber == loopIndex ? "active" : "")"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(loopIndex)">@loopIndex</a></li>						
+					}
+
+					@if (pageIndexEnd == this.pageCount - 2)
+					// Insert second-to-last page if we're between the third-to-last and last pages
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount - 1)">@(this.pageCount - 1)</a></li>
+					}
+					else if (pageIndexEnd < this.pageCount - 2)
+					// Otherwise, insert ellipsis if there is a bigger gap
+					{
+						<li class="page-item disabled"><a class="page-link">&hellip;</a></li>
+					}
+
+					@if (pageIndexEnd < this.pageCount)
+					// Always include last page
+					{
+						<li class="page-item"><a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageCount)">@this.pageCount</a></li>
+					}
+
+					<li class="page-item @(this.pageNumber == this.pageCount ? "disabled" : "")">
+						<a role="button" class="page-link" @onclick="() => ApplyPageNumber(this.pageNumber + 1)" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		}
 
 		<Table TableItem="ReportSummary" Items="this.summaries" @ref="this.sortedTable" PageSize="0" ColumnReorder="false" @onclick="FlagTableSortingChange">
 			@{ OnTableRefreshStart(); }

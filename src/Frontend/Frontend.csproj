@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
-		<RootNamespace>PrimeView.Frontend</RootNamespace>
+        <RootNamespace>PrimeView.Frontend</RootNamespace>
         <TargetFramework>net6.0</TargetFramework>
-		<RunAOTCompilation>true</RunAOTCompilation>
+        <RunAOTCompilation>true</RunAOTCompilation>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\JsonFileReader\JsonFileReader.csproj" />
+        <ProjectReference Include="..\RestAPIReader\RestAPIReader.csproj" />
     </ItemGroup>
 
 </Project>
