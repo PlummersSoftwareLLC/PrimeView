@@ -17,7 +17,9 @@ namespace PrimeView.RestAPIReader
 
 		public ReportReader(IConfiguration configuration)
 		{
-			this.primesAPI = new(configuration.GetValue<string>(Constants.APIBaseURI), new HttpClient());
+			this.primesAPI = new(new HttpClient());
+			if (!string.IsNullOrEmpty(configuration[Constants.APIBaseURI]))
+				this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
 		}
 
 		private async Task LoadMissingSummaries(int skipFirst, int maxSummaryCount)
@@ -43,7 +45,7 @@ namespace PrimeView.RestAPIReader
 
 		private async Task LoadSummaries(int skipFirst, int maxSummaryCount)
 		{
-			Service.SessionsResponseDto sessionsResult;
+			Service.Sessions sessionsResult;
 			try
 			{
 				sessionsResult = await this.primesAPI.GetSessionsAsync(skipFirst, maxSummaryCount);
@@ -55,25 +57,25 @@ namespace PrimeView.RestAPIReader
 			}
 
 			int i = 0;
-			foreach (var session in sessionsResult.Sessions)
+			foreach (var session in sessionsResult.Data)
 			{
 				var runner = session.Runner;
 
 				ReportSummary summary = new()
 				{
 					Id = session.Id,
-					Date = session.Created.DateTime,
+					Date = session.Created_at.DateTime,
 					User = runner.Name,
-					Architecture = runner.OsArch,
-					CpuBrand = runner.CpuBrand,
-					CpuCores = (int)runner.CpuCores,
-					CpuProcessors = (int)runner.CpuProcessors,
-					CpuVendor = runner.CpuVendor,
-					DockerArchitecture = runner.DockerArchitecture,
-					IsSystemVirtual = runner.SystemVirtual,
-					OsPlatform = runner.OsPlatform,
-					OsRelease = runner.OsRelease,
-					ResultCount = (int)session.ResultCount
+					Architecture = runner.Os_arch,
+					CpuBrand = runner.Cpu_brand,
+					CpuCores = (int)runner.Cpu_cores,
+					CpuProcessors = (int)runner.Cpu_processors,
+					CpuVendor = runner.Cpu_vendor,
+					DockerArchitecture = runner.Docker_architecture,
+					IsSystemVirtual = runner.System_virtual,
+					OsPlatform = runner.Os_platform,
+					OsRelease = runner.Os_release,
+					ResultCount = (int)session.Results_count
 				};
 
 				this.summaries.Add(skipFirst + i++, summary);
@@ -90,7 +92,7 @@ namespace PrimeView.RestAPIReader
 			Service.Session? sessionResponse;
 			try
 			{
-				sessionResponse = await this.primesAPI.GetSessionResultsAsync(id);
+				sessionResponse = await this.primesAPI.GetSessionResultsAsync(int.Parse(id));
 			}
 			catch (Service.ApiException e)
 			{
@@ -102,80 +104,80 @@ namespace PrimeView.RestAPIReader
 
 			CPUInfo cpu = new()
 			{
-				Brand = runner.CpuBrand,
-				Cores = (int)runner.CpuCores,
-				EfficiencyCores = (int?)runner.CpuEfficiencyCores,
-				Family = runner.CpuFamily,
-				Flags = runner.CpuFlags,
-				Governor = runner.CpuGovernor,
-				Manufacturer = runner.CpuManufacturer,
-				MaximumSpeed = (float?)runner.CpuSpeedMax,
-				MinimumSpeed = (float?)runner.CpuSpeedMin,
-				Model = runner.CpuModel,
-				PerformanceCores = (int?)runner.CpuPerformanceCores,
-				PhysicalCores = (int)runner.CpuPhysicalCores,
-				Processors = (int)runner.CpuProcessors,
-				RaspberryProcessor = runner.SystemRaspberryProcessor,
-				Revision = runner.CpuRevision,
-				Socket = runner.CpuSocket,
-				Speed = (float?)runner.CpuSpeed,
-				Stepping = runner.CpuStepping,
-				Vendor = runner.CpuVendor,
-				Virtualization = runner.CpuVirtualization,
-				Voltage	= runner.CpuVoltage
+				Brand = runner.Cpu_brand,
+				Cores = (int)runner.Cpu_cores,
+				EfficiencyCores = (int?)runner.Cpu_efficiency_cores,
+				Family = runner.Cpu_family,
+				Flags = runner.Cpu_flags,
+				Governor = runner.Cpu_governor,
+				Manufacturer = runner.Cpu_manufacturer,
+				MaximumSpeed = (float?)runner.Cpu_speed_max,
+				MinimumSpeed = (float?)runner.Cpu_speed_min,
+				Model = runner.Cpu_model,
+				PerformanceCores = (int?)runner.Cpu_performance_cores,
+				PhysicalCores = (int)runner.Cpu_physical_cores,
+				Processors = (int)runner.Cpu_processors,
+				RaspberryProcessor = runner.System_raspberry_processor,
+				Revision = runner.Cpu_revision,
+				Socket = runner.Cpu_socket,
+				Speed = (float?)runner.Cpu_speed,
+				Stepping = runner.Cpu_stepping,
+				Vendor = runner.Cpu_vendor,
+				Virtualization = runner.Cpu_virtualization,
+				Voltage	= runner.Cpu_voltage
 			};
 
 			Dictionary<string, object> cache = new();
 
-			if (runner.CpuCacheL1d != null)
-				cache["l1d"] = (long)runner.CpuCacheL1d;
-			if (runner.CpuCacheL1i != null)
-				cache["l1i"] = (long)runner.CpuCacheL1i;
-			if (runner.CpuCacheL2 != null)
-				cache["l2"] = (long)runner.CpuCacheL2;
-			if (runner.CpuCacheL3 != null)
-				cache["l3"] = (long)runner.CpuCacheL3;
+			if (runner.Cpu_cache_l1d != null)
+				cache["l1d"] = (long)runner.Cpu_cache_l1d;
+			if (runner.Cpu_cache_l1i != null)
+				cache["l1i"] = (long)runner.Cpu_cache_l1i;
+			if (runner.Cpu_cache_l2 != null)
+				cache["l2"] = (long)runner.Cpu_cache_l2;
+			if (runner.Cpu_cache_l3 != null)
+				cache["l3"] = (long)runner.Cpu_cache_l3;
 
 			if (cache.Count > 0)
 				cpu.Cache = cache;
 
 			SystemInfo system = new()
 			{
-				IsVirtual = runner.SystemVirtual,
-				Manufacturer = runner.SystemManufacturer,
-				Model = runner.SystemModel,
-				RaspberryManufacturer = runner.SystemRaspberryManufacturer,
-				RaspberryRevision = runner.SystemRaspberryRevision,
-				RaspberryType = runner.SystemRaspberryType,
-				SKU = runner.SystemSku,
-				Version = runner.SystemVersion
+				IsVirtual = runner.System_virtual,
+				Manufacturer = runner.System_manufacturer,
+				Model = runner.System_model,
+				RaspberryManufacturer = runner.System_raspberry_manufacturer,
+				RaspberryRevision = runner.System_raspberry_revision,
+				RaspberryType = runner.System_raspberry_type,
+				SKU = runner.System_sku,
+				Version = runner.System_version
 			};
 
 			OperatingSystemInfo operatingSystem = new() 
 			{
-				Architecture = runner.OsArch,
-				Build = runner.OsBuild,
-				CodeName = runner.OsCodename,
-				CodePage = runner.OsCodepage,
-				Distribution = runner.OsDistro,
-				IsUefi = runner.OsUefi,
-				Kernel = runner.OsKernel,
-				LogoFile = runner.OsLogofile,
-				Platform = runner.OsPlatform,
-				Release = runner.OsRelease,
-				ServicePack = runner.OsServicepack
+				Architecture = runner.Os_arch,
+				Build = runner.Os_build,
+				CodeName = runner.Os_codename,
+				CodePage = runner.Os_codepage,
+				Distribution = runner.Os_distro,
+				IsUefi = runner.Os_uefi,
+				Kernel = runner.Os_kernel,
+				LogoFile = runner.Os_logofile,
+				Platform = runner.Os_platform,
+				Release = runner.Os_release,
+				ServicePack = runner.Os_servicepack
 			};
 
 			DockerInfo dockerInfo = new()
 			{
-				Architecture = runner.DockerArchitecture,
-				CPUCount = (int)runner.DockerNcpu,
-				KernelVersion = runner.DockerKernelVersion,
-				OperatingSystem = runner.DockerOperatingSystem,
-				OSType = runner.DockerOsType,
-				OSVersion = runner.DockerOsVersion,
-				ServerVersion = runner.DockerServerVersion,
-				TotalMemory = (long)runner.DockerMemTotal
+				Architecture = runner.Docker_architecture,
+				CPUCount = (int)runner.Docker_ncpu,
+				KernelVersion = runner.Docker_kernel_version,
+				OperatingSystem = runner.Docker_operating_system,
+				OSType = runner.Docker_os_type,
+				OSVersion = runner.Docker_os_version,
+				ServerVersion = runner.Docker_server_version,
+				TotalMemory = (long)runner.Docker_mem_total
 			};
 
 			List<Result> results = new();
@@ -202,7 +204,7 @@ namespace PrimeView.RestAPIReader
 			Report report = new()
 			{
 				Id = sessionResponse.Id,
-				Date = sessionResponse.Created.DateTime,
+				Date = sessionResponse.Created_at.DateTime,
 				User = sessionResponse.Runner.Name,
 				CPU = cpu,
 				System = system,
