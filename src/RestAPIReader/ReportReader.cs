@@ -81,7 +81,7 @@ namespace PrimeView.RestAPIReader
 				this.summaries.Add(skipFirst + i++, summary);
 			}
 
-			this.totalReports = (int)sessionsResult.Total;
+			this.totalReports = sessionsResult.Total;
 		}
 
 		public async Task<Report> GetReport(string id)
