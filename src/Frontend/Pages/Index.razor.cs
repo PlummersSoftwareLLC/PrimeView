@@ -15,15 +15,42 @@ namespace PrimeView.Frontend.Pages
 		[Inject]
 		public IReportReader ReportReader { get; set; }
 
+		private int reportCount;
+
 		[QueryStringParameter("rc")]
-		public int MaxReportCount { get; set; }
+		public int ReportCount 
+		{ 
+			get => this.reportCount; 
+			set
+			{
+				if (value > 0)
+					this.reportCount = value;
+			} 
+		}
+
+		private int skipReports;
+
+		[QueryStringParameter("rs")]
+		public int SkipReports 
+		{ 
+			get => this.skipReports; 
+			set 
+			{
+				if (value >= 0)
+					this.skipReports = value;
+			} 
+		}
 
 		private ReportSummary[] summaries = null;
-		private int newMaxReportCount;
+		private int totalReports = 0;
+		private int newReportCount;
+		private int pageNumber = 1;
+		private int pageCount = 1;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
-			MaxReportCount = Configuration.GetValue(Constants.MaxReportCount, 30);
+			ReportCount = Configuration.GetValue(Constants.ReportCount, 50);
+			SkipReports = 0;
 			SortColumn = "dt";
 			SortDescending = true;
 
@@ -32,16 +59,49 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			this.summaries = await ReportReader.GetSummaries(MaxReportCount);
-			this.newMaxReportCount = MaxReportCount;
+			SkipReports -= SkipReports % ReportCount;
+			await LoadSummaries(); 
+			this.newReportCount = ReportCount;
 		}
 
-		private async Task ApplyNewMaxReportCount()
+		private async Task ApplyNewReportCount(int reportCount)
 		{
-			MaxReportCount = newMaxReportCount;
+			this.newReportCount = reportCount;
+			await ApplyNewReportCount();
+		}
+
+		private async Task ApplyNewReportCount()
+		{
+			ReportCount = this.newReportCount;
+			SkipReports -= SkipReports % ReportCount;
 
 			if (summaries != null)
-				summaries = await ReportReader.GetSummaries(MaxReportCount);
+				await LoadSummaries();
+		}
+
+		private async Task ApplyPageNumber(int pageNumber)
+		{
+			SkipReports = (pageNumber - 1) * ReportCount;
+
+			if (summaries != null)
+				await LoadSummaries();
+		}
+
+		private async Task LoadSummaries()
+		{
+			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+
+			// adjust SkipReports if we're skipping all reports that we have
+			if (this.totalReports > 0 && SkipReports >= this.totalReports)
+			{
+				SkipReports = this.totalReports - 1 - ((this.totalReports - 1) % ReportCount);
+				(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+			}
+
+			this.pageNumber = this.SkipReports / this.ReportCount + 1;
+			this.pageCount = this.totalReports / this.ReportCount;
+			if (this.totalReports % this.ReportCount > 0)
+				this.pageCount++;
 		}
 
 		private void LoadReport(string reportId)
@@ -49,5 +109,10 @@ namespace PrimeView.Frontend.Pages
 			NavigationManager.NavigateTo($"report?id={reportId}");
 		}
 
+		private async Task Refresh()
+		{
+			ReportReader.FlushCache();
+			await LoadSummaries();
+		}
 	}
 }

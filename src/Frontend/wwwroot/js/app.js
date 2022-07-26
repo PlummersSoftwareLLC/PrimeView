@@ -1,7 +1,7 @@
 ﻿var PrimeViewJS = PrimeViewJS || {};
 
 PrimeViewJS.ShowUrl = function (url) {
-	window.history.pushState(null, "", url);
+	window.history.replaceState(null, "", url);
 };
 
 PrimeViewJS.GetMultiselectValues = function (element, valueSeparator) {

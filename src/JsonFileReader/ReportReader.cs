@@ -18,10 +18,11 @@ namespace PrimeView.JsonFileReader
 		private readonly bool isS3Bucket;
 		private bool haveJsonFilesLoaded = false;
 		private bool reachedMaxFileCount = false;
+		private int totalReports = 0;
 
 		public ReportReader(string baseAddress, IConfiguration configuration)
 		{
-			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress)!) };
+			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress)) };
 			this.indexFileName = configuration.GetValue<string?>(Constants.Index, null);
 			this.isS3Bucket = configuration.GetValue(Constants.IsS3Bucket, false);
 		}
@@ -71,6 +72,7 @@ namespace PrimeView.JsonFileReader
 			this.summaries = new();
 			this.reportMap = new();
 			this.reachedMaxFileCount = false;
+			this.totalReports = reportFileNames?.Length ?? maxFileCount;
 
 			Dictionary<string, Task<string>> stringReaderMap = new();
 
@@ -207,11 +209,25 @@ namespace PrimeView.JsonFileReader
 			return await LoadReportJsonFile(id) ?? new Report();
 		}
 
-		public async Task<ReportSummary[]> GetSummaries(int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount)
 		{
-			await LoadReportJsonFiles(maxSummaryCount);
+			return await GetSummaries(0, maxSummaryCount);
+		}
 
-			return this.summaries!.Take(maxSummaryCount).ToArray();
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int skipFirst, int maxSummaryCount)
+		{
+			await LoadReportJsonFiles(skipFirst + maxSummaryCount);
+
+			return (this.summaries!.Skip(skipFirst).Take(maxSummaryCount).ToArray(), totalReports);
+		}
+
+		public void FlushCache()
+		{
+			this.totalReports = 0;
+			this.haveJsonFilesLoaded = false;
+			this.summaries = null;
+			this.reportMap = null;
+			this.reachedMaxFileCount = false;
 		}
 	}
 }

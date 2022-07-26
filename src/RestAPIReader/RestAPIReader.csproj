@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<RootNamespace>PrimeView.RestAPIReader</RootNamespace>
+	<TargetFramework>net6.0</TargetFramework>
+	<ImplicitUsings>disable</ImplicitUsings>
+	<Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="6.0.7">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+	<PackageReference Include="microsoft.extensions.configuration.binder" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="6.0.0" />
+	<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	<PackageReference Include="NSwag.ApiDescription.Client" Version="13.0.5">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\Entities\Entities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <OpenApiReference Include="OpenAPIs\v1.json" CodeGenerator="NSwagCSharp" Namespace="PrimeView.RestAPIReader.Service" ClassName="PrimesAPI">
+      <SourceUri>https://primes.marghidanu.com/v1</SourceUri>
+    </OpenApiReference>
+  </ItemGroup>
+
+</Project>
