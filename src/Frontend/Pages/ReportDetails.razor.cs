@@ -379,7 +379,10 @@ namespace PrimeView.Frontend.Pages
 			string jsonValue;
 			try
             {
-				jsonValue = JsonSerializer.Serialize(report, options: new() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault });
+				jsonValue = JsonSerializer.Serialize(report, options: new() { 
+					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+					WriteIndented = true,
+				});
             }
 			catch
             {
