@@ -8,10 +8,13 @@ using PrimeView.Frontend.Sorting;
 using PrimeView.Frontend.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages
@@ -142,6 +145,24 @@ namespace PrimeView.Frontend.Pages
 					titleBuilder.Append($" at {report.Date.Value.ToLocalTime()}");
 
 				return titleBuilder.Length > 0 ? $"Report generated{titleBuilder}" : "Report";
+			}
+		}
+
+		private string ReportFileName
+		{
+			get
+			{
+				StringBuilder fileNameBuilder = new("primes_report");
+
+				if (report?.User != null)
+					fileNameBuilder.Append($"_{report.User.Replace(' ', '_')}");
+
+				if (report?.Date != null)
+					fileNameBuilder.Append($"_{report.Date.Value.ToLocalTime().ToString().Replace(' ', '_')}");
+
+				fileNameBuilder.Append(".json");
+
+				return fileNameBuilder.ToString(); 			
 			}
 		}
 
@@ -351,6 +372,23 @@ namespace PrimeView.Frontend.Pages
 		private void SaveFilterPresets()
 		{
 			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets.Where(preset => !preset.IsFixed));
+		}
+
+		private async Task Download()
+        {
+			string jsonValue;
+			try
+            {
+				jsonValue = JsonSerializer.Serialize(report, options: new() { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault });
+            }
+			catch
+            {
+				return;
+            }
+			
+			using DotNetStreamReference streamRef = new(new MemoryStream(Encoding.UTF8.GetBytes(jsonValue)));
+
+			await JSRuntime.InvokeVoidAsync("PrimeViewJS.DownloadFileFromStream", ReportFileName, "application/json", streamRef);
 		}
 	}
 }

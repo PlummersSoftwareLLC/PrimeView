@@ -27,7 +27,13 @@
 			</div>
 		</div>
 
-		<h1>@ReportTitle</h1>
+		<div class="d-flex">
+			<div><h1>@ReportTitle</h1></div>
+			@if (this.report != null)
+			{
+				<div class="ml-auto"><button class="btn btn-outline-secondary" @onclick="Download"><i class="fa fa-download" role="button" aria-hidden="true"></i></button></div>
+			}
+		</div>
 
 		@if (this.report == null)
 		{
@@ -215,7 +221,7 @@
 								}
 								<form @onsubmit="AddFilterPreset" class="list-group-item p-0 d-flex justify-content-between align-items-center">
 									<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput">
-									<button type="submit" class="btn btn-success" disabled=@(!IsFilterPresetNameValid(filterPresetName))>
+									<button type="submit" class="btn btn-success" disabled="@(!IsFilterPresetNameValid(filterPresetName))">
 										<i class="fas fa-plus"></i>
 									</button>
 								</form>

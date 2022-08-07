@@ -64,51 +64,52 @@ namespace PrimeView.Frontend.Filters
 
 		public static string CreateSummary(this IFilterPropertyProvider filter, ILanguageInfoProvider languageInfoProvider)
 		{
-			List<string> segments = new();
+            List<string> segments = new()
+            {
+                filter.FilterLanguages.Count switch
+                {
+                    0 => "all languages",
+                    1 => $"{languageInfoProvider.GetLanguageInfo(filter.FilterLanguages[0]).Name}",
+                    _ => $"{filter.FilterLanguages.Count} languages"
+                },
 
-			segments.Add(filter.FilterLanguages.Count switch
-			{
-				0 => "all languages",
-				1 => $"{languageInfoProvider.GetLanguageInfo(filter.FilterLanguages[0]).Name}",
-				_ => $"{filter.FilterLanguages.Count} languages"
-			});
+                (filter.FilterParallelSinglethreaded, filter.FilterParallelMultithreaded) switch
+                {
+                    (true, false) => "single-threaded",
+                    (false, true) => "multithreaded",
+                    _ => null
+                },
 
-			segments.Add((filter.FilterParallelSinglethreaded, filter.FilterParallelMultithreaded) switch
-			{
-				(true, false) => "single-threaded",
-				(false, true) => "multithreaded",
-				_ => null
-			});
+                (filter.FilterAlgorithmBase, filter.FilterAlgorithmWheel, filter.FilterAlgorithmOther) switch
+                {
+                    (false, false, false) => null,
+                    (true, false, false) => "base algorithm",
+                    (false, true, false) => "wheel algorithm",
+                    (false, false, true) => "other algorithms",
+                    (true, true, true) => "all algorithms",
+                    _ => "multiple algorithms"
+                },
 
-			segments.Add((filter.FilterAlgorithmBase, filter.FilterAlgorithmWheel, filter.FilterAlgorithmOther) switch
-			{
-				(false, false, false) => null,
-				(true, false, false) => "base algorithm",
-				(false, true, false) => "wheel algorithm",
-				(false, false, true) => "other algorithms",
-				(true, true, true) => "all algorithms",
-				_ => "multiple algorithms"
-			});
+                (filter.FilterFaithful, filter.FilterUnfaithful) switch
+                {
+                    (true, false) => "faithful",
+                    (false, true) => "unfaithful",
+                    _ => null
+                },
 
-			segments.Add((filter.FilterFaithful, filter.FilterUnfaithful) switch
-			{
-				(true, false) => "faithful",
-				(false, true) => "unfaithful",
-				_ => null
-			});
+                (filter.FilterBitsOne, filter.FilterBitsOther, filter.FilterBitsUnknown) switch
+                {
+                    (true, false, false) => "one bit",
+                    (false, true, false) => "multiple bits",
+                    (false, false, true) => "unknown bits",
+                    (true, true, false) => "known bits",
+                    (false, true, true) => "all but one bit",
+                    (true, false, true) => "one or unknown bits",
+                    _ => null
+                }
+            };
 
-			segments.Add((filter.FilterBitsOne, filter.FilterBitsOther, filter.FilterBitsUnknown) switch
-			{
-				(true, false, false) => "one bit",
-				(false, true, false) => "multiple bits",
-				(false, false, true) => "unknown bits",
-				(true, true, false) => "known bits",
-				(false, true, true) => "all but one bit",
-				(true, false, true) => "one or unknown bits",
-				_ => null
-			});
-
-			return string.Join(", ", segments.Where(s => s != null));
+            return string.Join(", ", segments.Where(s => s != null));
 		}
 
 		public static IList<string> SplitFilterValues(this string text)
