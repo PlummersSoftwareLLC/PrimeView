@@ -382,6 +382,7 @@ namespace PrimeView.Frontend.Pages
 				jsonValue = JsonSerializer.Serialize(report, options: new() { 
 					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
 					WriteIndented = true,
+					PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 				});
             }
 			catch
