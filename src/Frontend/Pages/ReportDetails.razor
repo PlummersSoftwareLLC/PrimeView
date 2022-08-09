@@ -27,17 +27,27 @@
 			</div>
 		</div>
 
-		<div class="d-flex">
-			<div><h1>@ReportTitle</h1></div>
+		<div class="row align-items-center">
+			<div class="col">
+				<h1>@ReportTitle</h1>
+			</div>
 			@if (this.report != null)
 			{
-				<div class="ml-auto"><button class="btn btn-outline-primary" @onclick="Download"><i class="fa fa-download" role="button" aria-hidden="true"></i></button></div>
+					<div class="col-auto">
+						<i class="fa fa-download" aria-hidden="true"></i>
+					</div>
+					<div class="col-auto px-0">
+						<button class="btn btn-outline-primary" @onclick="DownloadJson">JSON</button>
+					</div>
+					<div class="col-auto pl-0">
+						<button class="btn btn-outline-primary" @onclick="DownloadExcel">Excel</button>
+					</div>
 			}
 		</div>
 
 		@if (this.report == null)
 		{
-			<div class="row">
+			<div class="row align-items-center">
 				<div class="col-auto text-success">
 					<div class="spinner-border"></div>
 				</div>
@@ -272,15 +282,9 @@
 				</Column>
 				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right">
 					<Template>
-						@if (solutionUrlTemplate != null)
+						@if (context.SolutionUrl != null)
 						{
-							var languageInfo = GetLanguageInfo(context.Language);
-
-							var solutionUrl = this.solutionUrlTemplate
-								.Replace("{sln}", context.Solution)
-								.Replace("{tag}", languageInfo.Tag ?? languageInfo.Name);
-
-							<a href="@solutionUrl" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
+							<a href="@context.SolutionUrl" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
 						}
 						else
 						{

@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using PrimeView.Entities;
 using PrimeView.Frontend.Filters;
 using PrimeView.Frontend.Parameters;
+using PrimeView.Frontend.ReportExporters;
 using PrimeView.Frontend.Sorting;
 using PrimeView.Frontend.Tools;
 using System;
@@ -13,8 +14,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages
@@ -148,7 +147,7 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
-		private string ReportFileName
+		private string ReportFileBaseName
 		{
 			get
 			{
@@ -159,8 +158,6 @@ namespace PrimeView.Frontend.Pages
 
 				if (report?.Date != null)
 					fileNameBuilder.Append($"_{report.Date.Value.ToLocalTime().ToString().Replace(' ', '_')}");
-
-				fileNameBuilder.Append(".json");
 
 				return fileNameBuilder.ToString(); 			
 			}
@@ -190,6 +187,18 @@ namespace PrimeView.Frontend.Pages
 			this.report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 
+			if (this.solutionUrlTemplate != null)
+			{
+				foreach (var result in this.report.Results)
+				{
+					var languageInfo = GetLanguageInfo(result.Language);
+
+					result.SolutionUrl = this.solutionUrlTemplate
+						.Replace("{sln}", result.Solution)
+						.Replace("{tag}", languageInfo.Tag ?? languageInfo.Name);
+				}
+			}
+			
 			if (LocalStorage.ContainKey(FilterPresetStorageKey))
 			{
 				try
@@ -200,7 +209,6 @@ namespace PrimeView.Frontend.Pages
 				{
 					LocalStorage.RemoveItem(FilterPresetStorageKey);
 				}
-
 			}
 
 			if (this.filterPresets == null)
@@ -374,25 +382,27 @@ namespace PrimeView.Frontend.Pages
 			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets.Where(preset => !preset.IsFixed));
 		}
 
-		private async Task Download()
-        {
-			string jsonValue;
-			try
-            {
-				jsonValue = JsonSerializer.Serialize(report, options: new() { 
-					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
-					WriteIndented = true,
-					PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-				});
-            }
-			catch
-            {
-				return;
-            }
-			
-			using DotNetStreamReference streamRef = new(new MemoryStream(Encoding.UTF8.GetBytes(jsonValue)));
+		private async Task DownloadExport(string fileExtension, string mimeType, byte[] export)
+		{
+			using DotNetStreamReference streamRef = new(new MemoryStream(export));
 
-			await JSRuntime.InvokeVoidAsync("PrimeViewJS.DownloadFileFromStream", ReportFileName, "application/json", streamRef);
+			await JSRuntime.InvokeVoidAsync("PrimeViewJS.DownloadFileFromStream", ReportFileBaseName + fileExtension, mimeType, streamRef);
+		}
+
+		private async Task DownloadJson()
+		{
+			byte[] export = JsonConverter.Convert(this.report);
+
+			if (export != null)
+				await DownloadExport(".json", "application/json", export);
+		}
+
+		private async Task DownloadExcel()
+		{
+			byte[] export = ExcelConverter.Convert(this.report, this);
+
+			if (export != null)
+				await DownloadExport(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", export);
 		}
 	}
 }
