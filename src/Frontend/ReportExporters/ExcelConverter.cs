@@ -183,31 +183,60 @@ namespace PrimeView.Frontend.ReportExporters
 		private static void FillResultsSheet(ExcelWorksheet sheet, IEnumerable<Result> results, ILanguageInfoProvider languageInfoProvider)
         {
 			sheet.Cells.LoadFromCollection(results);
-			for (int i = 2; i < sheet.Dimension.Rows; i++)
+			int lastRow = sheet.Dimension.Rows - 1;
+			for (int i = 2; i <= lastRow; i++)
 			{
 				var languageInfo = languageInfoProvider.GetLanguageInfo(sheet.Cells[i, Result.LanguageColumnIndex].Text);
 
 				var cell = sheet.Cells[i, Result.LanguageColumnIndex];
 				cell.Value = languageInfo.Name;
+				ExcelFont font;
 
 				if (!string.IsNullOrEmpty(languageInfo.URL))
 				{
 					cell.Hyperlink = new Uri(languageInfo.URL);
-					cell.Style.Font.Color.SetColor(Color.Blue);
-					cell.Style.Font.UnderLine = true;
+					font = cell.Style.Font;
+					font.Color.SetColor(Color.Blue);
+					font.UnderLine = true;
 				}
 
-				if (!string.IsNullOrEmpty(sheet.Cells[i, Result.SolutionUriColumnIndex].Text))
+				var uriText = sheet.Cells[i, Result.SolutionUriColumnIndex].Text;
+				if (!string.IsNullOrEmpty(uriText))
 				{
 					cell = sheet.Cells[i, Result.SolutionColumnIndex];
-					cell.Hyperlink = new Uri(sheet.Cells[i, Result.SolutionUriColumnIndex].Text);
-					cell.Style.Font.Color.SetColor(Color.Blue);
-					cell.Style.Font.UnderLine = true;
+					cell.Hyperlink = new Uri(uriText);
+					font = cell.Style.Font;
+					font.Color.SetColor(Color.Blue);
+					font.UnderLine = true;
 				}
+
+				bool allgreen = true;
+
+				cell = sheet.Cells[i, Result.AlgorithmColumnIndex];
+				if (cell.Value as string == "base")
+					cell.Style.Font.Color.SetColor(Color.Green);
+				else
+					allgreen = false;
+
+				cell = sheet.Cells[i, Result.IsFaithfulColumnIndex];
+				if (cell.Value as bool? ?? false)
+					cell.Style.Font.Color.SetColor(Color.Green);
+				else
+					allgreen = false;
+
+				cell = sheet.Cells[i, Result.BitsColumnIndex];
+				if (cell.Value is int && (int)cell.Value == 1)
+					cell.Style.Font.Color.SetColor(Color.Green);
+				else
+					allgreen = false;
+
+				if (allgreen)
+					sheet.Cells[i, Result.LabelColumnIndex].Style.Font.Color.SetColor(Color.Green);
 			}
 
-			sheet.Column(Result.SolutionColumnIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+			sheet.Cells[2, Result.SolutionColumnIndex, lastRow, Result.SolutionColumnIndex].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 			sheet.Column(Result.SolutionUriColumnIndex).Hidden = true;
+			sheet.Cells[2, Result.IsMultiThreadedColumnIndex, lastRow, Result.IsMultiThreadedColumnIndex].Style.Font.Color.SetColor(Color.Green);
 			sheet.Columns.AutoFit();
 		}
 	}

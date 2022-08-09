@@ -292,7 +292,18 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
+				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true">
+					<Template>
+						@if (context.Algorithm == "base" && context.IsFaithful == true && context.Bits == 1)
+						{
+							<span class="text-success">@context.Label</span>
+						}
+						else
+						{
+							@context.Label
+						}
+					</Template>
+				</Column>
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" Align="Align.Right" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => !r.IsMultiThreaded)} single-threaded")" Align="Align.Right" />
