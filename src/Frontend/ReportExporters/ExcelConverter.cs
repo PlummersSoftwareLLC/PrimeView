@@ -206,6 +206,7 @@ namespace PrimeView.Frontend.ReportExporters
 				}
 			}
 
+			sheet.Column(Result.SolutionColumnIndex).Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
 			sheet.Column(Result.SolutionUriColumnIndex).Hidden = true;
 			sheet.Columns.AutoFit();
 		}
