@@ -106,7 +106,7 @@ namespace PrimeView.Frontend.ReportExporters
 			AddValue(sheet, ref rowNumber, "Code page", os.CodePage);
 			AddValue(sheet, ref rowNumber, "Logo file", os.LogoFile);
 			AddValue(sheet, ref rowNumber, "Build", os.Build);
-			AddValue(sheet, ref rowNumber, "Serive pack", os.ServicePack);
+			AddValue(sheet, ref rowNumber, "Service pack", os.ServicePack);
 			AddValue(sheet, ref rowNumber, "UEFI", os.IsUefi);
 			OutlineSection(sheet, sectionTop, rowNumber - 1);
 		}
