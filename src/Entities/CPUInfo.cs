@@ -28,6 +28,7 @@ namespace PrimeView.Entities
 		public string? RaspberryProcessor { get; set; }
 		public string? Socket { get; set; }
 		public string? Flags { get; set; }
+		[JsonIgnore]
 		public string[]? FlagValues => Flags?.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 		public bool? Virtualization { get; set; }
 		public Dictionary<string, object>? Cache { get; set; }

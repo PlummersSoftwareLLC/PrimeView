@@ -4,10 +4,12 @@ using Microsoft.JSInterop;
 using PrimeView.Entities;
 using PrimeView.Frontend.Filters;
 using PrimeView.Frontend.Parameters;
+using PrimeView.Frontend.ReportExporters;
 using PrimeView.Frontend.Sorting;
 using PrimeView.Frontend.Tools;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -145,6 +147,22 @@ namespace PrimeView.Frontend.Pages
 			}
 		}
 
+		private string ReportFileBaseName
+		{
+			get
+			{
+				StringBuilder fileNameBuilder = new("primes_report");
+
+				if (report?.User != null)
+					fileNameBuilder.Append($"_{report.User.Replace(' ', '_')}");
+
+				if (report?.Date != null)
+					fileNameBuilder.Append($"_{report.Date.Value.ToLocalTime().ToString().Replace(' ', '_')}");
+
+				return fileNameBuilder.ToString(); 			
+			}
+		}
+
 		private string solutionUrlTemplate;
 		private Report report = null;
 		private int rowNumber = 0;
@@ -169,6 +187,18 @@ namespace PrimeView.Frontend.Pages
 			this.report = await ReportReader.GetReport(ReportId);
 			await LoadLanguageMap();
 
+			if (this.solutionUrlTemplate != null)
+			{
+				foreach (var result in this.report.Results)
+				{
+					var languageInfo = GetLanguageInfo(result.Language);
+
+					result.SolutionUrl = this.solutionUrlTemplate
+						.Replace("{sln}", result.Solution)
+						.Replace("{tag}", languageInfo.Tag ?? languageInfo.Name);
+				}
+			}
+			
 			if (LocalStorage.ContainKey(FilterPresetStorageKey))
 			{
 				try
@@ -179,7 +209,6 @@ namespace PrimeView.Frontend.Pages
 				{
 					LocalStorage.RemoveItem(FilterPresetStorageKey);
 				}
-
 			}
 
 			if (this.filterPresets == null)
@@ -351,6 +380,29 @@ namespace PrimeView.Frontend.Pages
 		private void SaveFilterPresets()
 		{
 			LocalStorage.SetItem(FilterPresetStorageKey, filterPresets.Where(preset => !preset.IsFixed));
+		}
+
+		private async Task DownloadExport(string fileExtension, string mimeType, byte[] export)
+		{
+			using DotNetStreamReference streamRef = new(new MemoryStream(export));
+
+			await JSRuntime.InvokeVoidAsync("PrimeViewJS.DownloadFileFromStream", ReportFileBaseName + fileExtension, mimeType, streamRef);
+		}
+
+		private async Task DownloadJson()
+		{
+			byte[] export = JsonConverter.Convert(this.report);
+
+			if (export != null)
+				await DownloadExport(".json", "application/json", export);
+		}
+
+		private async Task DownloadExcel()
+		{
+			byte[] export = ExcelConverter.Convert(this.report, this);
+
+			if (export != null)
+				await DownloadExport(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", export);
 		}
 	}
 }

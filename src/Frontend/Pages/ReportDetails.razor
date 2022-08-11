@@ -27,11 +27,27 @@
 			</div>
 		</div>
 
-		<h1>@ReportTitle</h1>
+		<div class="row align-items-center">
+			<div class="col">
+				<h1>@ReportTitle</h1>
+			</div>
+			@if (this.report != null)
+			{
+					<div class="col-auto">
+						<i class="fa fa-download" aria-hidden="true"></i>
+					</div>
+					<div class="col-auto px-0">
+						<button class="btn btn-outline-primary" @onclick="DownloadJson">JSON</button>
+					</div>
+					<div class="col-auto pl-0">
+						<button class="btn btn-outline-primary" @onclick="DownloadExcel">Excel</button>
+					</div>
+			}
+		</div>
 
 		@if (this.report == null)
 		{
-			<div class="row">
+			<div class="row align-items-center">
 				<div class="col-auto text-success">
 					<div class="spinner-border"></div>
 				</div>
@@ -53,7 +69,9 @@
 					</div>
 
 					<div class="collapse@(HideSystemInformation ? "" : ".show")">
-						<SystemInformation Report="this.report" />
+						<div class="card-body">
+							<SystemInformation Report="this.report" />
+						</div>
 					</div>
 				</div>
 
@@ -77,108 +95,111 @@
 					</div>
 
 					<div class="collapse@(HideFilters ? "" : ".show")">
-						<div class="row mx-2 mt-3">
-							<div class="col-auto">
-								<div class="form-group">
-									<label for="languages">Languages:</label>
-									<select multiple class="form-control" id="languages" @ref="languagesSelect" @onchange="LanguageSelectionChanged">
-										@{ var filterLanguages = FilterLanguages; }
-										@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Language)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
-										{
-											<option value="@languageInfo.Key" selected="@(filterLanguages.Contains(languageInfo.Key))">@languageInfo.Name</option>
-										}
-									</select>
-								</div>
-							</div>
+						<div class="card-body">
 
-							<div class="col-auto form-group">
-								<label>Parallelism:</label>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fp_st" @bind="FilterParallelSinglethreaded">
-									<label class="form-check-label" for="fp_st">
-										Single-threaded
-									</label>
+							<div class="row">
+								<div class="col-auto">
+									<div class="form-group">
+										<label for="languages">Languages:</label>
+										<select multiple class="form-control" id="languages" @ref="languagesSelect" @onchange="LanguageSelectionChanged">
+											@{ var filterLanguages = FilterLanguages; }
+											@foreach (var languageInfo in this.report.Results.Select(r => GetLanguageInfo(r.Language)).Distinct(new LanguageInfo.KeyEqualityComparer()).OrderBy(n => n.Name))
+											{
+												<option value="@languageInfo.Key" selected="@(filterLanguages.Contains(languageInfo.Key))">@languageInfo.Name</option>
+											}
+										</select>
+									</div>
 								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fp-mt" @bind="FilterParallelMultithreaded">
-									<label class="form-check-label" for="fp_mt">
-										Multithreaded
-									</label>
-								</div>
-							</div>
 
-							<div class="col-auto form-group">
-								<label>Algorithm:</label>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fa_ba" @bind="FilterAlgorithmBase">
-									<label class="form-check-label" for="fa_ba">
-										base
-									</label>
+								<div class="col-auto form-group">
+									<label>Parallelism:</label>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fp_st" @bind="FilterParallelSinglethreaded">
+										<label class="form-check-label" for="fp_st">
+											Single-threaded
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fp-mt" @bind="FilterParallelMultithreaded">
+										<label class="form-check-label" for="fp_mt">
+											Multithreaded
+										</label>
+									</div>
 								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fa_wh" @bind="FilterAlgorithmWheel">
-									<label class="form-check-label" for="fa_wh">
-										wheel
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fa_ot" @bind="FilterAlgorithmOther">
-									<label class="form-check-label" for="fa_ot">
-										&lt;other&gt;
-									</label>
-								</div>
-							</div>
 
-							<div class="col-auto form-group">
-								<label>Faithful:</label>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="ff_ff" @bind="FilterFaithful">
-									<label class="form-check-label" for="ff_ff">
-										yes
-									</label>
+								<div class="col-auto form-group">
+									<label>Algorithm:</label>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_ba" @bind="FilterAlgorithmBase">
+										<label class="form-check-label" for="fa_ba">
+											base
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_wh" @bind="FilterAlgorithmWheel">
+										<label class="form-check-label" for="fa_wh">
+											wheel
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fa_ot" @bind="FilterAlgorithmOther">
+										<label class="form-check-label" for="fa_ot">
+											&lt;other&gt;
+										</label>
+									</div>
 								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="ff_uf" @bind="FilterUnfaithful">
-									<label class="form-check-label" for="ff_uf">
-										no
-									</label>
-								</div>
-							</div>
 
-							<div class="col-auto form-group">
-								<label>Bits per prime:</label>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fb_on" @bind="FilterBitsOne">
-									<label class="form-check-label" for="fb_on">
-										1
-									</label>
+								<div class="col-auto form-group">
+									<label>Faithful:</label>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="ff_ff" @bind="FilterFaithful">
+										<label class="form-check-label" for="ff_ff">
+											yes
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="ff_uf" @bind="FilterUnfaithful">
+										<label class="form-check-label" for="ff_uf">
+											no
+										</label>
+									</div>
 								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fb_ot" @bind="FilterBitsOther">
-									<label class="form-check-label" for="fb_ot">
-										&gt;1
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
-									<label class="form-check-label" for="fb_uk">
-										<em>Unknown</em>
-									</label>
+
+								<div class="col-auto form-group">
+									<label>Bits per prime:</label>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_on" @bind="FilterBitsOne">
+										<label class="form-check-label" for="fb_on">
+											1
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_ot" @bind="FilterBitsOther">
+										<label class="form-check-label" for="fb_ot">
+											&gt;1
+										</label>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="fb_uk" @bind="FilterBitsUnknown">
+										<label class="form-check-label" for="fb_uk">
+											<em>Unknown</em>
+										</label>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="row mx-2 mb-3">
-							<div class="col-auto">
-								<button class="btn btn-primary" disabled="@AreFiltersClear" @onclick="ClearFilters">Clear filter</button>
+							<div class="row mx-2 mb-3">
+								<div class="col-auto">
+									<button class="btn btn-primary" disabled="@AreFiltersClear" @onclick="ClearFilters">Clear filter</button>
+								</div>
 							</div>
-						</div>
-						<div class="row mx-2 mb-3">
-							<div class="col">
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" id="bl" @bind="OnlyHighestPassesPerSecondPerThreadPerLanguage">
-									<label class="form-check-label" for="bl">
-										For each language, only show the result with the highest passes per second, per thread
-									</label>
+							<div class="row mx-2 mb-3">
+								<div class="col">
+									<div class="form-check">
+										<input class="form-check-input" type="checkbox" id="bl" @bind="OnlyHighestPassesPerSecondPerThreadPerLanguage">
+										<label class="form-check-label" for="bl">
+											For each language, only show the result with the highest passes per second, per thread
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -196,29 +217,31 @@
 				</div>
 
 				<div class="collapse@(HideFilterPresets ? "" : ".show")">
-					<div class="row">
-						<div class="col">
-							<div class="list-group list-group-flush">
-								@for (int i = 0; i < (this.filterPresets?.Count ?? 0); i++)
-								{
-									int presetIndex = i;
-									var preset = this.filterPresets[presetIndex];
+					<div class="card-body">
+						<div class="row">
+							<div class="col">
+								<div class="list-group list-group-flush">
+									@for (int i = 0; i < (this.filterPresets?.Count ?? 0); i++)
+									{
+										int presetIndex = i;
+										var preset = this.filterPresets[presetIndex];
 
-									<div class="list-group-item py-1 pl-2 pr-0 d-flex justify-content-between align-items-center">
-										<button class="btn btn-link @(preset.IsFixed ? "text-dark" : (string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase)) ? "text-success" : "text-primary") px-1 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
-											@preset.Name <span class="font-italic text-secondary">(@preset.CreateSummary(this))</span>
+										<div class="list-group-item py-1 pl-2 pr-0 d-flex justify-content-between align-items-center">
+											<button class="btn btn-link @(preset.IsFixed ? "text-dark" : (string.Equals(preset.Name, filterPresetName?.Trim(), StringComparison.OrdinalIgnoreCase)) ? "text-success" : "text-primary") px-1 text-left " @onclick="async () => await ApplyFilterPreset(presetIndex)">
+												@preset.Name <span class="font-italic text-secondary">(@preset.CreateSummary(this))</span>
+											</button>
+											<button class="btn btn-danger" style="box-shadow: none" disabled="@(preset.IsFixed)" @onclick="() => RemoveFilterPreset(presetIndex)">
+												<i class="fas fa-minus"></i>
+											</button>
+										</div>
+									}
+									<form @onsubmit="AddFilterPreset" class="list-group-item p-0 d-flex justify-content-between align-items-center">
+										<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput">
+										<button type="submit" class="btn btn-success" disabled="@(!IsFilterPresetNameValid(filterPresetName))">
+											<i class="fas fa-plus"></i>
 										</button>
-										<button class="btn btn-danger" style="box-shadow: none" disabled="@(preset.IsFixed)" @onclick="() => RemoveFilterPreset(presetIndex)">
-											<i class="fas fa-minus"></i>
-										</button>
-									</div>
-								}
-								<form @onsubmit="AddFilterPreset" class="list-group-item p-0 d-flex justify-content-between align-items-center">
-									<input type="text" class="form-control" placeholder="New preset name" @bind="filterPresetName" @bind:event="oninput">
-									<button type="submit" class="btn btn-success" disabled=@(!IsFilterPresetNameValid(filterPresetName))>
-										<i class="fas fa-plus"></i>
-									</button>
-								</form>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -259,15 +282,9 @@
 				</Column>
 				<Column TableItem="Result" Title="Solution" Field="@(r => r.Solution)" Sortable="false" Filterable="false" Align="Align.Right">
 					<Template>
-						@if (solutionUrlTemplate != null)
+						@if (context.SolutionUrl != null)
 						{
-							var languageInfo = GetLanguageInfo(context.Language);
-
-							var solutionUrl = this.solutionUrlTemplate
-								.Replace("{sln}", context.Solution)
-								.Replace("{tag}", languageInfo.Tag ?? languageInfo.Name);
-
-							<a href="@solutionUrl" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
+							<a href="@context.SolutionUrl" target="_blank" rel="noreferrer noopener">&nbsp;@context.Solution&nbsp;</a>
 						}
 						else
 						{
@@ -275,7 +292,18 @@
 						}
 					</Template>
 				</Column>
-				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true" />
+				<Column TableItem="Result" Title="Label" Field="@(r => r.Label)" Sortable="true" Filterable="true">
+					<Template>
+						@if (context.Algorithm == "base" && context.IsFaithful == true && context.Bits == 1)
+						{
+							<span class="text-success">@context.Label</span>
+						}
+						else
+						{
+							@context.Label
+						}
+					</Template>
+				</Column>
 				<Column TableItem="Result" Title="Passes" Field="@(r => r.Passes)" Sortable="true" Filterable="true" Align="Align.Right" />
 				<Column TableItem="Result" Title="Duration" Field="@(r => r.Duration)" Sortable="true" Filterable="true" />
 				<Column TableItem="Result" Title="# Threads" Field="@(r => r.Threads)" Sortable="true" Filterable="true" SetFooterValue="@($"{filteredItems.Count(r => !r.IsMultiThreaded)} single-threaded")" Align="Align.Right" />
