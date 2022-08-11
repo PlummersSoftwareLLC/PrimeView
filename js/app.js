@@ -27,3 +27,15 @@ PrimeViewJS.SetMultiselectValues = function (element, values) {
 		element.options[i].selected = values.includes(element.options[i].value);
 	}
 };
+
+PrimeViewJS.DownloadFileFromStream = async function (fileName, mimeType, contentStreamReference) {
+	const arrayBuffer = await contentStreamReference.arrayBuffer();
+	const blob = new Blob([arrayBuffer], { type: mimeType });
+	const url = URL.createObjectURL(blob);
+	const anchorElement = document.createElement('a');
+	anchorElement.href = url;
+	anchorElement.download = fileName ?? '';
+	anchorElement.click();
+	anchorElement.remove();
+	URL.revokeObjectURL(url);
+}
