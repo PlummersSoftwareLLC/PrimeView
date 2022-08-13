@@ -14,7 +14,7 @@ namespace PrimeView.Frontend.ReportExporters
 			{
 				jsonValue = JsonSerializer.Serialize(report, options: new()
 				{
-					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+					DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 					WriteIndented = true,
 					PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 				});
