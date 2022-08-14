@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace PrimeView.Frontend.ReportExporters
 {
-	public class JsonConverter
+	public static class JsonConverter
 	{
 		public static byte[] Convert(Report report)
 		{
