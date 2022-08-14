@@ -134,7 +134,6 @@ namespace PrimeView.Frontend.ReportExporters
 			AddExpandableValuesSection(sheet, ref rowNumber, "Docker", new()
 			{
 				{ "Kernel version", docker.KernelVersion },
-				{ "Kernel version", docker.KernelVersion },
 				{ "Operating system", docker.OperatingSystem },
 				{ "OS version", docker.OSVersion },
 				{ "OS type", docker.OSType },
