@@ -39,3 +39,32 @@ PrimeViewJS.DownloadFileFromStream = async function (fileName, mimeType, content
 	anchorElement.remove();
 	URL.revokeObjectURL(url);
 }
+
+var blinkTexts = [];
+var blinkCount = 0;
+
+function blinkInit () {
+    if (!$("#blinkTextMessage"))
+        return false;
+
+    $(".blinkTextContent").each((_index, element) => {
+		blinkTexts.push($(element).text());
+    });
+
+	return blinkTexts.length > 0;
+}
+
+function blinkText () {
+    var blinkTextDiv = $("#blinkTextMessage");
+    if(!blinkTextDiv)
+		return;
+
+	if (blinkCount >= blinkTexts.length)
+		blinkCount = 0;
+
+	blinkTextDiv.html(blinkTexts[blinkCount++]);
+	blinkTextDiv.fadeIn(300).animate({ opacity: 1.0 }).fadeOut(300, () => blinkText());
+}
+
+if (blinkInit())
+	blinkText();
