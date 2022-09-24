@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace PrimeView.Frontend.ReportExporters
 {
-	public class ExcelConverter
+	public static class ExcelConverter
 	{
 		public static byte[] Convert(Report report, ILanguageInfoProvider languageInfoProvider)
 		{
@@ -27,129 +27,164 @@ namespace PrimeView.Frontend.ReportExporters
 		}
 
 		private static void FillReportSheet(ExcelWorksheet sheet, Report report)
-        {
-            int rowNumber = 1;
+		{
+			int rowNumber = 1;
 
-            AddHeader(sheet, ref rowNumber, "General");
-            int sectionTop = rowNumber;
-            if (AddValue(sheet, ref rowNumber, "Id", report.Id))
-            {
-                sheet.Rows[sectionTop, rowNumber - 1].Hidden = true;
-            }
-            AddValue(sheet, ref rowNumber, "User", report.User);
-            AddValue(sheet, ref rowNumber, "Created at", report.Date, format: "yyyy-mm-dd HH:MM:SS");
-            OutlineSection(sheet, sectionTop, rowNumber - 1);
-            rowNumber++;
-
-            AddCPUSection(sheet, ref rowNumber, report.CPU);
-            rowNumber++;
-
+			AddGeneralSection(sheet, ref rowNumber, report);
+			AddCPUSection(sheet, ref rowNumber, report.CPU);
 			AddOperatingSystemSection(sheet, ref rowNumber, report.OperatingSystem);
-			rowNumber++;
-
 			AddSystemSection(sheet, ref rowNumber, report.System);
-			rowNumber++;
-
 			AddDockerSection(sheet, ref rowNumber, report.DockerInfo);
-			
+
 			sheet.Column(1).Style.Font.Bold = true;
 			sheet.Column(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-			sheet.Columns.AutoFit();
 			sheet.Columns.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+			sheet.Columns.AutoFit();
 		}
 
-        private static void AddCPUSection(ExcelWorksheet sheet, ref int rowNumber, CPUInfo cpu)
-        {
-            AddHeader(sheet, ref rowNumber, "CPU");
-            int sectionTop = rowNumber;
-            AddValue(sheet, ref rowNumber, "Manufacturer", cpu.Manufacturer);
-            AddValue(sheet, ref rowNumber, "Raspberry processor", cpu.RaspberryProcessor);
-            AddValue(sheet, ref rowNumber, "Brand", cpu.Brand);
-            AddValue(sheet, ref rowNumber, "Vendor", cpu.Vendor);
-            AddValue(sheet, ref rowNumber, "Family", cpu.Family);
-            AddValue(sheet, ref rowNumber, "Model", cpu.Model);
-            AddValue(sheet, ref rowNumber, "Stepping", cpu.Stepping);
-            AddValue(sheet, ref rowNumber, "Revision", cpu.Revision);
-            AddValue(sheet, ref rowNumber, "# Cores", cpu.Cores);
-            AddValue(sheet, ref rowNumber, "# Efficiency cores", cpu.EfficiencyCores);
-            AddValue(sheet, ref rowNumber, "# Performance cores", cpu.PerformanceCores);
-            AddValue(sheet, ref rowNumber, "# Physical cores", cpu.PhysicalCores);
-            AddValue(sheet, ref rowNumber, "# Processors", cpu.Processors);
-            AddValue(sheet, ref rowNumber, "Speed", cpu.Speed);
-            AddValue(sheet, ref rowNumber, "Minimum speed", cpu.MinimumSpeed);
-            AddValue(sheet, ref rowNumber, "Maximum speed", cpu.MaximumSpeed);
-            AddValue(sheet, ref rowNumber, "Voltage", cpu.Voltage);
-            AddValue(sheet, ref rowNumber, "Governor", cpu.Governor);
-            AddValue(sheet, ref rowNumber, "Socket", cpu.Socket);
-            if (cpu.FlagValues != null)
-                AddValue(sheet, ref rowNumber, "Flags", string.Join(", ", cpu.FlagValues.OrderBy(f => f)), wordWrap: true);
-            AddValue(sheet, ref rowNumber, "Virtualization", cpu.Virtualization);
-            if (cpu.Cache != null && cpu.Cache.Count > 0)
-            {
-                AddValue(sheet, ref rowNumber, "Cache", force: true);
-                foreach (var cacheLine in cpu.Cache)
-                    AddValue(sheet, ref rowNumber, $"- {cacheLine.Key}", cacheLine.Value);
-            }
-            OutlineSection(sheet, sectionTop, rowNumber - 1);
-		}
-
-        private static void AddOperatingSystemSection(ExcelWorksheet sheet, ref int rowNumber, OperatingSystemInfo os)
-        {
-            AddHeader(sheet, ref rowNumber, "Operating System");
-            int sectionTop = rowNumber;
-			AddValue(sheet, ref rowNumber, "Platform", os.Platform);
-			AddValue(sheet, ref rowNumber, "Distribution", os.Distribution);
-			AddValue(sheet, ref rowNumber, "Release", os.Release);
-			AddValue(sheet, ref rowNumber, "Code name", os.CodeName);
-			AddValue(sheet, ref rowNumber, "Kernel", os.Kernel);
-			AddValue(sheet, ref rowNumber, "Architecture", os.Architecture);
-			AddValue(sheet, ref rowNumber, "Code page", os.CodePage);
-			AddValue(sheet, ref rowNumber, "Logo file", os.LogoFile);
-			AddValue(sheet, ref rowNumber, "Build", os.Build);
-			AddValue(sheet, ref rowNumber, "Service pack", os.ServicePack);
-			AddValue(sheet, ref rowNumber, "UEFI", os.IsUefi);
-			OutlineSection(sheet, sectionTop, rowNumber - 1);
-		}
-
-		private static void AddSystemSection(ExcelWorksheet sheet, ref int rowNumber, SystemInfo system)
+		private static void AddGeneralSection(ExcelWorksheet sheet, ref int rowNumber, Report report)
 		{
-			AddHeader(sheet, ref rowNumber, "System");
-			int sectionTop = rowNumber;
-			AddValue(sheet, ref rowNumber, "Manufacturer", system.Manufacturer);
-			AddValue(sheet, ref rowNumber, "Raspberry manufacturer", system.RaspberryManufacturer);
-			AddValue(sheet, ref rowNumber, "SKU", system.SKU);
-			AddValue(sheet, ref rowNumber, "Virtual", system.IsVirtual);
-			AddValue(sheet, ref rowNumber, "Model", system.Model);
-			AddValue(sheet, ref rowNumber, "Version", system.Version);
-			AddValue(sheet, ref rowNumber, "Raspberry type", system.RaspberryType);
-			AddValue(sheet, ref rowNumber, "Raspberry revision", system.RaspberryRevision);
-			OutlineSection(sheet, sectionTop, rowNumber - 1);
+			AddExpandableSection(sheet, ref rowNumber, "General", (sheet, rowNumber) =>
+			{
+				int sectionTop = rowNumber;
+				if (AddValue(sheet, ref rowNumber, "Id", report.Id))
+				{
+					sheet.Rows[sectionTop, rowNumber - 1].Hidden = true;
+				}
+				AddValue(sheet, ref rowNumber, "User", report.User);
+				AddValue(sheet, ref rowNumber, "Created at", report.Date, format: "yyyy-mm-dd HH:MM:SS");
+				return rowNumber;
+			});
 		}
 
-		private static void AddDockerSection(ExcelWorksheet sheet, ref int rowNumber, DockerInfo docker)
+		private static void AddCPUSection(ExcelWorksheet sheet, ref int rowNumber, CPUInfo cpu)
 		{
-			AddHeader(sheet, ref rowNumber, "Docker");
-			int sectionTop = rowNumber;
-			AddValue(sheet, ref rowNumber, "Kernel version", docker.KernelVersion);
-			AddValue(sheet, ref rowNumber, "Operating system", docker.OperatingSystem);
-			AddValue(sheet, ref rowNumber, "OS version", docker.OSVersion);
-			AddValue(sheet, ref rowNumber, "OS type", docker.OSType);
-			AddValue(sheet, ref rowNumber, "Architecture", docker.Architecture);
-			AddValue(sheet, ref rowNumber, "# CPUs", docker.CPUCount);
-			AddValue(sheet, ref rowNumber, "Total memory", docker.TotalMemory);
-			AddValue(sheet, ref rowNumber, "Server version", docker.ServerVersion);
-			OutlineSection(sheet, sectionTop, rowNumber - 1);
+			AddExpandableSection(sheet, ref rowNumber, "CPU", (sheet, rowNumber) =>
+			{
+				AddValues(sheet, ref rowNumber, new()
+				{
+					{ "Manufacturer", cpu.Manufacturer },
+					{ "Raspberry processor", cpu.RaspberryProcessor },
+					{ "Brand", cpu.Brand },
+					{ "Vendor", cpu.Vendor },
+					{ "Family", cpu.Family },
+					{ "Model", cpu.Model },
+					{ "Stepping", cpu.Stepping },
+					{ "Revision", cpu.Revision },
+					{ "# Cores", cpu.Cores },
+					{ "# Efficiency cores", cpu.EfficiencyCores },
+					{ "# Performance cores", cpu.PerformanceCores },
+					{ "# Physical cores", cpu.PhysicalCores },
+					{ "# Processors", cpu.Processors },
+					{ "Speed", cpu.Speed },
+					{ "Minimum speed", cpu.MinimumSpeed },
+					{ "Maximum speed", cpu.MaximumSpeed },
+					{ "Voltage", cpu.Voltage },
+					{ "Governor", cpu.Governor },
+					{ "Socket", cpu.Socket } 
+				});
+				if (cpu.FlagValues != null)
+					AddValue(sheet, ref rowNumber, "Flags", string.Join(", ", cpu.FlagValues.OrderBy(f => f)), wordWrap: true);
+				AddValue(sheet, ref rowNumber, "Virtualization", cpu.Virtualization);
+				if (cpu.Cache != null && cpu.Cache.Count > 0)
+				{
+					AddValue(sheet, ref rowNumber, "Cache", force: true);
+					foreach (var cacheLine in cpu.Cache)
+						AddValue(sheet, ref rowNumber, $"- {cacheLine.Key}", cacheLine.Value);
+				}
+				return rowNumber;
+			});
 		}
 
-        private static void OutlineSection(ExcelWorksheet sheet, int topRow, int bottomRow)
-        {
-			if (bottomRow <= topRow)
-				return;
-
-			var rowRange = sheet.Rows[topRow, bottomRow];
-			rowRange.OutlineLevel = 1;
-			rowRange.Collapsed = false;
+		private static void AddOperatingSystemSection(ExcelWorksheet sheet, ref int rowNumber, OperatingSystemInfo os)
+		{
+			AddExpandableValuesSection(sheet, ref rowNumber, "Operating System", new()
+			{
+				{ "Platform", os.Platform },
+				{ "Distribution", os.Distribution },
+				{ "Release", os.Release },
+				{ "Code name", os.CodeName },
+				{ "Kernel", os.Kernel },
+				{ "Architecture", os.Architecture },
+				{ "Code page", os.CodePage },
+				{ "Logo file", os.LogoFile },
+				{ "Build", os.Build },
+				{ "Service pack", os.ServicePack },
+				{ "UEFI", os.IsUefi }
+            });
         }
+
+        private static void AddSystemSection(ExcelWorksheet sheet, ref int rowNumber, SystemInfo system)
+		{
+            AddExpandableValuesSection(sheet, ref rowNumber, "System", new()
+            {
+				{ "Manufacturer", system.Manufacturer },
+				{ "Raspberry manufacturer", system.RaspberryManufacturer },
+				{ "SKU", system.SKU },
+				{ "Virtual", system.IsVirtual },
+				{ "Model", system.Model },
+				{ "Version", system.Version },
+				{ "Raspberry type", system.RaspberryType },
+				{ "Raspberry revision", system.RaspberryRevision }
+            });
+        }
+
+        private static void AddDockerSection(ExcelWorksheet sheet, ref int rowNumber, DockerInfo docker)
+		{
+			AddExpandableValuesSection(sheet, ref rowNumber, "Docker", new()
+			{
+				{ "Kernel version", docker.KernelVersion },
+				{ "Operating system", docker.OperatingSystem },
+				{ "OS version", docker.OSVersion },
+				{ "OS type", docker.OSType },
+				{ "Architecture", docker.Architecture },
+				{ "# CPUs", docker.CPUCount },
+				{ "Total memory", docker.TotalMemory },
+				{ "Server version", docker.ServerVersion }
+			});
+		}
+
+		private static void AddExpandableValuesSection(ExcelWorksheet sheet, ref int rowNumber, string title, List<KeyValuePair<string, object>> entries)
+		{
+			AddExpandableSection(sheet, ref rowNumber, title, (sheet, rowNumber) =>
+			{
+				AddValues(sheet, ref rowNumber, entries);
+				return rowNumber;
+			});
+		}
+
+        private static void AddExpandableSection(ExcelWorksheet sheet, ref int rowNumber, string title, Func<ExcelWorksheet, int, int> AddEntries) 
+		{
+            var cell = sheet.Cells[rowNumber, 1];
+
+            cell.Value = title;
+            cell.Style.Font.Size = 14;
+            cell.Style.Font.UnderLine = true;
+
+            rowNumber++;
+            
+			int sectionTop = rowNumber;
+			rowNumber = AddEntries(sheet, rowNumber);
+
+			int sectionBottom = rowNumber - 1;
+			
+			rowNumber++;
+
+            if (sectionBottom <= sectionTop)
+                return;
+
+            var rowRange = sheet.Rows[sectionTop, sectionBottom];
+            rowRange.OutlineLevel = 1;
+            rowRange.Collapsed = false;
+        }
+
+		private static bool AddValues(ExcelWorksheet sheet, ref int rowNumber, List<KeyValuePair<string, object>> entries)
+		{
+			bool result = false;
+			foreach (var entry in entries)
+				result |= AddValue(sheet, ref rowNumber, entry.Key, entry.Value);
+			return result;
+		}
 
 		private static bool AddValue(ExcelWorksheet sheet, ref int rowNumber, string label, object value = null, bool force = false, string format = null, bool wordWrap = false)
         {
@@ -163,18 +198,6 @@ namespace PrimeView.Frontend.ReportExporters
                 valueCell.Style.Numberformat.Format = format;
 			if (wordWrap)
 				valueCell.Style.WrapText = true;
-
-			rowNumber++;
-			return true;
-        }
-
-		private static bool AddHeader(ExcelWorksheet sheet, ref int rowNumber, string text)
-        {
-			var cell = sheet.Cells[rowNumber, 1];
-
-			cell.Value = text;
-			cell.Style.Font.Size = 14;
-			cell.Style.Font.UnderLine = true;
 
 			rowNumber++;
 			return true;
@@ -239,5 +262,10 @@ namespace PrimeView.Frontend.ReportExporters
 			sheet.Cells[2, Result.IsMultiThreadedColumnIndex, lastRow, Result.IsMultiThreadedColumnIndex].Style.Font.Color.SetColor(Color.Green);
 			sheet.Columns.AutoFit();
 		}
-	}
+
+        public static void Add<T1, T2>(this List<KeyValuePair<T1, T2>> pairList, T1 key, T2 value)
+        {
+            pairList.Add(new KeyValuePair<T1, T2>(key, value));
+        }
+    }
 }
