@@ -74,6 +74,7 @@ namespace PrimeView.RestAPIReader
 					DockerArchitecture = runner.Docker_architecture,
 					IsSystemVirtual = runner.System_virtual,
 					OsPlatform = runner.Os_platform,
+					OsDistro = runner.Os_distro,
 					OsRelease = runner.Os_release,
 					ResultCount = (int)session.Results_count
 				};
