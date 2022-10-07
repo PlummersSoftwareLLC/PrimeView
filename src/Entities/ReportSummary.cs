@@ -12,6 +12,7 @@ namespace PrimeView.Entities
 		public int? CpuCores { get; set; }
 		public int? CpuProcessors { get; set; }
 		public string? OsPlatform { get; set; }
+		public string? OsDistro { get; set; }
 		public string? OsRelease { get; set; }
 		public string? Architecture { get; set; }
 		public bool? IsSystemVirtual { get; set; }
