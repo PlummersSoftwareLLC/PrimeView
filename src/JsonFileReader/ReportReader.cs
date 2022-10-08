@@ -140,6 +140,7 @@ namespace PrimeView.JsonFileReader
 				DockerArchitecture = report.DockerInfo?.Architecture,
 				IsSystemVirtual = report.System?.IsVirtual,
 				OsPlatform = report.OperatingSystem?.Platform,
+				OsDistro = report.OperatingSystem?.Distribution,
 				OsRelease = report.OperatingSystem?.Release,
 				ResultCount = report.Results?.Length ?? 0,
 				User = report.User
