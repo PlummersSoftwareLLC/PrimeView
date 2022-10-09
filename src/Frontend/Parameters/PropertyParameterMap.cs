@@ -34,6 +34,7 @@ namespace PrimeView.Frontend.Parameters
 				{ $"{reportSummary}.{nameof(ReportSummary.CpuBrand)}", "cb" },
 				{ $"{reportSummary}.{nameof(ReportSummary.CpuCores)}", "cc" },
 				{ $"{reportSummary}.{nameof(ReportSummary.CpuProcessors)}", "cp" },
+				{ $"{reportSummary}.{nameof(ReportSummary.OsDistro)}", "od" },
 				{ $"{reportSummary}.{nameof(ReportSummary.OsPlatform)}", "op" },
 				{ $"{reportSummary}.{nameof(ReportSummary.OsRelease)}", "or" },
 				{ $"{reportSummary}.{nameof(ReportSummary.Architecture)}", "ar" },
