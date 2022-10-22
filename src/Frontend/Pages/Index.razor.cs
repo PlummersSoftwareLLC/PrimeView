@@ -41,7 +41,11 @@ namespace PrimeView.Frontend.Pages
 			} 
 		}
 
-		private ReportSummary[] summaries = null;
+        [QueryStringParameter("hf")]
+        public bool HideFilters { get; set; } = false;
+
+
+        private ReportSummary[] summaries = null;
 		private int totalReports = 0;
 		private int newReportCount;
 		private int pageNumber = 1;
@@ -114,5 +118,9 @@ namespace PrimeView.Frontend.Pages
 			ReportReader.FlushCache();
 			await LoadSummaries();
 		}
-	}
+        private void ToggleFilterPanel()
+        {
+            HideFilters = !HideFilters;
+        }
+    }
 }

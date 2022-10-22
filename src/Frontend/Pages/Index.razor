@@ -29,7 +29,42 @@
 			<div class="ml-auto"><button class="btn btn-outline-secondary" @onclick="Refresh"><i class="fa fa-refresh" role="button" aria-hidden="true"></i></button></div>
 		</div>
 
-		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
+		<div class="accordion">
+			<div class="card">
+				<div class="card-header">
+					<h2 class="mb-0">
+						<button class="btn btn-block text-primary text-left" @onclick="ToggleFilterPanel">
+							<i class="fa @(HideFilters ? "fa-angle-right" : "fa-angle-down")"></i>&nbsp;&nbsp;Filter
+						</button>
+					</h2>
+				</div>
+
+				<div class="collapse@(HideFilters ? "" : ".show")">
+					<div class="card-body">
+
+						<div class="row">
+							<div class="col-auto">
+								<div class="form-group">
+									<label for="runners">Runner:</label>
+									<select multiple class="form-control" id="runners" @ref="runnersSelect" @onchange="RunnerSelectionChanged">
+										@{
+											var filterRunners = FilterRunners;
+										}
+										@foreach (var runnerInfo in this.runners.OrderBy(r => r.Name))
+										{
+											<option value="@runnerInfo.Id" selected="@(filterRunners.Contains(filterRunners.Id))">@runnerInfo.Name</option>
+										}
+									</select>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<form class="form-inline mt-4 mb-2" @onsubmit="ApplyNewReportCount">
 			<label>Reports per page:&nbsp;</label>
 			@foreach(int reportNumber in new int[] {25, 50, 100}) 
 			{
