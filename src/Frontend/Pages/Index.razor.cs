@@ -44,7 +44,10 @@ namespace PrimeView.Frontend.Pages
         [QueryStringParameter("hf")]
         public bool HideFilters { get; set; } = false;
 
+		[QueryStringParameter("fr")]
+		public string FilterRunners { get; set; }
 
+		private Runner[] runners = null;
         private ReportSummary[] summaries = null;
 		private int totalReports = 0;
 		private int newReportCount;
@@ -63,6 +66,7 @@ namespace PrimeView.Frontend.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
+			this.runners = await ReportReader.GetRunners();
 			SkipReports -= SkipReports % ReportCount;
 			await LoadSummaries(); 
 			this.newReportCount = ReportCount;
@@ -93,13 +97,13 @@ namespace PrimeView.Frontend.Pages
 
 		private async Task LoadSummaries()
 		{
-			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+			(this.summaries, this.totalReports) = await ReportReader.GetSummaries(FilterRunners, SkipReports, ReportCount);
 
 			// adjust SkipReports if we're skipping all reports that we have
 			if (this.totalReports > 0 && SkipReports >= this.totalReports)
 			{
 				SkipReports = this.totalReports - 1 - ((this.totalReports - 1) % ReportCount);
-				(this.summaries, this.totalReports) = await ReportReader.GetSummaries(SkipReports, ReportCount);
+				(this.summaries, this.totalReports) = await ReportReader.GetSummaries(FilterRunners, SkipReports, ReportCount);
 			}
 
 			this.pageNumber = this.SkipReports / this.ReportCount + 1;

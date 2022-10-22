@@ -46,13 +46,13 @@
 							<div class="col-auto">
 								<div class="form-group">
 									<label for="runners">Runner:</label>
-									<select multiple class="form-control" id="runners" @ref="runnersSelect" @onchange="RunnerSelectionChanged">
+									<select class="form-control" id="runners" @onchange="RunnersSelectionChanged">
 										@{
 											var filterRunners = FilterRunners;
 										}
-										@foreach (var runnerInfo in this.runners.OrderBy(r => r.Name))
+										@foreach (var runner in this.runners.OrderBy(r => r.Desciption))
 										{
-											<option value="@runnerInfo.Id" selected="@(filterRunners.Contains(filterRunners.Id))">@runnerInfo.Name</option>
+											<option value="@runner.Id" selected="@(filterRunners == runner.Id))">@runner.Desciption</option>
 										}
 									</select>
 								</div>
