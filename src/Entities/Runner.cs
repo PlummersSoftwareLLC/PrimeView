@@ -14,7 +14,6 @@ namespace PrimeView.Entities
         public OperatingSystemInfo? OperatingSystem { get; set; }
         public SystemInfo? System { get; set; }
         public DockerInfo? DockerInfo { get; set; }
-        public Result[]? Results { get; set; }
 
         public string Description
         {
