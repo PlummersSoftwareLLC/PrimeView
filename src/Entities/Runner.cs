@@ -27,8 +27,8 @@ namespace PrimeView.Entities
                 if (OperatingSystem?.Architecture != null)
                     builder.Append($"{OperatingSystem.Architecture} ");
 
-                if (CPU?.Manufacturer != null)
-                    builder.Append($"{CPU.Manufacturer} ");
+                if (CPU?.Vendor != null)
+                    builder.Append($"{CPU.Vendor} ");
 
                 if (CPU?.Brand != null)
                     builder.Append($"{CPU.Brand} ");
