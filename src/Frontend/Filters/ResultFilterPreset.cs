@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace PrimeView.Frontend.Filters
 {
-	public class ResultFilterPreset : IFilterPropertyProvider
+	public class ResultFilterPreset : IResultFilterPropertyProvider
 	{
 		[JsonPropertyName("nm")]
 		public string Name { get; set; }

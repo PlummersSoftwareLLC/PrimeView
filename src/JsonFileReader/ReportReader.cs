@@ -212,10 +212,10 @@ namespace PrimeView.JsonFileReader
 
 		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount)
 		{
-			return await GetSummaries(0, maxSummaryCount);
+			return await GetSummaries(null, 0, maxSummaryCount);
 		}
 
-		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int skipFirst, int maxSummaryCount)
+		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
 		{
 			await LoadReportJsonFiles(skipFirst + maxSummaryCount);
 
@@ -229,6 +229,11 @@ namespace PrimeView.JsonFileReader
 			this.summaries = null;
 			this.reportMap = null;
 			this.reachedMaxFileCount = false;
+		}
+
+		public Task<Runner[]> GetRunners()
+		{
+			return Task.FromResult(Array.Empty<Runner>());
 		}
 	}
 }

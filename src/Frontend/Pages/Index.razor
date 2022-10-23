@@ -29,7 +29,28 @@
 			<div class="ml-auto"><button class="btn btn-outline-secondary" @onclick="Refresh"><i class="fa fa-refresh" role="button" aria-hidden="true"></i></button></div>
 		</div>
 
-		<form class="form-inline my-2" @onsubmit="ApplyNewReportCount">
+		@if (this.runners != null)
+		{
+			<div class="row">
+				<div class="col-auto">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="runners">Runner</label>
+						</div>
+						<select class="custom-select" id="runners" @bind="@FilterRunners">
+							<option value="">All runners</option>
+							
+							@foreach (var runner in this.runners.OrderBy(r => r.Description))
+							{
+								<option value="@runner.Id">@runner.Description</option>
+							}
+						</select>
+					</div>
+				</div>
+			</div>
+		}
+
+		<form class="form-inline mt-4 mb-2" @onsubmit="ApplyNewReportCount">
 			<label>Reports per page:&nbsp;</label>
 			@foreach(int reportNumber in new int[] {25, 50, 100}) 
 			{

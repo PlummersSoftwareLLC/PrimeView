@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace PrimeView.Frontend.Pages
 {
-	public partial class ReportDetails : SortedTablePage<Result>, IFilterPropertyProvider, ILanguageInfoProvider
+	public partial class ReportDetails : SortedTablePage<Result>, IResultFilterPropertyProvider, ILanguageInfoProvider
 	{
 		private const string FilterPresetStorageKey = "ResultFilterPresets";
 
