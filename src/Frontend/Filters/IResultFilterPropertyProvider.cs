@@ -2,7 +2,7 @@
 
 namespace PrimeView.Frontend.Filters
 {
-	public interface IFilterPropertyProvider
+	public interface IResultFilterPropertyProvider
 	{
 		public IList<string> FilterLanguages { get; }
 

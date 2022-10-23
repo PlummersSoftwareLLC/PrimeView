@@ -62,7 +62,7 @@ namespace PrimeView.Frontend.Filters
 				: filteredResults;
 		}
 
-		public static string CreateSummary(this IFilterPropertyProvider filter, ILanguageInfoProvider languageInfoProvider)
+		public static string CreateSummary(this IResultFilterPropertyProvider filter, ILanguageInfoProvider languageInfoProvider)
 		{
             List<string> segments = new()
             {
