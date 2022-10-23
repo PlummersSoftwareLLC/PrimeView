@@ -141,13 +141,5 @@ namespace PrimeView.Frontend.Pages
 			ReportReader.FlushCache();
 			await LoadSummaries();
 		}
-
-		private async Task RunnersSelectionChanged(ChangeEventArgs e)
-		{
-			string selectedRunner = e.Value?.ToString();
-
-            FilterRunners = string.IsNullOrWhiteSpace(selectedRunner) ? null : selectedRunner;
-			await LoadSummaries();
-		}
     }
 }
