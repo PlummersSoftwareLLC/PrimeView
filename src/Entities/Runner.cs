@@ -16,7 +16,7 @@ namespace PrimeView.Entities
         public DockerInfo? DockerInfo { get; set; }
         public Result[]? Results { get; set; }
 
-        public string Desciption
+        public string Description
         {
             get
             {

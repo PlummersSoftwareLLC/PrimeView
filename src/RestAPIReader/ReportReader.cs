@@ -14,7 +14,7 @@ namespace PrimeView.RestAPIReader
 		private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = new();
 		private readonly Dictionary<string, Report> reportMap = new();
 		private readonly Service.PrimesAPI primesAPI;
-		private int totalReports = 0;
+		private readonly Dictionary<string, int> totalReportsMap = new();
 
 		public ReportReader(IConfiguration configuration)
 		{
@@ -23,20 +23,20 @@ namespace PrimeView.RestAPIReader
 				this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
 		}
 
-		private async Task<SortedList<int, ReportSummary>> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
+		private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
 		{
 			if (runnerId == null)
 				runnerId = string.Empty;
 
 			if (!this.summaryMap.ContainsKey(runnerId))
 				this.summaryMap.Add(runnerId, new SortedList<int, ReportSummary>());
-
+			
 			var summaries = summaryMap[runnerId];
 
-			for (int missingIndex = skipFirst; missingIndex < skipFirst + maxSummaryCount; missingIndex++)
+            for (int missingIndex = skipFirst; missingIndex < skipFirst + maxSummaryCount; missingIndex++)
 			{
 				// find gaps in the requested key space, and fill them
-				if (summaries.ContainsKey(missingIndex))
+				if (!summaries.ContainsKey(missingIndex))
 				{
 					int missingCount = 0;
 
@@ -51,10 +51,10 @@ namespace PrimeView.RestAPIReader
 				}
 			}
 
-			return summaries;
+			return (summaries, this.totalReportsMap[runnerId]);
 		}
 
-		private async Task LoadSummaries(SortedList<int, ReportSummary> summaries, string? runnerId, int skipFirst, int maxSummaryCount)
+		private async Task LoadSummaries(SortedList<int, ReportSummary> summaries, string runnerId, int skipFirst, int maxSummaryCount)
 		{
 			Service.Sessions sessionsResult;
 			try
@@ -96,7 +96,7 @@ namespace PrimeView.RestAPIReader
 				summaries.Add(skipFirst + i++, summary);
 			}
 
-			this.totalReports = sessionsResult.Total;
+			this.totalReportsMap[runnerId] = sessionsResult.Total;
 		}
 
 		public async Task<Report> GetReport(string id)
@@ -279,9 +279,9 @@ namespace PrimeView.RestAPIReader
 
 		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
 		{
-			var summaries = await LoadMissingSummaries(string.IsNullOrWhiteSpace(runnerId) ? null : runnerId, skipFirst, maxSummaryCount);
+			var result = await LoadMissingSummaries(string.IsNullOrWhiteSpace(runnerId) ? null : runnerId, skipFirst, maxSummaryCount);
 
-			return (summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), this.totalReports);
+			return (result.summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), result.totalReports);
 		}
 
 		public void FlushCache()
