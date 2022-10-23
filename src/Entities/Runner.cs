@@ -36,8 +36,11 @@ namespace PrimeView.Entities
                 if (CPU?.Cores != null)
                     builder.Append($"({CPU.Cores} cores) ");
 
+                if (OperatingSystem?.Distribution != null || OperatingSystem?.Release != null)
+                    builder.Append($"running ");
+
                 if (OperatingSystem?.Distribution != null)
-                    builder.Append($"running {OperatingSystem.Distribution} ");
+                    builder.Append($"{OperatingSystem.Distribution} ");
 
                 if (OperatingSystem?.Release != null)
                     builder.Append($"{OperatingSystem.Release}");
