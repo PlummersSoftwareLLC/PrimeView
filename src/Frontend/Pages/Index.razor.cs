@@ -53,7 +53,7 @@ namespace PrimeView.Frontend.Pages
                 // could find to reliably link the value that is shown in the runner drop-down (i.e. the selected value)
                 // to the one that is actually chosen. And in the context of the @bind, this seems to be the way to kick
                 // off a load of the correct summaries and a rerender, in the background.
-                if (initialized)
+                if (summaries != null)
 				{
 					new Task(async () =>
 					{
@@ -70,7 +70,6 @@ namespace PrimeView.Frontend.Pages
 		private int newReportCount;
 		private int pageNumber = 1;
 		private int pageCount = 1;
-		private bool initialized = false;
 
 		public override Task SetParametersAsync(ParameterView parameters)
 		{
@@ -88,7 +87,6 @@ namespace PrimeView.Frontend.Pages
 			SkipReports -= SkipReports % ReportCount;
 			await LoadSummaries(); 
 			this.newReportCount = ReportCount;
-			this.initialized = true;
 		}
 
 		private async Task ApplyNewReportCount(int reportCount)
