@@ -49,11 +49,11 @@ namespace PrimeView.Frontend.Pages
 			{
 				filterRunners = value ?? string.Empty;
 
-                // The following smells up to high heaven, and I don't like it. Sadly, using a @bind is the only way I
-                // could find to reliably link the value that is shown in the runner drop-down (i.e. the selected value)
-                // to the one that is actually chosen. And in the context of the @bind, this seems to be the way to kick
-                // off a load of the correct summaries and a rerender, in the background.
-                if (summaries != null)
+				// The following smells up to high heaven, and I don't like it. Sadly, using a @bind is the only way I
+				// could find to reliably link the value that is shown in the runner drop-down (i.e. the selected value)
+				// to the one that is actually chosen. And in the context of the @bind, this seems to be the way to kick
+				// off a load of the correct summaries and a rerender, in the background.
+				if (summaries != null)
 				{
 					new Task(async () =>
 					{
@@ -65,7 +65,7 @@ namespace PrimeView.Frontend.Pages
 		}
 
 		private Runner[] runners = null;
-        private ReportSummary[] summaries = null;
+		private ReportSummary[] summaries = null;
 		private int totalReports = 0;
 		private int newReportCount;
 		private int pageNumber = 1;
@@ -137,7 +137,8 @@ namespace PrimeView.Frontend.Pages
 		private async Task Refresh()
 		{
 			ReportReader.FlushCache();
+			this.runners = await ReportReader.GetRunners();
 			await LoadSummaries();
 		}
-    }
+	}
 }
