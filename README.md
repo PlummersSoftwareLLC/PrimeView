@@ -1,7 +1,7 @@
 # PrimeView
+
 ![CI](https://github.com/rbergen/PrimeView/actions/workflows/azure-static-web-apps-agreeable-mud-0b27ba210.yml/badge.svg)
 ![CI](https://github.com/PlummersSoftwareLLC/PrimeView/actions/workflows/github-pages.yml/badge.svg)
-
 
 This is a Blazor WebAssembly static in-browser web application to view benchmark reports generated in/for the [Primes](https://github.com/PlummersSoftwareLLC/Primes) project.
 
@@ -15,21 +15,24 @@ As the report reader back-ends are isolated from the front-end (and added via de
 
 The solution can be built by running the following commands from the repository root directory, once [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0) is installed:
 
-```
+```shell
 dotnet workload install wasm-tools
 dotnet publish
 ```
 
 Note that:
+
 * the first command installs the tools required for AOT compilation. That command has to be executed only once for any system PrimeView is built on.
 * the AOT compilation can take multiple minutes to complete.
 
 At the end of the build process, the location of the build output will be indicated in the following line:
-```
+
+```shell
 Frontend -> <repo root>\src\Frontend\bin\Debug\net6.0\publish\
 ```
 
 ## Implementation notes
+
 Where applicable, implementation notes can be found in README.md files in the directories for the respective C#/Blazor projects.
 
 ## Attribution
