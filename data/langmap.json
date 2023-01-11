@@ -3,6 +3,10 @@
 		"name": "Ada",
 		"url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
 	},
+    "algol68g": {
+        "name": "Algol 68G",
+        "url": "https://en.wikipedia.org/wiki/ALGOL_68"
+    },
 	"amd64": {
 		"name": "AMD64 machine code",
 		"url": "https://en.wikipedia.org/wiki/X86-64",
