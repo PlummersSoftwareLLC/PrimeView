@@ -19,7 +19,7 @@ jobs:
         dotnet-version: 6.0.x
 
     - name: Install wasm-tools for AOT compilation
-      run: dotnet workload --sdk-version 6.0.405 install wasm-tools
+      run: dotnet workload install --sdk-version 6.0.405 wasm-tools
 
     - name: Publish Frontend project
       run: dotnet publish src/Frontend/Frontend.csproj -c Release -o release --nologo
