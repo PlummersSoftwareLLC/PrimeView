@@ -59,7 +59,7 @@
 	},
 	"centurionpl": {
 		"name": "Centurion PL",
-		"url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf"
+		"url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf",
 		"tag": "CenturionPL"
 	},
 	"chapel": {
