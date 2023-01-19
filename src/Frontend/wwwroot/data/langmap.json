@@ -118,7 +118,7 @@
 	},
 	"euphoria": {
 		"name": "Euphoria",
-		"url": "https://www.emojicode.org/"
+		"url": "https://en.wikipedia.org/wiki/Euphoria_(programming_language)"
 	},
 	"forth": {
 		"name": "Forth",
@@ -248,6 +248,10 @@
 	"perl": {
 		"name": "Perl",
 		"url": "https://www.perl.org/"
+	},
+	"phix": {
+		"name": "Phix",
+		"url": "http://phix.x10.mx/"
 	},
 	"php": {
 		"name": "PHP",
