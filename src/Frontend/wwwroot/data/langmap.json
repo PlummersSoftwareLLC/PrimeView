@@ -116,6 +116,10 @@
 		"name": "Emojicode",
 		"url": "https://www.emojicode.org/"
 	},
+	"erlang": {
+		"name": "Erlang",
+		"url": "https://www.erlang.org/"
+	},
 	"euphoria": {
 		"name": "Euphoria",
 		"url": "https://en.wikipedia.org/wiki/Euphoria_(programming_language)"
@@ -321,6 +325,10 @@
 	"sqlite": {
 		"name": "SQLite",
 		"url": "https://www.sqlite.org/"
+	},
+	"squirrel": {
+		"name": "Squirrel",
+		"url": "http://squirrel-lang.org/"
 	},
 	"standardml": {
 		"name": "Standard ML",
