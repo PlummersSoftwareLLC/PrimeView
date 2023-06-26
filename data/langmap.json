@@ -199,8 +199,8 @@
 		"tag": "Lean4"
 	},
 	"lisp": {
-		"name": "Lisp",
-		"url": "https://en.wikipedia.org/wiki/Lisp_(programming_language)"
+		"name": "Common Lisp",
+		"url": "https://en.wikipedia.org/wiki/Common_Lisp"
 	},
 	"lua": {
 		"name": "Lua",
