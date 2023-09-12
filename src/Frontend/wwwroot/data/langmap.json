@@ -355,6 +355,10 @@
 		"name": "Umple",
 		"url": "https://cruise.umple.org/umple/"
 	},
+	"unicat": {
+		"name": "Unicat",
+		"url": "https://esolangs.org/wiki/Unicat"
+	},
 	"v": {
 		"name": "V",
 		"url": "https://vlang.io/"
