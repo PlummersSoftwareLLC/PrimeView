@@ -22,7 +22,7 @@ namespace PrimeView.JsonFileReader
 
 		public ReportReader(string baseAddress, IConfiguration configuration)
 		{
-			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress)) };
+			this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress) ?? baseAddress) };
 			this.indexFileName = configuration.GetValue<string?>(Constants.Index, null);
 			this.isS3Bucket = configuration.GetValue(Constants.IsS3Bucket, false);
 		}
