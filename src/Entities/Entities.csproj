@@ -1,13 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<RootNamespace>PrimeView.Entities</RootNamespace>
-		<TargetFramework>net6.0</TargetFramework>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="EPPlus" Version="6.0.6" />
-	</ItemGroup>
-
+  <PropertyGroup>
+    <RootNamespace>PrimeView.Entities</RootNamespace>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="7.0.3" />
+  </ItemGroup>
 </Project>
