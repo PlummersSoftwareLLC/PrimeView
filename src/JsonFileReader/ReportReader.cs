@@ -32,8 +32,8 @@ namespace PrimeView.JsonFileReader
 			if (string.IsNullOrEmpty(fileName))
 				return null;
 
-			if (haveJsonFilesLoaded && reportMap!.ContainsKey(fileName))
-				return reportMap![fileName];
+			if (haveJsonFilesLoaded && reportMap!.TryGetValue(fileName, out Report? report))
+				return report;
 
 			string reportJson;
 
@@ -69,12 +69,12 @@ namespace PrimeView.JsonFileReader
 				catch { }
 			}
 
-			this.summaries = new();
-			this.reportMap = new();
+			this.summaries = [];
+			this.reportMap = [];
 			this.reachedMaxFileCount = false;
 			this.totalReports = reportFileNames?.Length ?? maxFileCount;
 
-			Dictionary<string, Task<string>> stringReaderMap = new();
+			Dictionary<string, Task<string>> stringReaderMap = [];
 
 			for (int fileIndex = 0; fileIndex != reportFileNames?.Length; fileIndex++)
 			{
@@ -165,7 +165,7 @@ namespace PrimeView.JsonFileReader
 
 			var resultsElement = element.GetElement("results");
 
-			List<Result> results = new();
+			List<Result> results = [];
 
 			if (resultsElement.HasValue && resultsElement.Value.ValueKind == JsonValueKind.Array)
 			{
@@ -175,7 +175,7 @@ namespace PrimeView.JsonFileReader
 				}
 			}
 
-			report.Results = results.ToArray();
+			report.Results = [..results];
 
 			return report;
 		}
