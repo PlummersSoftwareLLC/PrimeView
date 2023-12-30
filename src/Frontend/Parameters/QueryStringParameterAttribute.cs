@@ -2,16 +2,16 @@
 
 namespace PrimeView.Frontend.Parameters
 {
-	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public sealed class QueryStringParameterAttribute : Attribute
-	{
-		public QueryStringParameterAttribute() { }
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public sealed class QueryStringParameterAttribute : Attribute
+    {
+        public QueryStringParameterAttribute() { }
 
-		public QueryStringParameterAttribute(string name)
-		{
-			Name = name;
-		}
+        public QueryStringParameterAttribute(string name)
+        {
+            Name = name;
+        }
 
-		public string Name { get; }
-	}
+        public string Name { get; }
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using PrimeView.Entities;
-using PrimeView.RestAPIReader;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,188 +8,187 @@ using System.Threading.Tasks;
 
 namespace PrimeView.RestAPIReader
 {
-	public class ReportReader : IReportReader
-	{
-		private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = new();
-		private readonly Dictionary<string, Report> reportMap = new();
-		private readonly Service.PrimesAPI primesAPI;
-		private readonly Dictionary<string, int> totalReportsMap = new();
+    public class ReportReader : IReportReader
+    {
+        private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = [];
+        private readonly Dictionary<string, Report> reportMap = [];
+        private readonly Service.PrimesAPI primesAPI;
+        private readonly Dictionary<string, int> totalReportsMap = [];
 
-		public ReportReader(IConfiguration configuration)
-		{
-			this.primesAPI = new(new HttpClient());
-			if (!string.IsNullOrEmpty(configuration[Constants.APIBaseURI]))
-				this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
-		}
+        public ReportReader(IConfiguration configuration)
+        {
+            this.primesAPI = new(new HttpClient());
+            if (!string.IsNullOrEmpty(configuration[Constants.APIBaseURI]))
+                this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
+        }
 
-		private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
-		{
-			if (runnerId == null)
-				runnerId = string.Empty;
+        private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
+        {
+            runnerId ??= string.Empty;
 
-			if (!this.summaryMap.ContainsKey(runnerId))
-				this.summaryMap.Add(runnerId, new SortedList<int, ReportSummary>());
-			
-			var summaries = summaryMap[runnerId];
+            if (!this.summaryMap.ContainsKey(runnerId))
+                this.summaryMap.Add(runnerId, []);
+
+            var summaries = summaryMap[runnerId];
 
             for (int missingIndex = skipFirst; missingIndex < skipFirst + maxSummaryCount; missingIndex++)
-			{
-				// find gaps in the requested key space, and fill them
-				if (!summaries.ContainsKey(missingIndex))
-				{
-					int missingCount = 0;
+            {
+                // find gaps in the requested key space, and fill them
+                if (!summaries.ContainsKey(missingIndex))
+                {
+                    int missingCount = 0;
 
-					// count number of missing keys, but stop when we've reached the end of the key space we were asked to load
-					while (!summaries.ContainsKey(missingIndex + ++missingCount) && (missingIndex + missingCount) < (skipFirst + maxSummaryCount));
+                    // count number of missing keys, but stop when we've reached the end of the key space we were asked to load
+                    while (!summaries.ContainsKey(missingIndex + ++missingCount) && (missingIndex + missingCount) < (skipFirst + maxSummaryCount)) ;
 
-					await LoadSummaries(summaries, runnerId, missingIndex, missingCount);
+                    await LoadSummaries(summaries, runnerId, missingIndex, missingCount);
 
-					// we may not actually have been able to load all requested missing summaries, but for the sake of filling gaps
-					//  for which data is available in an efficient manner, we'll act like we did; it just means some gaps may remain
-					missingIndex += missingCount;
-				}
-			}
-
-			return (summaries, this.totalReportsMap[runnerId]);
-		}
-
-		private async Task LoadSummaries(SortedList<int, ReportSummary> summaries, string runnerId, int skipFirst, int maxSummaryCount)
-		{
-			Service.Sessions sessionsResult;
-			try
-			{
-				if (string.IsNullOrWhiteSpace(runnerId) || !int.TryParse(runnerId, out int parsedRunnerId))
-					sessionsResult = await this.primesAPI.GetSessionsAsync(skipFirst, maxSummaryCount, null);
-				else
-					sessionsResult = await this.primesAPI.GetRunnerSessionsAsync(parsedRunnerId, skipFirst, maxSummaryCount);
-			}
-			catch (Service.ApiException e)
-			{
-				Console.Error.WriteLine(e);
-				return;
-			}
-
-			int i = 0;
-			foreach (var session in sessionsResult.Data)
-			{
-				var runner = session.Runner;
-
-				ReportSummary summary = new()
-				{
-					Id = session.Id,
-					Date = session.Created_at.DateTime,
-					User = runner.Name,
-					Architecture = runner.Os_arch,
-					CpuBrand = runner.Cpu_brand,
-					CpuCores = (int)runner.Cpu_cores,
-					CpuProcessors = (int)runner.Cpu_processors,
-					CpuVendor = runner.Cpu_vendor,
-					DockerArchitecture = runner.Docker_architecture,
-					IsSystemVirtual = runner.System_virtual,
-					OsPlatform = runner.Os_platform,
-					OsDistro = runner.Os_distro,
-					OsRelease = runner.Os_release,
-					ResultCount = (int)session.Results_count
-				};
-
-				summaries.Add(skipFirst + i++, summary);
-			}
-
-			this.totalReportsMap[runnerId] = sessionsResult.Total;
-		}
-
-		public async Task<Report> GetReport(string id)
-		{
-			if (this.reportMap.ContainsKey(id))
-				return this.reportMap[id];
-
-			Service.Session? sessionResponse;
-			try
-			{
-				sessionResponse = await this.primesAPI.GetSessionResultsAsync(int.Parse(id));
-			}
-			catch (Service.ApiException e)
-			{
-				Console.Error.WriteLine(e);
-				return new Report();
-			}
-
-			(CPUInfo cpu, SystemInfo system, OperatingSystemInfo operatingSystem, DockerInfo dockerInfo) = ParseRunner(sessionResponse.Runner);
-
-			List<Result> results = new();
-			foreach(var apiResult in sessionResponse.Results)
-			{
-				Result result = new()
-				{
-					Algorithm = apiResult.Algorithm,
-					Duration = apiResult.Duration,
-					IsFaithful = apiResult.Faithful,
-					Label = apiResult.Label,
-					Language = apiResult.Implementation,
-					Passes = (long)apiResult.Passes,
-					Solution = apiResult.Solution,
-					Threads = apiResult.Threads
-				};
-
-				if (int.TryParse(apiResult.Bits, out int bits))
-					result.Bits = bits;
-
-				results.Add(result);
-			}
-
-			Report report = new()
-			{
-				Id = sessionResponse.Id,
-				Date = sessionResponse.Created_at.DateTime,
-				User = sessionResponse.Runner.Name,
-				CPU = cpu,
-				System = system,
-				OperatingSystem = operatingSystem,
-				DockerInfo = dockerInfo,
-				Results = results.ToArray()
-			};
-
-			this.reportMap[id] = report;
-
-			return report;
-		}
-
-		public async Task<Runner[]> GetRunners()
-		{
-			Service.Runners runnersResponse;
-
-			try
-			{
-				runnersResponse = await this.primesAPI.GetRunnersAsync(0, 100);
-			}
-			catch (Service.ApiException e)
-			{
-				Console.Error.WriteLine(e);
-                return Array.Empty<Runner>();
+                    // we may not actually have been able to load all requested missing summaries, but for the sake of filling gaps
+                    //  for which data is available in an efficient manner, we'll act like we did; it just means some gaps may remain
+                    missingIndex += missingCount;
+                }
             }
 
-			List<Runner> runners = new();
+            return (summaries, this.totalReportsMap[runnerId]);
+        }
 
-			foreach (var runner in runnersResponse.Data)
-			{
+        private async Task LoadSummaries(SortedList<int, ReportSummary> summaries, string runnerId, int skipFirst, int maxSummaryCount)
+        {
+            Service.Sessions sessionsResult;
+            try
+            {
+                if (string.IsNullOrWhiteSpace(runnerId) || !int.TryParse(runnerId, out int parsedRunnerId))
+                    sessionsResult = await this.primesAPI.GetSessionsAsync(skipFirst, maxSummaryCount, null);
+                else
+                    sessionsResult = await this.primesAPI.GetRunnerSessionsAsync(parsedRunnerId, skipFirst, maxSummaryCount);
+            }
+            catch (Service.ApiException e)
+            {
+                Console.Error.WriteLine(e);
+                return;
+            }
+
+            int i = 0;
+            foreach (var session in sessionsResult.Data)
+            {
+                var runner = session.Runner;
+
+                ReportSummary summary = new()
+                {
+                    Id = session.Id,
+                    Date = session.Created_at.DateTime,
+                    User = runner.Name,
+                    Architecture = runner.Os_arch,
+                    CpuBrand = runner.Cpu_brand,
+                    CpuCores = (int)runner.Cpu_cores,
+                    CpuProcessors = (int)runner.Cpu_processors,
+                    CpuVendor = runner.Cpu_vendor,
+                    DockerArchitecture = runner.Docker_architecture,
+                    IsSystemVirtual = runner.System_virtual,
+                    OsPlatform = runner.Os_platform,
+                    OsDistro = runner.Os_distro,
+                    OsRelease = runner.Os_release,
+                    ResultCount = (int)session.Results_count
+                };
+
+                summaries.Add(skipFirst + i++, summary);
+            }
+
+            this.totalReportsMap[runnerId] = sessionsResult.Total;
+        }
+
+        public async Task<Report> GetReport(string id)
+        {
+            if (reportMap.TryGetValue(id, out Report? value))
+                return value;
+
+            Service.Session? sessionResponse;
+            try
+            {
+                sessionResponse = await this.primesAPI.GetSessionResultsAsync(int.Parse(id));
+            }
+            catch (Service.ApiException e)
+            {
+                Console.Error.WriteLine(e);
+                return new Report();
+            }
+
+            (CPUInfo cpu, SystemInfo system, OperatingSystemInfo operatingSystem, DockerInfo dockerInfo) = ParseRunner(sessionResponse.Runner);
+
+            List<Result> results = [];
+            foreach (var apiResult in sessionResponse.Results)
+            {
+                Result result = new()
+                {
+                    Algorithm = apiResult.Algorithm,
+                    Duration = apiResult.Duration,
+                    IsFaithful = apiResult.Faithful,
+                    Label = apiResult.Label,
+                    Language = apiResult.Implementation,
+                    Passes = (long)apiResult.Passes,
+                    Solution = apiResult.Solution,
+                    Threads = apiResult.Threads
+                };
+
+                if (int.TryParse(apiResult.Bits, out int bits))
+                    result.Bits = bits;
+
+                results.Add(result);
+            }
+
+            Report report = new()
+            {
+                Id = sessionResponse.Id,
+                Date = sessionResponse.Created_at.DateTime,
+                User = sessionResponse.Runner.Name,
+                CPU = cpu,
+                System = system,
+                OperatingSystem = operatingSystem,
+                DockerInfo = dockerInfo,
+                Results = [.. results]
+            };
+
+            this.reportMap[id] = report;
+
+            return report;
+        }
+
+        public async Task<Runner[]> GetRunners()
+        {
+            Service.Runners runnersResponse;
+
+            try
+            {
+                runnersResponse = await this.primesAPI.GetRunnersAsync(0, 100);
+            }
+            catch (Service.ApiException e)
+            {
+                Console.Error.WriteLine(e);
+                return [];
+            }
+
+            List<Runner> runners = [];
+
+            foreach (var runner in runnersResponse.Data)
+            {
                 (CPUInfo cpu, SystemInfo system, OperatingSystemInfo operatingSystem, DockerInfo dockerInfo) = ParseRunner(runner);
 
-				runners.Add(new()
-				{
-					Id = runner.Id,
-					User = runner.Name,
-					CPU = cpu,
-					System = system,
-					OperatingSystem = operatingSystem,
-					DockerInfo = dockerInfo
-				});
-			}
+                runners.Add(new()
+                {
+                    Id = runner.Id,
+                    User = runner.Name,
+                    CPU = cpu,
+                    System = system,
+                    OperatingSystem = operatingSystem,
+                    DockerInfo = dockerInfo
+                });
+            }
 
-			return runners.ToArray();
+            return [.. runners];
         }
 
         private (CPUInfo cpu, SystemInfo system, OperatingSystemInfo operatingSystem, DockerInfo dockerInfo) ParseRunner(Service.Runner runner)
-		{
+        {
             CPUInfo cpu = new()
             {
                 Brand = runner.Cpu_brand,
@@ -216,7 +214,7 @@ namespace PrimeView.RestAPIReader
                 Voltage = runner.Cpu_voltage
             };
 
-            Dictionary<string, object> cache = new();
+            Dictionary<string, object> cache = [];
 
             if (runner.Cpu_cache_l1d != null)
                 cache["l1d"] = (long)runner.Cpu_cache_l1d;
@@ -269,25 +267,25 @@ namespace PrimeView.RestAPIReader
                 TotalMemory = (long)runner.Docker_mem_total
             };
 
-			return (cpu, system, operatingSystem, dockerInfo);
+            return (cpu, system, operatingSystem, dockerInfo);
         }
 
         public async Task<(ReportSummary[] summaries, int total)> GetSummaries(int maxSummaryCount)
-		{
-			return await GetSummaries(null, 0, maxSummaryCount);
-		}
+        {
+            return await GetSummaries(null, 0, maxSummaryCount);
+        }
 
-		public async Task<(ReportSummary[] summaries, int total)> GetSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
-		{
-			var result = await LoadMissingSummaries(string.IsNullOrWhiteSpace(runnerId) ? null : runnerId, skipFirst, maxSummaryCount);
+        public async Task<(ReportSummary[] summaries, int total)> GetSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
+        {
+            var (summaries, totalReports) = await LoadMissingSummaries(string.IsNullOrWhiteSpace(runnerId) ? null : runnerId, skipFirst, maxSummaryCount);
 
-			return (result.summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), result.totalReports);
-		}
+            return (summaries.SkipWhile(pair => pair.Key < skipFirst).TakeWhile(pair => pair.Key < skipFirst + maxSummaryCount).Select(pair => pair.Value).ToArray(), totalReports);
+        }
 
-		public void FlushCache()
-		{
-			this.summaryMap.Clear();
-			this.reportMap.Clear();
-		}
-	}
+        public void FlushCache()
+        {
+            this.summaryMap.Clear();
+            this.reportMap.Clear();
+        }
+    }
 }
