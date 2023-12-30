@@ -277,6 +277,10 @@
 		"name": "Prolog",
 		"url": "https://en.wikipedia.org/wiki/Prolog"
 	},
+	"pyret": {
+		"name": "Pyret",
+		"url": "https://pyret.org/index.html"
+	},
 	"python": {
 		"name": "Python",
 		"url": "https://www.python.org/"
