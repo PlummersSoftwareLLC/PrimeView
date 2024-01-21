@@ -40,6 +40,10 @@
 		"name": "BASIC",
 		"url": "https://en.wikipedia.org/wiki/BASIC"
 	},
+	"beef": {
+		"name": "Beef",
+		"url": "https://www.beeflang.org/"
+	},
 	"befunge": {
 		"name": "Befunge",
 		"url": "https://en.wikipedia.org/wiki/Befunge"
