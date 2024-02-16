@@ -13,10 +13,10 @@ As the report reader back-ends are isolated from the front-end (and added via de
 
 ## Building
 
-The solution can be built by running the following commands from the repository root directory, once [.NET 6.0](https://dotnet.microsoft.com/download/dotnet/6.0) is installed:
+The solution can be built by running the following commands from the repository root directory, once [.NET 8.0](https://dotnet.microsoft.com/download/dotnet/8.0) is installed:
 
 ```shell
-dotnet workload install wasm-tools
+dotnet workload install wasm-tools-net6
 dotnet publish
 ```
 
@@ -28,7 +28,7 @@ Note that:
 At the end of the build process, the location of the build output will be indicated in the following line:
 
 ```shell
-Frontend -> <repo root>\src\Frontend\bin\Debug\net6.0\publish\
+Frontend -> <repo root>\src\Frontend\bin\Release\net8.0\publish\
 ```
 
 ## Implementation notes
