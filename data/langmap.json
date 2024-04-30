@@ -204,7 +204,8 @@
 	},
 	"lisp": {
 		"name": "Common Lisp",
-		"url": "https://en.wikipedia.org/wiki/Common_Lisp"
+		"url": "https://en.wikipedia.org/wiki/Common_Lisp",
+		"tag": "Lisp"
 	},
 	"lua": {
 		"name": "Lua",
