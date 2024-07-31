@@ -216,6 +216,11 @@
 		"url": "https://en.wikipedia.org/wiki/MUMPS",
 		"tag": "M"
 	},
+	"macro11": {
+		"name": "MACRO-11",
+		"url": "https://en.wikipedia.org/wiki/MACRO-11",
+		"tag": "MACRO11"
+	},
 	"mixal": {
 		"name": "MIXAL",
 		"url": "https://en.wikipedia.org/wiki/MIX"
