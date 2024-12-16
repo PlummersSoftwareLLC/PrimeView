@@ -381,6 +381,10 @@
 		"name": "Verilog",
 		"url": "https://en.wikipedia.org/wiki/Verilog"
 	},
+	"whitespace": {
+		"name": "Whitespace",
+		"url": "https://en.wikipedia.org/wiki/Whitespace_(programming_language)"
+	},
 	"wren": {
 		"name": "Wren",
 		"url": "https://wren.io/"
