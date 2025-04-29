@@ -48,6 +48,11 @@
 		"name": "Befunge",
 		"url": "https://en.wikipedia.org/wiki/Befunge"
 	},
+	"boxlang": {
+		"name": "BoxLang",
+		"url": "https://www.boxlang.io/",
+		"tag": "BoxLang"
+	},
 	"brainfuck": {
 		"name": "Brainfuck",
 		"url": "https://en.wikipedia.org/wiki/Brainfuck",
@@ -65,6 +70,11 @@
 		"name": "Centurion PL",
 		"url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf",
 		"tag": "CenturionPL"
+	},
+	"cfml": {
+		"name": "CFML",
+		"url": "https://en.wikipedia.org/wiki/ColdFusion_Markup_Language",
+		"tag": "CFML"
 	},
 	"chapel": {
 		"name": "Chapel",
