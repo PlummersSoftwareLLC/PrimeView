@@ -226,6 +226,11 @@
 		"url": "https://en.wikipedia.org/wiki/MUMPS",
 		"tag": "M"
 	},
+	"m4": {
+		"name": "m4",
+		"url": "https://en.wikipedia.org/wiki/M4_(computer_language)",
+		"tag": "M4"
+	},
 	"macro11": {
 		"name": "MACRO-11",
 		"url": "https://en.wikipedia.org/wiki/MACRO-11",
