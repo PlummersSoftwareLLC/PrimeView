@@ -244,6 +244,10 @@
 		"name": "(mixed)",
 		"tag": "Mixed"
 	},
+	"mojo": {
+		"name": "Mojo",
+		"url": "https://www.modular.com/mojo"
+	},
 	"nim": {
 		"name": "Nim",
 		"url": "https://nim-lang.org/"
