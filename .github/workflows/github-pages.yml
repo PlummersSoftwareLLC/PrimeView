@@ -8,6 +8,8 @@ on:
 jobs:
   deploy-to-github-pages:
 
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
 
