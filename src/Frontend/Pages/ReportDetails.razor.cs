@@ -392,6 +392,14 @@ namespace PrimeView.Frontend.Pages
                 await DownloadExport(".json", "application/json", export);
         }
 
+        private async Task DownloadCsv()
+        {
+            byte[] export = CsvConverter.Convert(this.report, this);
+
+            if (export != null)
+                await DownloadExport(".csv", "text/csv", export);
+        }
+
         private async Task DownloadExcel()
         {
             byte[] export = ExcelConverter.Convert(this.report, this);
@@ -399,5 +407,6 @@ namespace PrimeView.Frontend.Pages
             if (export != null)
                 await DownloadExport(".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", export);
         }
+
     }
 }
