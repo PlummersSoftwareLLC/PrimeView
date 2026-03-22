@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace PrimeView.RestAPIReader
 {
-    public class ReportReader(IConfiguration configuration) : IReportReader
+    public class ReportReader(HttpClient httpClient, IConfiguration configuration) : IReportReader
     {
         private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = [];
         private readonly Dictionary<string, Report> reportMap = [];
-        private readonly Service.PrimesAPI primesAPI = CreatePrimesAPI(configuration);
+        private readonly Service.PrimesAPI primesAPI = CreatePrimesAPI(httpClient, configuration);
         private readonly Dictionary<string, int> totalReportsMap = [];
 
-        private static Service.PrimesAPI CreatePrimesAPI(IConfiguration configuration)
+        private static Service.PrimesAPI CreatePrimesAPI(HttpClient httpClient, IConfiguration configuration)
         {
-            var api = new Service.PrimesAPI(new HttpClient());
+            var api = new Service.PrimesAPI(httpClient);
             var baseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
             if (!string.IsNullOrEmpty(baseUrl))
                 api.BaseUrl = baseUrl;
