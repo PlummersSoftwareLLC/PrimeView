@@ -12,13 +12,18 @@ namespace PrimeView.RestAPIReader
     {
         private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = [];
         private readonly Dictionary<string, Report> reportMap = [];
-        private readonly Service.PrimesAPI primesAPI = new(new HttpClient())
-        {
-            BaseUrl = !string.IsNullOrEmpty(configuration[Constants.APIBaseURI]) 
-                ? configuration.GetValue<string>(Constants.APIBaseURI)! 
-                : null!
-        };
+        private readonly Service.PrimesAPI primesAPI = CreatePrimesAPI(configuration);
         private readonly Dictionary<string, int> totalReportsMap = [];
+
+        private static Service.PrimesAPI CreatePrimesAPI(IConfiguration configuration)
+        {
+            var api = new Service.PrimesAPI(new HttpClient());
+            var baseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
+            if (!string.IsNullOrEmpty(baseUrl))
+                api.BaseUrl = baseUrl;
+
+            return api;
+        }
 
         private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
         {
