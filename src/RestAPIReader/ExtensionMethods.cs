@@ -10,9 +10,7 @@ namespace PrimeView.RestAPIReader
     {
         public static IServiceCollection AddRestAPIReportReader(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            var baseUrl = configuration.GetValue<string>(Constants.APIBaseURI) ?? string.Empty;
-
-            serviceCollection.AddHttpClient(Constants.PrimesAPI, client => client.BaseAddress = new Uri(baseUrl));
+            serviceCollection.AddHttpClient(Constants.PrimesAPI, client => client.BaseAddress = new Uri(configuration.GetValue<string>(Constants.APIBaseURI) ?? string.Empty));
 
             return serviceCollection.AddScoped<IReportReader, ReportReader>();
         }
