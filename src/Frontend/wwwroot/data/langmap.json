@@ -1,419 +1,422 @@
 {
-	"ada": {
-		"name": "Ada",
-		"url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
-	},
-	"algol68g": {
-		"name": "Algol 68G",
-		"url": "https://en.wikipedia.org/wiki/ALGOL_68"
-	},
-	"amd64": {
-		"name": "AMD64 machine code",
-		"url": "https://en.wikipedia.org/wiki/X86-64",
-		"tag": "Amd64"
-	},
-	"apl": {
-		"name": "APL",
-		"url": "https://en.wikipedia.org/wiki/APL_(programming_language)"
-	},
-	"assembly": {
-		"name": "Assembly",
-		"url": "https://en.wikipedia.org/wiki/Assembly_language"
-	},
-	"assemblyscript": {
-		"name": "AssemblyScript",
-		"url": "https://www.assemblyscript.org/"
-	},
-	"awk": {
-		"name": "AWK",
-		"url": "https://en.wikipedia.org/wiki/AWK"
-	},
-	"ballerina": {
-		"name": "Ballerina",
-		"url": "https://ballerina.io/"
-	},
-	"bash": {
-		"name": "Bash",
-		"url": "https://www.gnu.org/software/bash/"
-	},
-	"basic": {
-		"name": "BASIC",
-		"url": "https://en.wikipedia.org/wiki/BASIC"
-	},
-	"beef": {
-		"name": "Beef",
-		"url": "https://www.beeflang.org/"
-	},
-	"befunge": {
-		"name": "Befunge",
-		"url": "https://en.wikipedia.org/wiki/Befunge"
-	},
-	"boxlang": {
-		"name": "BoxLang",
-		"url": "https://www.boxlang.io/",
-		"tag": "BoxLang"
-	},
-	"brainfuck": {
-		"name": "Brainfuck",
-		"url": "https://en.wikipedia.org/wiki/Brainfuck",
-		"tag": "BrainFuck"
-	},
-	"c": {
-		"name": "C",
-		"url": "https://en.wikipedia.org/wiki/C_(programming_language)"
-	},
-	"clipper": {
-		"name": "Clipper",
-		"url": "https://en.wikipedia.org/wiki/Clipper_(programming_language)"
-	},
-	"centurionpl": {
-		"name": "Centurion PL",
-		"url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf",
-		"tag": "CenturionPL"
-	},
-	"cfml": {
-		"name": "CFML",
-		"url": "https://en.wikipedia.org/wiki/ColdFusion_Markup_Language",
-		"tag": "CFML"
-	},
-	"chapel": {
-		"name": "Chapel",
-		"url": "https://chapel-lang.org/"
-	},
-	"clojure": {
-		"name": "Clojure",
-		"url": "https://clojure.org/"
-	},
-	"cobol": {
-		"name": "COBOL",
-		"url": "https://en.wikipedia.org/wiki/COBOL"
-	},
-	"comal": {
-		"name": "COMAL",
-		"url": "https://en.wikipedia.org/wiki/COMAL"
-	},
-	"cpp": {
-		"name": "C++",
-		"url": "https://isocpp.org/",
-		"tag": "CPP"
-	},
-	"crystal": {
-		"name": "Crystal",
-		"url": "https://crystal-lang.org/"
-	},
-	"csharp": {
-		"name": "C#",
-		"url": "https://docs.microsoft.com/en-us/dotnet/csharp/",
-		"tag": "CSharp"
-	},
-	"cython": {
-		"name": "Cython",
-		"url": "https://cython.org/"
-	},
-	"d": {
-		"name": "D",
-		"url": "https://dlang.org/"
-	},
-	"dart": {
-		"name": "Dart",
-		"url": "https://dart.dev/"
-	},
-	"delphi": {
-		"name": "Delphi",
-		"url": "https://www.embarcadero.com/products/delphi"
-	},
-	"elixir": {
-		"name": "Elixir",
-		"url": "https://elixir-lang.org/"
-	},
-	"emojicode": {
-		"name": "Emojicode",
-		"url": "https://www.emojicode.org/"
-	},
-	"erlang": {
-		"name": "Erlang",
-		"url": "https://www.erlang.org/"
-	},
-	"euphoria": {
-		"name": "Euphoria",
-		"url": "https://en.wikipedia.org/wiki/Euphoria_(programming_language)"
-	},
-	"forth": {
-		"name": "Forth",
-		"url": "https://en.wikipedia.org/wiki/Forth_(programming_language)"
-	},
-	"fortran": {
-		"name": "Fortran",
-		"url": "https://wg5-fortran.org/"
-	},
-	"fsharp": {
-		"name": "F#",
-		"url": "https://fsharp.org/",
-		"tag": "FSharp"
-	},
-	"gdscript": {
-		"name": "GDScript",
-		"url": "https://gdscript.com/"
-	},
-	"go": {
-		"name": "Go",
-		"url": "https://golang.org/"
-	},
-	"groovy": {
-		"name": "Groovy",
-		"url": "https://groovy-lang.org/"
-	},
-	"hack": {
-		"name": "Hack",
-		"url": "https://hacklang.org/"
-	},
-	"haskell": {
-		"name": "Haskell",
-		"url": "https://www.haskell.org/"
-	},
-	"haxe": {
-		"name": "Haxe",
-		"url": "https://haxe.org/"
-	},
-	"idl": {
-		"name": "IDL",
-		"url": "https://en.wikipedia.org/wiki/IDL_(programming_language)"
-	},
-	"java": {
-		"name": "Java",
-		"url": "https://www.java.com/"
-	},
-	"javascript": {
-		"name": "JavaScript",
-		"url": "https://www.javascript.com/"
-	},
-	"julia": {
-		"name": "Julia",
-		"url": "https://julialang.org/"
-	},
-	"kermit": {
-		"name": "Kermit",
-		"url": "https://www.kermitproject.org/index.html"
-	},
-	"kos": {
-		"name": "Kos",
-		"url": "https://github.com/kos-lang/kos"
-	},
-	"kotlin": {
-		"name": "Kotlin",
-		"url": "https://kotlinlang.org/"
-	},
-	"latex": {
-		"name": "LaTeX",
-		"url": "https://www.latex-project.org/"
-	},
-	"lean4": {
-		"name": "Lean 4",
-		"url": "https://leanprover.github.io/",
-		"tag": "Lean4"
-	},
-	"lisp": {
-		"name": "Common Lisp",
-		"url": "https://en.wikipedia.org/wiki/Common_Lisp",
-		"tag": "Lisp"
-	},
-	"lua": {
-		"name": "Lua",
-		"url": "https://www.lua.org/"
-	},
-	"m": {
-		"name": "M (MUMPS)",
-		"url": "https://en.wikipedia.org/wiki/MUMPS",
-		"tag": "M"
-	},
-	"m4": {
-		"name": "m4",
-		"url": "https://en.wikipedia.org/wiki/M4_(computer_language)",
-		"tag": "M4"
-	},
-	"macro11": {
-		"name": "MACRO-11",
-		"url": "https://en.wikipedia.org/wiki/MACRO-11",
-		"tag": "MACRO11"
-	},
-	"mixal": {
-		"name": "MIXAL",
-		"url": "https://en.wikipedia.org/wiki/MIX"
-	},
-	"mixed": {
-		"name": "(mixed)",
-		"tag": "Mixed"
-	},
-	"mojo": {
-		"name": "Mojo",
-		"url": "https://www.modular.com/mojo"
-	},
-	"nim": {
-		"name": "Nim",
-		"url": "https://nim-lang.org/"
-	},
-	"nodejs": {
-		"name": "Node.js",
-		"url": "https://nodejs.org/",
-		"tag": "NodeJS"
-	},
-	"ocaml": {
-		"name": "OCaml",
-		"url": "https://ocaml.org/"
-	},
-	"octave": {
-		"name": "Octave",
-		"url": "https://www.gnu.org/software/octave/"
-	},
-	"odin": {
-		"name": "Odin",
-		"url": "https://odin-lang.org/"
-	},
-	"pascal": {
-		"name": "Pascal",
-		"url": "https://en.wikipedia.org/wiki/Pascal_(programming_language)"
-	},
-	"pdl": {
-		"name": "Perl Data Language",
-		"url": "http://pdl.perl.org/",
-		"tag": "PDL"
-	},
-	"perl": {
-		"name": "Perl",
-		"url": "https://www.perl.org/"
-	},
-	"phix": {
-		"name": "Phix",
-		"url": "http://phix.x10.mx/"
-	},
-	"php": {
-		"name": "PHP",
-		"url": "https://www.php.net/"
-	},
-	"pony": {
-		"name": "Pony",
-		"url": "https://www.ponylang.io/"
-	},
-	"postscript": {
-		"name": "PostScript",
-		"url": "https://nl.wikipedia.org/wiki/PostScript"
-	},
-	"powershell": {
-		"name": "PowerShell",
-		"url": "https://docs.microsoft.com/en-gb/powershell/"
-	},
-	"prolog": {
-		"name": "Prolog",
-		"url": "https://en.wikipedia.org/wiki/Prolog"
-	},
-	"pyret": {
-		"name": "Pyret",
-		"url": "https://pyret.org/index.html"
-	},
-	"python": {
-		"name": "Python",
-		"url": "https://www.python.org/"
-	},
-	"r": {
-		"name": "R",
-		"url": "https://www.r-project.org/"
-	},
-	"raku": {
-		"name": "Raku",
-		"url": "https://www.raku.org/"
-	},
-	"red": {
-		"name": "Red",
-		"url": "https://www.red-lang.org/"
-	},
-	"rexx": {
-		"name": "Rexx",
-		"url": "http://www.rexxinfo.org/",
-		"tag": "REXX"
-	},
-	"ruby": {
-		"name": "Ruby",
-		"url": "https://www.ruby-lang.org/"
-	},
-	"rust": {
-		"name": "Rust",
-		"url": "https://www.rust-lang.org/"
-	},
-	"scala": {
-		"name": "Scala",
-		"url": "https://www.scala-lang.org/"
-	},
-	"scheme": {
-		"name": "Scheme",
-		"url": "https://en.wikipedia.org/wiki/Scheme_(programming_language)"
-	},
-	"smalltalk": {
-		"name": "Smalltalk",
-		"url": "https://en.wikipedia.org/wiki/Smalltalk"
-	},
-	"sql": {
-		"name": "SQL",
-		"url": "https://en.wikipedia.org/wiki/SQL"
-	},
-	"sqlite": {
-		"name": "SQLite",
-		"url": "https://www.sqlite.org/"
-	},
-	"squirrel": {
-		"name": "Squirrel",
-		"url": "http://squirrel-lang.org/"
-	},
-	"standardml": {
-		"name": "Standard ML",
-		"url": "https://en.wikipedia.org/wiki/Standard_ML",
-		"tag": "StandardML"
-	},
-	"swift": {
-		"name": "Swift",
-		"url": "https://swift.org/"
-	},
-	"tcl": {
-		"name": "Tcl",
-		"url": "https://www.tcl.tk/"
-	},
-	"tex": {
-		"name": "TeX",
-		"url": "https://en.wikipedia.org/wiki/TeX"
-	},
-	"typescript": {
-		"name": "TypeScript",
-		"url": "https://www.typescriptlang.org/"
-	},
-	"umple": {
-		"name": "Umple",
-		"url": "https://cruise.umple.org/umple/"
-	},
-	"unicat": {
-		"name": "Unicat",
-		"url": "https://esolangs.org/wiki/Unicat"
-	},
-	"v": {
-		"name": "V",
-		"url": "https://vlang.io/"
-	},
-	"verilog": {
-		"name": "Verilog",
-		"url": "https://en.wikipedia.org/wiki/Verilog"
-	},
-	"whitespace": {
-		"name": "Whitespace",
-		"url": "https://en.wikipedia.org/wiki/Whitespace_(programming_language)"
-	},
-	"wren": {
-		"name": "Wren",
-		"url": "https://wren.io/"
-	},
-	"yoix": {
-		"name": "Yoix",
-		"url": "https://en.wikipedia.org/wiki/Yoix"
-	},
-	"zig": {
-		"name": "Zig",
-		"url": "https://ziglang.org/"
-	}
+  "ada": {
+    "name": "Ada",
+    "url": "https://en.wikipedia.org/wiki/Ada_(programming_language)"
+  },
+  "algol": {
+    "name": "ALGOL",
+    "url": "https://en.wikipedia.org/wiki/ALGOL"
+  },
+  "algol68g": {
+    "name": "Algol 68G",
+    "url": "https://en.wikipedia.org/wiki/ALGOL_68",
+    "tag": "Algol68g"
+  },
+  "amd64": {
+    "name": "AMD64 machine code",
+    "url": "https://en.wikipedia.org/wiki/X86-64",
+    "tag": "Amd64"
+  },
+  "apl": {
+    "name": "APL",
+    "url": "https://en.wikipedia.org/wiki/APL_(programming_language)"
+  },
+  "assembly": {
+    "name": "Assembly",
+    "url": "https://en.wikipedia.org/wiki/Assembly_language"
+  },
+  "assemblyscript": {
+    "name": "AssemblyScript",
+    "url": "https://www.assemblyscript.org/"
+  },
+  "awk": {
+    "name": "AWK",
+    "url": "https://en.wikipedia.org/wiki/AWK"
+  },
+  "ballerina": {
+    "name": "Ballerina",
+    "url": "https://ballerina.io/"
+  },
+  "bash": {
+    "name": "Bash",
+    "url": "https://www.gnu.org/software/bash/"
+  },
+  "basic": {
+    "name": "BASIC",
+    "url": "https://en.wikipedia.org/wiki/BASIC"
+  },
+  "beef": {
+    "name": "Beef",
+    "url": "https://www.beeflang.org/"
+  },
+  "befunge": {
+    "name": "Befunge",
+    "url": "https://en.wikipedia.org/wiki/Befunge"
+  },
+  "boxlang": {
+    "name": "BoxLang",
+    "url": "https://www.boxlang.io/"
+  },
+  "brainfuck": {
+    "name": "Brainfuck",
+    "url": "https://en.wikipedia.org/wiki/Brainfuck",
+    "tag": "BrainFuck"
+  },
+  "c": {
+    "name": "C",
+    "url": "https://en.wikipedia.org/wiki/C_(programming_language)"
+  },
+  "clipper": {
+    "name": "Clipper",
+    "url": "https://en.wikipedia.org/wiki/Clipper_(programming_language)"
+  },
+  "centurionpl": {
+    "name": "Centurion PL",
+    "url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf",
+    "tag": "CenturionPL"
+  },
+  "cfml": {
+    "name": "CFML",
+    "url": "https://en.wikipedia.org/wiki/ColdFusion_Markup_Language"
+  },
+  "chapel": {
+    "name": "Chapel",
+    "url": "https://chapel-lang.org/"
+  },
+  "clojure": {
+    "name": "Clojure",
+    "url": "https://clojure.org/"
+  },
+  "cobol": {
+    "name": "COBOL",
+    "url": "https://en.wikipedia.org/wiki/COBOL"
+  },
+  "comal": {
+    "name": "COMAL",
+    "url": "https://en.wikipedia.org/wiki/COMAL"
+  },
+  "cpp": {
+    "name": "C++",
+    "url": "https://isocpp.org/",
+    "tag": "CPP"
+  },
+  "crystal": {
+    "name": "Crystal",
+    "url": "https://crystal-lang.org/"
+  },
+  "csharp": {
+    "name": "C#",
+    "url": "https://docs.microsoft.com/en-us/dotnet/csharp/",
+    "tag": "CSharp"
+  },
+  "cython": {
+    "name": "Cython",
+    "url": "https://cython.org/"
+  },
+  "d": {
+    "name": "D",
+    "url": "https://dlang.org/"
+  },
+  "dart": {
+    "name": "Dart",
+    "url": "https://dart.dev/"
+  },
+  "delphi": {
+    "name": "Delphi",
+    "url": "https://www.embarcadero.com/products/delphi"
+  },
+  "elixir": {
+    "name": "Elixir",
+    "url": "https://elixir-lang.org/"
+  },
+  "emojicode": {
+    "name": "Emojicode",
+    "url": "https://www.emojicode.org/"
+  },
+  "erlang": {
+    "name": "Erlang",
+    "url": "https://www.erlang.org/"
+  },
+  "euphoria": {
+    "name": "Euphoria",
+    "url": "https://en.wikipedia.org/wiki/Euphoria_(programming_language)"
+  },
+  "forth": {
+    "name": "Forth",
+    "url": "https://en.wikipedia.org/wiki/Forth_(programming_language)"
+  },
+  "fortran": {
+    "name": "Fortran",
+    "url": "https://wg5-fortran.org/"
+  },
+  "fsharp": {
+    "name": "F#",
+    "url": "https://fsharp.org/",
+    "tag": "FSharp"
+  },
+  "gdscript": {
+    "name": "GDScript",
+    "url": "https://gdscript.com/"
+  },
+  "go": {
+    "name": "Go",
+    "url": "https://golang.org/"
+  },
+  "groovy": {
+    "name": "Groovy",
+    "url": "https://groovy-lang.org/"
+  },
+  "hack": {
+    "name": "Hack",
+    "url": "https://hacklang.org/"
+  },
+  "haskell": {
+    "name": "Haskell",
+    "url": "https://www.haskell.org/"
+  },
+  "haxe": {
+    "name": "Haxe",
+    "url": "https://haxe.org/"
+  },
+  "idl": {
+    "name": "IDL",
+    "url": "https://en.wikipedia.org/wiki/IDL_(programming_language)"
+  },
+  "java": {
+    "name": "Java",
+    "url": "https://www.java.com/"
+  },
+  "javascript": {
+    "name": "JavaScript",
+    "url": "https://www.javascript.com/"
+  },
+  "julia": {
+    "name": "Julia",
+    "url": "https://julialang.org/"
+  },
+  "kermit": {
+    "name": "Kermit",
+    "url": "https://www.kermitproject.org/index.html"
+  },
+  "kos": {
+    "name": "Kos",
+    "url": "https://github.com/kos-lang/kos"
+  },
+  "kotlin": {
+    "name": "Kotlin",
+    "url": "https://kotlinlang.org/"
+  },
+  "latex": {
+    "name": "LaTeX",
+    "url": "https://www.latex-project.org/"
+  },
+  "lean4": {
+    "name": "Lean 4",
+    "url": "https://leanprover.github.io/",
+    "tag": "Lean4"
+  },
+  "lisp": {
+    "name": "Common Lisp",
+    "url": "https://en.wikipedia.org/wiki/Common_Lisp",
+    "tag": "Lisp"
+  },
+  "lua": {
+    "name": "Lua",
+    "url": "https://www.lua.org/"
+  },
+  "m": {
+    "name": "M (MUMPS)",
+    "url": "https://en.wikipedia.org/wiki/MUMPS",
+    "tag": "M"
+  },
+  "m4": {
+    "name": "m4",
+    "url": "https://en.wikipedia.org/wiki/M4_(computer_language)",
+    "tag": "M4"
+  },
+  "macro11": {
+    "name": "MACRO-11",
+    "url": "https://en.wikipedia.org/wiki/MACRO-11",
+    "tag": "MACRO11"
+  },
+  "mixal": {
+    "name": "MIXAL",
+    "url": "https://en.wikipedia.org/wiki/MIX"
+  },
+  "mixed": {
+    "name": "(mixed)",
+    "tag": "Mixed"
+  },
+  "mojo": {
+    "name": "Mojo",
+    "url": "https://www.modular.com/mojo"
+  },
+  "nim": {
+    "name": "Nim",
+    "url": "https://nim-lang.org/"
+  },
+  "nodejs": {
+    "name": "Node.js",
+    "url": "https://nodejs.org/",
+    "tag": "NodeJS"
+  },
+  "ocaml": {
+    "name": "OCaml",
+    "url": "https://ocaml.org/"
+  },
+  "octave": {
+    "name": "Octave",
+    "url": "https://www.gnu.org/software/octave/"
+  },
+  "odin": {
+    "name": "Odin",
+    "url": "https://odin-lang.org/"
+  },
+  "pascal": {
+    "name": "Pascal",
+    "url": "https://en.wikipedia.org/wiki/Pascal_(programming_language)"
+  },
+  "pdl": {
+    "name": "Perl Data Language",
+    "url": "http://pdl.perl.org/",
+    "tag": "PDL"
+  },
+  "perl": {
+    "name": "Perl",
+    "url": "https://www.perl.org/"
+  },
+  "phix": {
+    "name": "Phix",
+    "url": "http://phix.x10.mx/"
+  },
+  "php": {
+    "name": "PHP",
+    "url": "https://www.php.net/"
+  },
+  "pony": {
+    "name": "Pony",
+    "url": "https://www.ponylang.io/"
+  },
+  "postscript": {
+    "name": "PostScript",
+    "url": "https://nl.wikipedia.org/wiki/PostScript"
+  },
+  "powershell": {
+    "name": "PowerShell",
+    "url": "https://docs.microsoft.com/en-gb/powershell/"
+  },
+  "prolog": {
+    "name": "Prolog",
+    "url": "https://en.wikipedia.org/wiki/Prolog"
+  },
+  "pyret": {
+    "name": "Pyret",
+    "url": "https://pyret.org/index.html"
+  },
+  "python": {
+    "name": "Python",
+    "url": "https://www.python.org/"
+  },
+  "r": {
+    "name": "R",
+    "url": "https://www.r-project.org/"
+  },
+  "raku": {
+    "name": "Raku",
+    "url": "https://www.raku.org/"
+  },
+  "red": {
+    "name": "Red",
+    "url": "https://www.red-lang.org/"
+  },
+  "rexx": {
+    "name": "Rexx",
+    "url": "http://www.rexxinfo.org/",
+    "tag": "REXX"
+  },
+  "ruby": {
+    "name": "Ruby",
+    "url": "https://www.ruby-lang.org/"
+  },
+  "rust": {
+    "name": "Rust",
+    "url": "https://www.rust-lang.org/"
+  },
+  "scala": {
+    "name": "Scala",
+    "url": "https://www.scala-lang.org/"
+  },
+  "scheme": {
+    "name": "Scheme",
+    "url": "https://en.wikipedia.org/wiki/Scheme_(programming_language)"
+  },
+  "smalltalk": {
+    "name": "Smalltalk",
+    "url": "https://en.wikipedia.org/wiki/Smalltalk"
+  },
+  "sql": {
+    "name": "SQL",
+    "url": "https://en.wikipedia.org/wiki/SQL"
+  },
+  "sqlite": {
+    "name": "SQLite",
+    "url": "https://www.sqlite.org/"
+  },
+  "squirrel": {
+    "name": "Squirrel",
+    "url": "http://squirrel-lang.org/"
+  },
+  "standardml": {
+    "name": "Standard ML",
+    "url": "https://en.wikipedia.org/wiki/Standard_ML",
+    "tag": "StandardML"
+  },
+  "swift": {
+    "name": "Swift",
+    "url": "https://swift.org/"
+  },
+  "tcl": {
+    "name": "Tcl",
+    "url": "https://www.tcl.tk/"
+  },
+  "tex": {
+    "name": "TeX",
+    "url": "https://en.wikipedia.org/wiki/TeX"
+  },
+  "typescript": {
+    "name": "TypeScript",
+    "url": "https://www.typescriptlang.org/"
+  },
+  "umple": {
+    "name": "Umple",
+    "url": "https://cruise.umple.org/umple/"
+  },
+  "unicat": {
+    "name": "Unicat",
+    "url": "https://esolangs.org/wiki/Unicat"
+  },
+  "v": {
+    "name": "V",
+    "url": "https://vlang.io/"
+  },
+  "verilog": {
+    "name": "Verilog",
+    "url": "https://en.wikipedia.org/wiki/Verilog"
+  },
+  "whitespace": {
+    "name": "Whitespace",
+    "url": "https://en.wikipedia.org/wiki/Whitespace_(programming_language)"
+  },
+  "wren": {
+    "name": "Wren",
+    "url": "https://wren.io/"
+  },
+  "yoix": {
+    "name": "Yoix",
+    "url": "https://en.wikipedia.org/wiki/Yoix"
+  },
+  "zig": {
+    "name": "Zig",
+    "url": "https://ziglang.org/"
+  }
 }
