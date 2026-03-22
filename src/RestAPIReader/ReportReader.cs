@@ -8,19 +8,12 @@ using System.Threading.Tasks;
 
 namespace PrimeView.RestAPIReader
 {
-    public class ReportReader : IReportReader
+    public class ReportReader(IHttpClientFactory httpClientFactory) : IReportReader
     {
         private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = [];
         private readonly Dictionary<string, Report> reportMap = [];
-        private readonly Service.PrimesAPI primesAPI;
+        private readonly Service.PrimesAPI primesAPI = new(httpClientFactory.CreateClient(Constants.PrimesAPI));
         private readonly Dictionary<string, int> totalReportsMap = [];
-
-        public ReportReader(IConfiguration configuration)
-        {
-            this.primesAPI = new(new HttpClient());
-            if (!string.IsNullOrEmpty(configuration[Constants.APIBaseURI]))
-                this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
-        }
 
         private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
         {

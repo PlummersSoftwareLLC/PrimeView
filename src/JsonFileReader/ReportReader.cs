@@ -9,23 +9,16 @@ using System.Threading.Tasks;
 
 namespace PrimeView.JsonFileReader
 {
-    public class ReportReader : IReportReader
+    public class ReportReader(string baseAddress, IConfiguration configuration) : IReportReader
     {
         private List<ReportSummary>? summaries;
         private Dictionary<string, Report>? reportMap;
-        private readonly HttpClient httpClient;
-        private readonly string? indexFileName;
-        private readonly bool isS3Bucket;
+        private readonly HttpClient httpClient = new() { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress) ?? baseAddress) };
+        private readonly string? indexFileName = configuration.GetValue<string?>(Constants.Index, null);
+        private readonly bool isS3Bucket = configuration.GetValue(Constants.IsS3Bucket, false);
         private bool haveJsonFilesLoaded = false;
         private bool reachedMaxFileCount = false;
         private int totalReports = 0;
-
-        public ReportReader(string baseAddress, IConfiguration configuration)
-        {
-            this.httpClient = new HttpClient { BaseAddress = new Uri(configuration.GetValue(Constants.BaseURI, baseAddress) ?? baseAddress) };
-            this.indexFileName = configuration.GetValue<string?>(Constants.Index, null);
-            this.isS3Bucket = configuration.GetValue(Constants.IsS3Bucket, false);
-        }
 
         private async Task<Report?> LoadReportJsonFile(string fileName)
         {
