@@ -9,9 +9,9 @@ namespace PrimeView.Frontend.Filters
             Name = "Leaderboard";
             ImplementationText = string.Empty;
             ParallelismText = Constants.MultithreadedTag;
-            AlgorithmText = new string[] { Constants.WheelTag, Constants.OtherTag }.JoinFilterValues();
+            AlgorithmText = new[] { Constants.WheelTag, Constants.OtherTag }.JoinFilterValues();
             FaithfulText = Constants.UnfaithfulTag;
-            BitsText = new string[] { Constants.UnknownTag, Constants.OtherTag }.JoinFilterValues();
+            BitsText = new[] { Constants.UnknownTag, Constants.OtherTag }.JoinFilterValues();
         }
 
         public override bool IsFixed => true;

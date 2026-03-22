@@ -8,19 +8,17 @@ using System.Threading.Tasks;
 
 namespace PrimeView.RestAPIReader
 {
-    public class ReportReader : IReportReader
+    public class ReportReader(IConfiguration configuration) : IReportReader
     {
         private readonly Dictionary<string, SortedList<int, ReportSummary>> summaryMap = [];
         private readonly Dictionary<string, Report> reportMap = [];
-        private readonly Service.PrimesAPI primesAPI;
-        private readonly Dictionary<string, int> totalReportsMap = [];
-
-        public ReportReader(IConfiguration configuration)
+        private readonly Service.PrimesAPI primesAPI = new(new HttpClient())
         {
-            this.primesAPI = new(new HttpClient());
-            if (!string.IsNullOrEmpty(configuration[Constants.APIBaseURI]))
-                this.primesAPI.BaseUrl = configuration.GetValue<string>(Constants.APIBaseURI);
-        }
+            BaseUrl = !string.IsNullOrEmpty(configuration[Constants.APIBaseURI]) 
+                ? configuration.GetValue<string>(Constants.APIBaseURI)! 
+                : null!
+        };
+        private readonly Dictionary<string, int> totalReportsMap = [];
 
         private async Task<(SortedList<int, ReportSummary> summaries, int totalReports)> LoadMissingSummaries(string? runnerId, int skipFirst, int maxSummaryCount)
         {
