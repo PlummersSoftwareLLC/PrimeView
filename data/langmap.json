@@ -66,10 +66,6 @@
     "name": "C",
     "url": "https://en.wikipedia.org/wiki/C_(programming_language)"
   },
-  "clipper": {
-    "name": "Clipper",
-    "url": "https://en.wikipedia.org/wiki/Clipper_(programming_language)"
-  },
   "centurionpl": {
     "name": "Centurion PL",
     "url": "https://github.com/Nakazoto/CenturionComputer/blob/main/Reference/CPU6%20Programmer%20Manual/02_CPL_ocr.pdf",
@@ -82,6 +78,10 @@
   "chapel": {
     "name": "Chapel",
     "url": "https://chapel-lang.org/"
+  },
+  "clipper": {
+    "name": "Clipper",
+    "url": "https://en.wikipedia.org/wiki/Clipper_(programming_language)"
   },
   "clojure": {
     "name": "Clojure",
@@ -205,6 +205,10 @@
   "kotlin": {
     "name": "Kotlin",
     "url": "https://kotlinlang.org/"
+  },
+  "lateralus": {
+    "name": "Lateralus",
+    "url": "https://lateralus.dev/"
   },
   "latex": {
     "name": "LaTeX",
