@@ -182,6 +182,10 @@
     "name": "IDL",
     "url": "https://en.wikipedia.org/wiki/IDL_(programming_language)"
   },
+  "intercal": {
+    "name": "INTERCAL",
+    "url": "https://en.wikipedia.org/wiki/INTERCAL"
+  },
   "java": {
     "name": "Java",
     "url": "https://www.java.com/"
@@ -223,6 +227,10 @@
     "name": "Common Lisp",
     "url": "https://en.wikipedia.org/wiki/Common_Lisp",
     "tag": "Lisp"
+  },
+  "lolcode": {
+    "name": "LOLCODE",
+    "url": "https://en.wikipedia.org/wiki/LOLCODE"
   },
   "lua": {
     "name": "Lua",
